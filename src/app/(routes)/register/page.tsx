@@ -1,7 +1,15 @@
-export default function RegisterPage() {
+import RegisterForm from "@/app/components/RegisterForm/RegisterForm";
+
+export default function RegisterPage(): JSX.Element {
   return (
     <div className="register">
-      Register
+      <img 
+        src="next.svg" 
+        alt="" 
+        className="register__logo"
+      />
+
+      <RegisterForm/>
     </div>
   );
 }
