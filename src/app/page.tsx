@@ -1,7 +1,2 @@
-export default function App() {
-  return (
-    <div className="app">
-      shopping list
-    </div>
-  )
-}
+import { redirect } from "next/navigation";
+export default function App() { redirect('/lists') }

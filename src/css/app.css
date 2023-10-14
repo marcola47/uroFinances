@@ -8,13 +8,16 @@
 }
 
 html {
-  font-family: "Montserrat", "Oxygen", "Ubuntu", sans-serif;
+  font-family: "Montserrat", "Oxygen", sans-serif;
+  font-size: 16px;
 }
 
 body {
-  background-color: rgb(34, 39, 44);
+  color: hsl(210, 14%, 100%);
+  background-color: hsl(210, 14%, 15%);
 }
 
 input, button, textarea {
   font-size: inherit;
+  color: inherit;
 }/*# sourceMappingURL=app.css.map */
