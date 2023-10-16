@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUIContext } from "@/app/context/ui";
-import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaDollarSign, FaGear, FaInfo } from "react-icons/fa6";
+import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaStore, FaDollarSign, FaGear, FaInfo } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
   const { navbarOpen, setNavbarOpen } = useUIContext();
@@ -81,9 +81,15 @@ export default function Navbar(): JSX.Element {
           />
 
           <NavbarLink 
-            href="/measurement-units" 
+            href="/units" 
             name="Measurement Units" 
             icon={ <FaRuler/> }
+          />
+
+          <NavbarLink 
+            href="/stores" 
+            name="Stores" 
+            icon={ <FaStore/> }
           />
 
           <NavbarLink 

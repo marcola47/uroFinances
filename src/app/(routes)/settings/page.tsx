@@ -1,12 +1,12 @@
 import Navbar from "@/app/components/Navbar/Navbar";
 
-export default function CategoriesPage() {
+export default function SettingsPage() {
   return (
     <div className="app">
       <Navbar/>
 
-      <div className="categories">
-        Categories
+      <div className="settings">
+        Settings
       </div>
     </div>
   );

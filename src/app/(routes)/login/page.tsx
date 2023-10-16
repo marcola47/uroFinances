@@ -5,6 +5,7 @@ export default function LoginPage(): JSX.Element {
   return (
     <div className="app">
       <Navbar/>
+      
       <div className="login">
         <img 
           src="next.svg" 
