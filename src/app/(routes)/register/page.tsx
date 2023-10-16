@@ -1,5 +1,5 @@
 import Navbar from "@/app/components/Navbar/Navbar";
-import RegisterForm from "@/app/components/RegisterForm/RegisterForm";
+import { FormRegister } from "@/app/components/Forms/Forms";
 
 export default function RegisterPage(): JSX.Element {
   return (
@@ -13,7 +13,7 @@ export default function RegisterPage(): JSX.Element {
           className="register__logo"
         />
 
-        <RegisterForm/>
+        <FormRegister/>
       </div>
     </div>
   );
