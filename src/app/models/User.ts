@@ -1,26 +1,49 @@
 import mongoose from "mongoose";
 import idSchema from './_id';
 
-const userSchema = new mongoose.Schema(
-{
+const purchaseSchema = new mongoose.Schema({
+  list: {
+    type: String,
+    ref: 'List',
+    required: true
+  },
+
+  store: {
+    type: String,
+    ref: 'Store',
+    default: null,
+    required: false
+  },
+
+  date: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+
+  price: {
+    type: Number,
+    required: true,
+    min: [0, 'Price must be greater than 0']
+  }
+}, { _id: false })
+
+const userSchema = new mongoose.Schema({
   id: idSchema,
   
-  picture:
-  {
+  picture: {
     type: String,
     default: null,
     required: false
   },
 
-  name: 
-  { 
+  name: { 
     type: String, 
     required: true,
     maxlength: 128
   }, 
 
-  email: 
-  {
+  email: {
     type: String,
     required: true,
     unique: true,
@@ -29,11 +52,15 @@ const userSchema = new mongoose.Schema(
     match: [/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, 'Please provide a valid email address.']
   },
 
-  password:
-  {
+  password: {
     type: String,
     required: true,
     minlength: 8
+  },
+
+  purchases: {
+    type: [purchaseSchema],
+    required: false
   }
 });
 

@@ -1,37 +1,25 @@
 import mongoose from 'mongoose';
 import idSchema from './_id';
 
-const ListSchema = new mongoose.Schema(
-{
+const ListSchema = new mongoose.Schema({
   id: idSchema,
 
-  name:
-  {
+  name: {
     type: String,
     required: true,
     maxlength: 128
   },
 
-  owner:
-  {
+  owner: {
     type: String,
     ref: 'User',
     required: true
   },
 
-  items:
-  {
+  items: {
     type: [String],
     default: [],
     required: true
-  },
-
-  store:
-  {
-    type: String,
-    ref: 'Store',
-    default: null,
-    required: false
   }
 });
 

@@ -1,19 +1,16 @@
 import mongoose from "mongoose";
 import idSchema from './_id';
 
-const categorySchema = new mongoose.Schema(
-{
+const categorySchema = new mongoose.Schema({
   id: idSchema,
 
-  name:
-  {
+  name: {
     type: String,
     required: true,
     maxlength: 128
   },
 
-  owner:
-  {
+  owner: {
     type: String,
     ref: 'User',
     required: true

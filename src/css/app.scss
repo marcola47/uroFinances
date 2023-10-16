@@ -20,7 +20,14 @@ body {
   background-color: $grey-800;
 }
 
-input, button, textarea { 
+input, button, textarea {
+  font-family: inherit; 
   font-size: inherit;
   color: inherit; 
+}
+
+.app
+{
+  position: relative;
+  padding-top: 80px; 
 }

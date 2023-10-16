@@ -1,19 +1,16 @@
 import mongoose from "mongoose";
 import idSchema from './_id';
 
-const storeSchema = new mongoose.Schema(
-{
+const storeSchema = new mongoose.Schema({
   id: idSchema,
 
-  name:
-  {
+  name: {
     type: String,
     required: true,
     maxlength: 128
   },
 
-  location:
-  {
+  location: {
     type: String,
     default: null,
     required: false,

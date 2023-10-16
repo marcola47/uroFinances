@@ -1,7 +1,7 @@
 "use client"
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation";
-import { FaUser, FaEnvelope, FaKey } from 'react-icons/fa';
+import { FaEnvelope, FaKey } from 'react-icons/fa';
 
 export default function RegisterForm(): JSX.Element {
   const [name, setName] = useState("");
@@ -11,11 +11,10 @@ export default function RegisterForm(): JSX.Element {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const passwordConfirmRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
-  function handleRegister(): void
+  function handleLogin(): void
   {
     const name = nameRef.current?.value;
     const email = emailRef.current?.value;
@@ -27,17 +26,6 @@ export default function RegisterForm(): JSX.Element {
   return (
     <div className="form form--register">
       <div className="form__inputs">
-        <div className="form__input">
-          <FaUser/>
-          <input 
-            type="text" 
-            name="name" 
-            id="name" 
-            ref={ nameRef }
-            placeholder="Your name"
-          />
-        </div>
-
         <div className="form__input">
           <FaEnvelope/>
           <input 
@@ -59,29 +47,18 @@ export default function RegisterForm(): JSX.Element {
             placeholder="Your password"
           />
         </div>
-
-        <div className="form__input">
-          <FaKey/>
-          <input 
-            type="password" 
-            name="passwordConfirmation" 
-            id="passwordConfirmation" 
-            ref={ passwordConfirmRef }
-            placeholder="Confirm your password"
-          />
-        </div>
       </div>
 
       <div 
         className="form__cta"
-        onClick={ () => {router.push("/login");} }
-        children="Already have an account? Click here to login"
+        onClick={ () => {router.push("/register")} }
+        children="Don't have an account? Click here to register!"
       />
 
       <button 
         className="form__submit"
-        onClick={ handleRegister }
-        children="REGISTER"
+        onClick={ handleLogin }
+        children="LOGIN"
       />
     </div>
   )
