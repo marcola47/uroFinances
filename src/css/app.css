@@ -37,7 +37,7 @@
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  padding: 16px;
+  padding: 24px 16px 16px 16px;
   border-bottom: 2px solid hsl(210, 14%, 20%);
 }
 .navbar__user svg {
@@ -54,11 +54,13 @@
   width: 96px;
   transform: rotate(-45deg);
 }
-.navbar__links, .navbar__options {
+.navbar__links, .navbar__options, .navbar__signout {
   display: flex;
   flex-direction: column;
   gap: 24px;
   padding: 16px;
+}
+.navbar__links, .navbar__options {
   border-bottom: 2px solid hsl(210, 14%, 20%);
 }
 .navbar__link {

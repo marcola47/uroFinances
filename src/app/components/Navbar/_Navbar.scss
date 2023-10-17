@@ -48,7 +48,7 @@
    
     overflow: hidden;
     position: relative;
-    padding: 16px;
+    padding: 24px 16px 16px 16px;
     border-bottom: 2px solid $grey-750;
 
     svg { 
@@ -69,14 +69,16 @@
     }
   }
 
-  &__links, &__options {
+  &__links, &__options, &__signout {
     display: flex;
     flex-direction: column;
     gap: 24px;
 
     padding: 16px;
-    border-bottom: 2px solid $grey-750;
   }
+
+  &__links, &__options 
+  { border-bottom: 2px solid $grey-750 }
 
   &__link {
     display: flex;
