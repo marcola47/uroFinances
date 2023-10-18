@@ -2,7 +2,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useUIContext } from "@/app/context/Uisdasdsd";
+import { useUIContext } from "@/app/context/Ui";
 import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaStore, FaDollarSign, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
