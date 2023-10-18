@@ -1,4 +1,4 @@
-import { UIContextProvider } from './context/Ui';
+import { UIContextProvider } from './context/Uisdasdsd';
 import SessionProvider from './context/SessionProvider';
 import { getServerSession } from 'next-auth';
 import '@/css/app.css';

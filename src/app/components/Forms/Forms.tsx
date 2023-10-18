@@ -119,6 +119,7 @@ export function FormRegister(): JSX.Element {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -127,13 +128,47 @@ export function FormRegister(): JSX.Element {
 
   const router = useRouter();
 
-  function handleRegister(): void
+  async function handleRegister(): Promise<void>
   {
-    const name = nameRef.current?.value;
-    const email = emailRef.current?.value;
-    const password = passwordRef.current?.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    console.log({ name, email, password })
+    const name = nameRef.current?.value || "";
+    const email = emailRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
+    const passwordConfirm = passwordConfirmRef.current?.value || "";
+
+    if (name === "" || email === "" || password === "" || passwordConfirm === "") {
+      console.log("Please fill all fields");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      console.log("Invalid email");
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      console.log("Passwords don't match");
+      return;
+    }
+
+    if (password.length < 8) {
+      console.log("Password must be at least 8 characters long");
+      return;
+    }
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    console.log(await res.json());
+    await signIn("credentials", {
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
+      callbackUrl: "/",
+    });
   }
 
   return (
@@ -146,6 +181,8 @@ export function FormRegister(): JSX.Element {
             name="name" 
             id="name" 
             ref={ nameRef }
+            value={ name }
+            onChange={ (e) => {setName(e.target.value)} }
             placeholder="Your name"
           />
         </div>
@@ -157,6 +194,8 @@ export function FormRegister(): JSX.Element {
             name="email" 
             id="email" 
             ref={ emailRef }
+            value={ email }
+            onChange={ (e) => {setEmail(e.target.value)} }
             placeholder="Your email"
           />
         </div>
@@ -168,6 +207,8 @@ export function FormRegister(): JSX.Element {
             name="password" 
             id="password" 
             ref={ passwordRef }
+            value={ password }
+            onChange={ (e) => {setPassword(e.target.value)} }
             placeholder="Your password"
           />
         </div>
@@ -179,6 +220,8 @@ export function FormRegister(): JSX.Element {
             name="passwordConfirmation" 
             id="passwordConfirmation" 
             ref={ passwordConfirmRef }
+            value={ passwordConfirm }
+            onChange={ (e) => {setPasswordConfirm(e.target.value)} }
             placeholder="Confirm your password"
           />
         </div>

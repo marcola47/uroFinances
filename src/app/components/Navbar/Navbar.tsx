@@ -2,7 +2,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useUIContext } from "@/app/context/Ui";
+import { useUIContext } from "@/app/context/Uisdasdsd";
 import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaStore, FaDollarSign, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
@@ -10,7 +10,13 @@ export default function Navbar(): JSX.Element {
   const { data: session } = useSession();
   const pathname = usePathname();
 
-  function NavbarLink(props: { href: string, name: string, icon: JSX.Element }): JSX.Element {
+  type NavbarLinkProps = {
+    href: string,
+    name: string,
+    icon: JSX.Element
+  }
+
+  function NavbarLink(props: NavbarLinkProps): JSX.Element {
     const { href, name, icon } = props;
     
     return (
@@ -19,8 +25,8 @@ export default function Navbar(): JSX.Element {
           href={ href }
           className={`navbar__link ${pathname === href ? 'navbar__link--active' : ''}`}
         >
-          { icon } 
-          <span>{ name }</span>
+          { icon }
+          { name }
         </Link>
       </div>
     )
@@ -29,7 +35,7 @@ export default function Navbar(): JSX.Element {
   function NavbarHeader(): JSX.Element {
     const style = navbarOpen
     ? { color: "#323b43" }
-    : { color: "#fff" }
+    : { color: "#fff"    }
 
     return (
       <div className="navbar__header">
@@ -70,11 +76,11 @@ export default function Navbar(): JSX.Element {
             </div>
 
           : <div 
-              className="navbar__signin"
+              className="navbar__login"
               onClick={ () => signIn() }
             >
               <FaCircleUser/>
-              <span>Sign in</span>
+              <span>Login or Sign up</span>
             </div>
         }
 
@@ -88,7 +94,7 @@ export default function Navbar(): JSX.Element {
   }
 
   const style = navbarOpen
-  ? { transform: 'translateX(0%)' }
+  ? { transform: 'translateX(0%)'   }
   : { transform: 'translateX(111%)' }
 
   return (
@@ -160,7 +166,7 @@ export default function Navbar(): JSX.Element {
             onClick={ () => signOut() } 
           >
             <FaRightFromBracket/>
-            <span>Signout</span>
+            <span>Log out</span>
           </div>
         }
       </div>

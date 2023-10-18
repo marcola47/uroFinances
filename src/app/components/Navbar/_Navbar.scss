@@ -62,8 +62,7 @@
     color: $grey-700;
     background-color: $blue-50;
 
-    &__img
-    {
+    &__img {
       width: 72px;
       height: 72px;
       margin-bottom: 16px;
@@ -85,10 +84,10 @@
     }
   }
 
-  &__credentials, &__signin
+  &__credentials, &__login
   { svg { font-size: 3.5rem }}
 
-  &__signin {
+  &__login {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -99,6 +98,9 @@
     font-weight: 600;
 
     cursor: pointer;
+
+    span 
+    { text-decoration: underline; }
   }
 
   &__links, &__options {
@@ -123,7 +125,7 @@
     text-decoration: none;
 
     &--active 
-    { background-color: $grey-650}
+    { background-color: $grey-650 }
   }
 
   &__signout {
