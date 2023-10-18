@@ -15,6 +15,11 @@ const categorySchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+
+  icon: {
+    type: String,
+    required: false
+  }
 })
 
 categorySchema.index({ id: 1 }, { unique: true });

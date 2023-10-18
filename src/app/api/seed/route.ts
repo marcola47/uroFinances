@@ -1,11 +1,31 @@
-import { NextResponse } from 'next/dist/server/web/spec-extension/response';
+import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 import User from '@/app/models/User';
-import users from './users.json' assert { type: "json" };
+import users from './data_users.json' assert { type: "json" };
 
-export async function POST() {
+import Category from '@/app/models/Category';
+import categories from './data_categories.json' assert { type: "json" };
+
+export async function POST(req: NextRequest) {
+  const url = new URL(req.url);
+  const type = url.searchParams.get('type');
+
+  type SeedCollectionParams = {
+    Model: mongoose.Model<any>;
+    data: any[];
+  }
+
+  async function seedCollection(params: SeedCollectionParams) {
+    const { Model, data } = params;
+
+    await Model.deleteMany({});
+
+    for (const item of data) 
+      await Model.create(item);
+  }
+
   async function seedUsers() {
     await User.deleteMany({})
     
@@ -25,7 +45,12 @@ export async function POST() {
   
   try {  
     await mongoose.connect(process.env.MONGO_URI ?? "");
-    await seedUsers();
+    
+    switch (type) {
+      case 'users': await seedUsers(); break;
+      case 'categories': await seedCollection({ Model: Category, data: categories }); break;
+    }
+
     await mongoose.connection.close();
   
     return NextResponse.json({ status: 200 });
