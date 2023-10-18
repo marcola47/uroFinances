@@ -1,5 +1,6 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useUIContext } from "@/app/context/Ui";
 import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaStore, FaDollarSign, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
@@ -7,26 +8,34 @@ import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, F
 export default function Navbar(): JSX.Element {
   const { navbarOpen, setNavbarOpen } = useUIContext();
   const { data: session } = useSession();
+  const pathname = usePathname();
 
   function NavbarLink(props: { href: string, name: string, icon: JSX.Element }): JSX.Element {
     const { href, name, icon } = props;
     
     return (
-      <Link 
-        href={ href }
-        className="navbar__link"
-      >
-        { icon } 
-        <span>{ name }</span>
-      </Link>
+      <div onClick={ () => {setNavbarOpen(false)} }>
+        <Link 
+          href={ href }
+          className={`navbar__link ${pathname === href ? 'navbar__link--active' : ''}`}
+        >
+          { icon } 
+          <span>{ name }</span>
+        </Link>
+      </div>
     )
   }
   
   function NavbarHeader(): JSX.Element {
+    const style = navbarOpen
+    ? { color: "#323b43" }
+    : { color: "#fff" }
+
     return (
       <div className="navbar__header">
         <div 
           className="navbar__burger"
+          style={ style }
           onClick={ () => setNavbarOpen(!navbarOpen) }
           children={ <FaBarsStaggered/> }
         />
@@ -37,11 +46,20 @@ export default function Navbar(): JSX.Element {
   function NavbarUser({ session }: { session: any }): JSX.Element {
     return (
       <div className="navbar__user">
-        <FaCircleUser/>
-
         {
           session 
           ? <div className="navbar__credentials">
+              {
+                session?.user?.image
+                ? <img 
+                    src={ session?.user?.image } 
+                    alt="user-image"
+                    className="navbar__user__img" 
+                  />
+                
+                : <FaCircleUser/>
+              }
+
               <div className="navbar__user__name">
                 { session?.user?.name }
               </div>
@@ -51,13 +69,17 @@ export default function Navbar(): JSX.Element {
               </div>
             </div>
 
-          : <div className="navbar__credentials">
-              Login to continue
+          : <div 
+              className="navbar__signin"
+              onClick={ () => signIn() }
+            >
+              <FaCircleUser/>
+              <span>Sign in</span>
             </div>
         }
 
         <img 
-          src="logo--circle.svg" 
+          src="logos/logo--circle.svg" 
           alt="logo"
           className="navbar__user__logo" 
         />
@@ -67,13 +89,11 @@ export default function Navbar(): JSX.Element {
 
   const style = navbarOpen
   ? { transform: 'translateX(0%)' }
-  : { transform: 'translateX(100%)' }
-
+  : { transform: 'translateX(111%)' }
 
   return (
     <div className="navbar">
       <NavbarHeader/>
-      
 
       <div 
         className="navbar__content"
@@ -133,13 +153,16 @@ export default function Navbar(): JSX.Element {
           />
         </div>
 
-        <div className="navbar__signout">
-          <NavbarLink 
-            href="/login" 
-            name="Signout" 
-            icon={ <FaRightFromBracket/> }
-          />
-        </div>
+        {
+          session &&
+          <div 
+            className="navbar__signout"
+            onClick={ () => signOut() } 
+          >
+            <FaRightFromBracket/>
+            <span>Signout</span>
+          </div>
+        }
       </div>
     </div>
   );
