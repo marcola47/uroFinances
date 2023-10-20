@@ -60,7 +60,7 @@ export const authOptions = {
       token.id = user.id;
       token.emailVerified = user.emailVerified;
       token.provider = user.provider;
-      token.missingPassword = (user.provider === 'credentials' && !user.password) ? true : false;
+      token.missingPassword = user.provider === 'credentials' && !user.password;
 
       return token;
     },
