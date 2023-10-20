@@ -12,12 +12,11 @@ export default function VerifyCredentials(): JSX.Element {
 
     //@ts-expect-error
     if (session?.user?.missingPassword === true && pathname !== '/auth/change-password')
-      redirect('/auth/change-password');
+      redirect('/ath/change-password');
 
-    // //@ts-expect-error
-    // else if (session?.user?.emailVerified === false && pathname !== '/auth/verify-email' &&  pathname !== '/auth/change-password')
-    //   redirect('/auth/verify-email');
-
+    //@ts-expect-error
+    else if (session?.user?.emailVerified === false && pathname !== '/auth/verify-email')
+      redirect('/auth/verify-email');
   }, [session, pathname])
 
   return <div/>  
