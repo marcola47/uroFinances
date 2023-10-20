@@ -8,7 +8,7 @@ export default function RegisterPage(): JSX.Element {
 
       <div className="register">
         <img 
-          src="next.svg" 
+          src="/next.svg" 
           alt="" 
           className="register__logo"
         />

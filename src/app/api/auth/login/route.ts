@@ -11,9 +11,11 @@ export default async function login(email: string, password: string): Promise<an
     if (!user)
       return null;
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match)
-      return null;
+    if (user.password) {
+      const match = await bcrypt.compare(password, user.password);
+      if (!match)
+        return null;
+    }
 
     return user;
   } 

@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -50,21 +51,20 @@ export default function Navbar(): JSX.Element {
   }
 
   function NavbarUser({ session }: { session: any }): JSX.Element {
+    const [userImgSrc, setUserImgSrc] = useState(session?.user?.image || '/user.svg')
+
     return (
       <div className="navbar__user">
         {
-          session 
+          session?.user
           ? <div className="navbar__credentials">
-              {
-                session?.user?.image
-                ? <img 
-                    src={ session?.user?.image } 
-                    alt="user-image"
-                    className="navbar__user__img" 
-                  />
-                
-                : <FaCircleUser/>
-              }
+              <img 
+                src={ userImgSrc } 
+                alt="user-image"
+                className="navbar__user__img" 
+                referrerPolicy="no-referrer"
+                onError={() => { setUserImgSrc('user.svg') }}
+              />
 
               <div className="navbar__user__name">
                 { session?.user?.name }
@@ -85,7 +85,7 @@ export default function Navbar(): JSX.Element {
         }
 
         <img 
-          src="logos/logo--circle.svg" 
+          src="/logos/logo--circle.svg" 
           alt="logo"
           className="navbar__user__logo" 
         />
@@ -107,67 +107,77 @@ export default function Navbar(): JSX.Element {
       >
         <NavbarUser session={ session }/>
 
-        <div className="navbar__links">
-          <NavbarLink 
-            href="/lists" 
-            name="Lists" 
-            icon={ <FaFileLines/> }
-          />
-
-          <NavbarLink 
-            href="/products" 
-            name="Products" 
-            icon={ <FaBasketShopping/> }
-          />
-
-          <NavbarLink 
-            href="/categories" 
-            name="Categories" 
-            icon={ <FaList/> }
-          />
-
-          <NavbarLink 
-            href="/units" 
-            name="Measurement Units" 
-            icon={ <FaRuler/> }
-          />
-
-          <NavbarLink 
-            href="/stores" 
-            name="Stores" 
-            icon={ <FaStore/> }
-          />
-
-          <NavbarLink 
-            href="/expenses" 
-            name="My Expenses" 
-            icon={ <FaDollarSign/> }
-          />
-        </div>
-
-        <div className="navbar__options">
-          <NavbarLink 
-            href="/settings" 
-            name="Settings" 
-            icon={ <FaGear/> }
-          />
-
-          <NavbarLink 
-            href="/about" 
-            name="About uroGroceries" 
-            icon={ <FaInfo/> }
-          />
-        </div>
-
         {
-          session &&
-          <div 
-            className="navbar__signout"
-            onClick={ () => signOut() } 
-          >
-            <FaRightFromBracket/>
-            <span>Log out</span>
-          </div>
+          session 
+          ? <>
+              <div className="navbar__links">
+                <NavbarLink 
+                  href="/lists" 
+                  name="Lists" 
+                  icon={ <FaFileLines/> }
+                />
+
+                <NavbarLink 
+                  href="/products" 
+                  name="Products" 
+                  icon={ <FaBasketShopping/> }
+                />
+
+                <NavbarLink 
+                  href="/categories" 
+                  name="Categories" 
+                  icon={ <FaList/> }
+                />
+
+                <NavbarLink 
+                  href="/units" 
+                  name="Measurement Units" 
+                  icon={ <FaRuler/> }
+                />
+
+                <NavbarLink 
+                  href="/stores" 
+                  name="Stores" 
+                  icon={ <FaStore/> }
+                />
+
+                <NavbarLink 
+                  href="/expenses" 
+                  name="My Expenses" 
+                  icon={ <FaDollarSign/> }
+                />
+              </div>
+
+              <div className="navbar__options">
+                <NavbarLink 
+                  href="/settings" 
+                  name="Settings" 
+                  icon={ <FaGear/> }
+                />
+
+                <NavbarLink 
+                  href="/about" 
+                  name="About uroGroceries" 
+                  icon={ <FaInfo/> }
+                />
+              </div>
+
+              <div 
+                className="navbar__signout"
+                onClick={ () => signOut() } 
+              >
+                <FaRightFromBracket/>
+                <span>Log out</span>
+              </div>
+            </>
+
+          : <div className="navbar__options">
+              <NavbarLink 
+                href="/about" 
+                name="About uroGroceries" 
+                icon={ <FaInfo/> }
+              />
+            </div>
         }
       </div>
     </div>

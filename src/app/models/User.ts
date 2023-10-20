@@ -46,16 +46,36 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
     trim: true,
+    unique: true,
     match: [/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, 'Please provide a valid email address.']
   },
 
   password: {
     type: String,
+    validate: {
+      validator: function(this: any, value: string) {
+        return this.providerID !== null || value !== undefined;
+      }, message: 'Password is required when providerID is null.'
+    }
+  },
+
+  emailVerified: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
+
+  provider: {
+    type: String,
     required: true,
-    minlength: 8
+    enum: ['google', 'github', 'credentials']
+  },
+
+  providerID: {
+    type: mongoose.Schema.Types.Mixed,
+    required: false
   },
 
   purchases: {

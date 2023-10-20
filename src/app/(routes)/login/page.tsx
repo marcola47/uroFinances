@@ -10,7 +10,7 @@ export default function LoginPage(props: Props): JSX.Element {
       
       <div className="login">
         <img 
-          src="next.svg" 
+          src="/next.svg" 
           alt="" 
           className="login__logo"
         />

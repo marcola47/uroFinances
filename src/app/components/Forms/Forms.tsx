@@ -28,7 +28,7 @@ export function FormLogin(props: Props): JSX.Element {
     await signIn("credentials", {
       email: emailRef.current?.value,
       password: passwordRef.current?.value,
-      callbackUrl: props.callbackUrl || "/",
+      callbackUrl: props.callbackUrl || "/"
     });
   }
 
@@ -40,7 +40,7 @@ export function FormLogin(props: Props): JSX.Element {
           onClick={ () => { handleOAuthLogin('github') } }
         >
           <img 
-            src="logos/logo__github.svg" 
+            src="/logos/logo__github.svg" 
             alt="" 
             className="form__button__logo"
           />
@@ -56,7 +56,7 @@ export function FormLogin(props: Props): JSX.Element {
           onClick={ () => { handleOAuthLogin('google') } }
         >
           <img 
-            src="logos/logo__google.svg" 
+            src="/logos/logo__google.svg" 
             alt="" 
             className="form__button__logo"
           />
