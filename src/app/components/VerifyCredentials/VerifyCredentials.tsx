@@ -10,16 +10,13 @@ export default function VerifyCredentials(): JSX.Element {
   useEffect(() => {
     console.log(session)
 
-    if (!session?.user && (pathname !== '/' && pathname !== '/login' && pathname !== '/register'))
-      redirect('/');
-
     //@ts-expect-error
-    else if (session?.user?.missingPassword === true && pathname !== '/auth/change-password')
+    if (session?.user?.missingPassword === true && pathname !== '/auth/change-password')
       redirect('/auth/change-password');
 
-    //@ts-expect-error
-    else if (session?.user?.emailVerified === false && pathname !== '/auth/verify-email' &&  pathname !== '/auth/change-password')
-      redirect('/auth/verify-email');
+    // //@ts-expect-error
+    // else if (session?.user?.emailVerified === false && pathname !== '/auth/verify-email' &&  pathname !== '/auth/change-password')
+    //   redirect('/auth/verify-email');
 
   }, [session, pathname])
 

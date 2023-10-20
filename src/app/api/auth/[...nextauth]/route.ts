@@ -53,15 +53,22 @@ export const authOptions = {
   ],
 
   callbacks: {
-    async session({ session }: { session: any }) {
-      const sessionUser = await User.findOne({ email: session.user.email })
-      session.user.id = sessionUser.id;
+    async jwt({ token }: { token: any }) {
+      await dbConnection();
+      const user = await User.findOne({ email: token.email });
 
-      if (sessionUser.provider === 'credentials' && !sessionUser.password)
-        session.user.missingPassword = true;
+      token.id = user.id;
+      token.emailVerified = user.emailVerified;
+      token.provider = user.provider;
+      token.missingPassword = (user.provider === 'credentials' && !user.password) ? true : false;
 
-      if (sessionUser.emailVerified === false)
-        session.user.emailVerified = sessionUser.emailVerified;
+      return token;
+    },
+
+    async session({ session, token }: { session: any, token: any }) {
+      session.user.id = token.id;
+      session.user.emailVerified = token.emailVerified;
+      session.user.missingPassword = token.missingPassword;
 
       return session;
     },

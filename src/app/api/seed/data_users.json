@@ -3,6 +3,7 @@
     "id": "2f713bd2-2a04-46d7-930b-bba65597fd46",
     "name": "Marcos Eduardo Mori Kaminski",
     "email": "marcosemk1005@gmail.com",
-    "password": "1234567890"
+    "password": "1234567890",
+    "provider": "credentials"
   }
 ]
