@@ -1,15 +1,14 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
-import Mailgun from 'mailgun.js';
-import formData from 'form-data';
+import nodemailer from 'nodemailer';
 
 import dbConnection from '@/libs/dbConnection';
+import sendEmail from '@/libs/nodemailer';
+
 import User from '@/app/models/User';
 import EmailToken from '@/app/models/EmailToken';
 
-const API_KEY = process.env.MAILGUN_API_KEY || '';
-const DOMAIN = process.env.MAILGUN_DOMAIN || '';
 
 export async function POST(req: Request) {
   try {
@@ -32,21 +31,14 @@ export async function POST(req: Request) {
     })
    
     const token = await EmailToken.create({
-      id: uuid(),
       user: newUser.id,
       token: `${uuid()}${uuid()}`.replace(/-/g, '')
     })
     
-    const mailgun = new Mailgun(formData)
-    const client = mailgun.client({ 
-      username: 'api', 
-      key: API_KEY 
-    });
-
-    const messageData = {
-      from: `noreply@${DOMAIN}`,
-      to: newUser.email,
-      subject: 'Please, verify your email.',
+    const mailBody = {
+      from: 'test@example.com',
+      to: 'test@example.com',
+      subject: 'Verify your email',
       html: `
         <html>
           <h3>Hello, ${newUser.name}!</h3>
@@ -56,9 +48,9 @@ export async function POST(req: Request) {
           <p>${process.env.NEXT_APP_ROUTE}/api/auth/verify-email/${token.token}</p>
         </html>
       `
-    }
-
-    await client.messages.create(DOMAIN, messageData);
+    };
+  
+    sendEmail(mailBody);
     return NextResponse.json({ message: "User registered", status: 200 });
   }
 
