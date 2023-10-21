@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     const { id, name, email } = await req.json();
 
     if (!id || !name || !email || id === "" || name === "" || email === "") 
-      return NextResponse.json({ status: 400 });
+      return NextResponse.json({ status: 400, err: "Either id, name or email is not valid" });
 
     const token = await PasswordToken.create({
       user: id,
@@ -22,10 +22,10 @@ export async function POST(req: NextRequest) {
       html: `
         <html>
           <h3>Hello, ${name}!</h3>
-          <a href="${process.env.NEXT_APP_ROUTE}/auth/create-password/${token.token}">Please reset your password by clicking here</a>
+          <a href="${process.env.NEXT_APP_ROUTE}/auth/password/create/${token.token}">Please reset your password by clicking here</a>
 
           <h4>Or copy and paste the link below in your browser: </h4>
-          <p>${process.env.NEXT_APP_ROUTE}/auth/create-password/${token.token}</p>
+          <p>${process.env.NEXT_APP_ROUTE}/auth/password/create/${token.token}</p>
         </html>
       `
     };
@@ -36,6 +36,6 @@ export async function POST(req: NextRequest) {
 
   catch (err) {
     console.log(err);
-    return NextResponse.json({ status: 500 });
+    return NextResponse.json({ status: 500, error: err });
   }
 }

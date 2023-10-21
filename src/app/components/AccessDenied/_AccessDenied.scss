@@ -1,0 +1,14 @@
+@import '../../../css/variables';
+
+.access-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 16px 64px 16px;
+
+  &__header 
+  { text-align: center }
+
+  .btn 
+  { margin-top: 24px }
+}

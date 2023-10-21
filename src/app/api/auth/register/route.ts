@@ -40,10 +40,10 @@ export async function POST(req: Request) {
       html: `
         <html>
           <h3>Hello, ${newUser.name}!</h3>
-          <a href="${process.env.NEXT_APP_ROUTE}/api/auth/verify-email/${token.token}">Please verify your email by clicking here</a>
+          <a href="${process.env.NEXT_APP_ROUTE}/api/auth/email/verify/${token.token}">Please verify your email by clicking here</a>
 
           <h4>Or copy and paste the link below in your browser: </h4>
-          <p>${process.env.NEXT_APP_ROUTE}/api/auth/verify-email/${token.token}</p>
+          <p>${process.env.NEXT_APP_ROUTE}/api/auth/email/verify/${token.token}</p>
         </html>
       `
     };

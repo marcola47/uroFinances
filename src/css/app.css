@@ -1,4 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;900&display=swap");
+.access-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 16px 64px 16px;
+}
+.access-denied__header {
+  text-align: center;
+}
+.access-denied .btn {
+  margin-top: 24px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+  padding: 16px;
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(208, 15%, 23%);
+}
+
 .register, .login {
   display: flex;
   flex-direction: column;
@@ -217,6 +240,21 @@
   cursor: pointer;
 }
 
+.email-sent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+}
+.email-sent__icon svg {
+  font-size: 10rem;
+  margin-block: 32px;
+}
+.email-sent__header, .email-sent__text {
+  text-align: center;
+}
+
 .create-pwd {
   display: flex;
   flex-direction: column;
@@ -280,8 +318,16 @@ input, button, textarea {
   color: inherit;
 }
 
+button {
+  color: white;
+  background-color: black;
+}
+
 .app {
+  display: flex;
+  flex-direction: column;
   position: relative;
+  min-height: 100dvh;
   padding-top: 80px;
 }
 
@@ -289,7 +335,7 @@ input, button, textarea {
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
-.btn--reset-pwd {
+.btn--bg-blue {
   padding: 16px;
   border-radius: 3px;
   color: hsl(0, 0%, 100%);
@@ -297,6 +343,6 @@ input, button, textarea {
   font-size: 1.2rem;
   font-weight: 600;
 }
-.btn--reset-pwd:hover {
+.btn--bg-blue:hover {
   background-color: hsl(211, 95%, 58%);
 }/*# sourceMappingURL=app.css.map */
