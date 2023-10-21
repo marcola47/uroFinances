@@ -1,4 +1,109 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;900&display=swap");
+.register, .login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.form__oauth {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form__btn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 3px;
+  color: hsl(210, 14%, 15%);
+  background-color: hsl(0, 0%, 100%);
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.form__btn:hover {
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(210, 14%, 5%);
+}
+.form__btn:hover img {
+  filter: invert(100%);
+}
+.form__btn img {
+  width: 32px;
+}
+.form__divider {
+  position: relative;
+  height: 3px;
+  background-color: hsl(210, 14%, 45%);
+}
+.form__divider__text {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  padding: 0 8px;
+  background-color: hsl(210, 14%, 15%);
+  transform: translate(-50%, 0);
+}
+.form__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.form__input {
+  position: relative;
+}
+.form__input svg {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+.form__input input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border-radius: 3px;
+  background-color: hsl(210, 14%, 30%);
+}
+.form__input input::-moz-placeholder {
+  color: hsl(210, 14%, 65%);
+}
+.form__input input::placeholder {
+  color: hsl(210, 14%, 65%);
+}
+.form__cta {
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.form__cta:hover {
+  color: hsl(211, 95%, 58%);
+}
+.form__submit {
+  padding: 16px;
+  margin-top: 32px;
+  border-radius: 3px;
+  color: hsl(210, 100%, 98%);
+  background-color: hsl(218, 80%, 46%);
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.form__submit:hover {
+  background-color: hsl(215, 85%, 51%);
+}
+
 .navbar {
   z-index: 10;
   position: fixed;
@@ -112,170 +217,24 @@
   cursor: pointer;
 }
 
-.login {
+.create-pwd {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 24px;
-  padding: 24px;
+  padding: 64px 16px 64px 16px;
 }
-.login .form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
+.create-pwd__icon svg {
+  font-size: 10rem;
+  margin-bottom: 64px;
 }
-.login .form__oauth {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.create-pwd__header {
+  text-align: center;
 }
-.login .form__btn {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 3px;
-  color: hsl(210, 14%, 15%);
-  background-color: hsl(0, 0%, 100%);
-  font-size: 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.login .form__btn:hover {
-  color: hsl(0, 0%, 100%);
-  background-color: hsl(210, 14%, 5%);
-}
-.login .form__btn:hover img {
-  filter: invert(100%);
-}
-.login .form__btn img {
-  width: 32px;
-}
-.login .form__divider {
-  position: relative;
-  height: 3px;
-  background-color: hsl(210, 14%, 45%);
-}
-.login .form__divider__text {
-  position: absolute;
-  top: -9px;
-  left: 50%;
-  padding: 0 8px;
-  background-color: hsl(210, 14%, 15%);
-  transform: translate(-50%, 0);
-}
-.login .form__inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.login .form__input {
-  position: relative;
-}
-.login .form__input svg {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-}
-.login .form__input input {
-  width: 100%;
-  padding: 16px 16px 16px 48px;
-  border-radius: 3px;
-  background-color: hsl(210, 14%, 30%);
-}
-.login .form__input input::-moz-placeholder {
-  color: hsl(210, 14%, 65%);
-}
-.login .form__input input::placeholder {
-  color: hsl(210, 14%, 65%);
-}
-.login .form__cta {
-  text-decoration: underline;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.login .form__cta:hover {
-  color: hsl(211, 95%, 58%);
-}
-.login .form__submit {
-  padding: 16px;
-  margin-top: 32px;
-  border-radius: 3px;
-  color: hsl(210, 100%, 98%);
-  background-color: hsl(218, 80%, 46%);
-  font-size: 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.login .form__submit:hover {
-  background-color: hsl(215, 85%, 51%);
-}
-
-.register {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  padding: 24px;
-}
-.register .form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-.register .form__inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.register .form__input {
-  position: relative;
-}
-.register .form__input svg {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-}
-.register .form__input input {
-  width: 100%;
-  padding: 16px 16px 16px 48px;
-  border-radius: 3px;
-  background-color: hsl(210, 14%, 30%);
-}
-.register .form__input input::-moz-placeholder {
-  color: hsl(210, 14%, 65%);
-}
-.register .form__input input::placeholder {
-  color: hsl(210, 14%, 65%);
-}
-.register .form__cta {
-  text-decoration: underline;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.register .form__cta:hover {
-  color: hsl(211, 95%, 58%);
-}
-.register .form__submit {
-  padding: 16px;
-  margin-top: 32px;
-  border-radius: 3px;
-  color: hsl(210, 100%, 98%);
-  background-color: hsl(218, 80%, 46%);
-  font-size: 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.register .form__submit:hover {
-  background-color: hsl(215, 85%, 51%);
+.create-pwd__text {
+  margin-bottom: 32px;
+  color: hsl(210, 14%, 80%);
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .seeder {
@@ -324,4 +283,20 @@ input, button, textarea {
 .app {
   position: relative;
   padding-top: 80px;
+}
+
+.btn {
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.btn--reset-pwd {
+  padding: 16px;
+  border-radius: 3px;
+  color: hsl(0, 0%, 100%);
+  background-color: hsl(215, 85%, 51%);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.btn--reset-pwd:hover {
+  background-color: hsl(211, 95%, 58%);
 }/*# sourceMappingURL=app.css.map */

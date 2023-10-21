@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
-import nodemailer from 'nodemailer';
-
 import dbConnection from '@/libs/dbConnection';
 import sendEmail from '@/libs/nodemailer';
 

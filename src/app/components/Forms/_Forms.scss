@@ -1,0 +1,121 @@
+@import '../../../css/variables';
+
+.register, .login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+
+  &__oauth {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+
+    padding: 16px;
+    border-radius: $br-s;
+
+    color: $grey-800;
+    background-color: $grey-0;
+
+    font-size: 1.2rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    @include transition;
+
+    &:hover {
+      color: $grey-0;
+      background-color: $grey-900;
+
+      img
+      { filter: invert(100%) }
+    }
+
+    img
+    { width: 32px; }
+  }
+
+  &__divider {
+    position: relative;
+    height: 3px;
+
+    background-color: $grey-500;
+
+    &__text {
+      position: absolute;
+      top: -9px;
+      left: 50%;
+      padding: 0 8px;
+      background-color: $grey-800;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__input {
+    position: relative;
+
+    svg {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 16px 16px 48px;
+      border-radius: $br-s;
+      background-color: $grey-650;
+
+      &::placeholder 
+      { color: $grey-300 }
+    }
+  }
+
+  &__cta {
+    text-decoration: underline;
+    cursor: pointer;
+    @include transition;
+
+    &:hover { color: $blue-500 }
+  }
+
+  &__submit {
+    padding: 16px;
+    margin-top: 32px;
+    border-radius: $br-s;
+
+    color: $blue-25;
+    background-color: $blue-700;
+
+    font-size: 1.2rem;
+    font-weight: 600;
+    
+    cursor: pointer;
+    @include transition;
+
+    &:hover 
+    { background-color: $blue-600; }
+  }
+}

@@ -31,3 +31,22 @@ input, button, textarea {
   position: relative;
   padding-top: 80px; 
 }
+
+.btn {
+  cursor: pointer;
+  @include transition;
+
+  &--reset-pwd {
+    padding: 16px;
+    border-radius: $br-s;
+
+    color: $grey-0;
+    background-color: $blue-600;
+
+    font-size: 1.2rem;
+    font-weight: 600;
+
+    &:hover 
+    { background-color: $blue-500 }
+  }
+}

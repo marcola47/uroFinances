@@ -37,7 +37,7 @@ export function FormLogin(props: Props): JSX.Element {
       <div className="form__oauth">
         <div 
           className="form__btn form__btn--github"
-          onClick={ () => { handleOAuthLogin('github') } }
+          onClick={ () => { signIn('github', { callbackUrl: props.callbackUrl || "/" }) } }
         >
           <img 
             src="/logos/logo__github.svg" 
@@ -53,7 +53,7 @@ export function FormLogin(props: Props): JSX.Element {
 
         <div 
           className="form__btn form__btn--google"
-          onClick={ () => { handleOAuthLogin('google') } }
+          onClick={ () => { signIn('google', { callbackUrl: props.callbackUrl || "/" }) } }
         >
           <img 
             src="/logos/logo__google.svg" 
@@ -173,6 +173,44 @@ export function FormRegister(): JSX.Element {
 
   return (
     <div className="form form--register">
+      <div className="form__oauth">
+        <div 
+          className="form__btn form__btn--github"
+          onClick={ () => { signIn('github', { callbackUrl: '/' }) } }
+        >
+          <img 
+            src="/logos/logo__github.svg" 
+            alt="" 
+            className="form__button__logo"
+          />
+
+          <span
+            className="form__button__text"
+            children="CONTINUE WITH GITHUB"
+          />
+        </div>
+
+        <div 
+          className="form__btn form__btn--google"
+          onClick={ () => { signIn('google', { callbackUrl: '/' }) } }
+        >
+          <img 
+            src="/logos/logo__google.svg" 
+            alt="" 
+            className="form__button__logo"
+          />
+
+          <span
+            className="form__button__text"
+            children="CONTINUE WITH GOOGLE"
+          />
+        </div>
+      </div>
+
+      <div className="form__divider">
+        <span className="form__divider__text">or</span>
+      </div>
+
       <div className="form__inputs">
         <div className="form__input">
           <FaUser/>
