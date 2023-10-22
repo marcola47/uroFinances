@@ -1,43 +1,57 @@
 @import '../../../css/variables';
 
 .navbar {
-  z-index: 10;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 64px;
+  display: flex;
+  flex-direction: column;
 
-  &__header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
+  position: absolute;
+  left: 0;
+  width: 400px;
+  height: 100dvh;
 
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 16px 24px;
+  background-color: $grey-700;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 
-    svg
-    { 
-      font-size: 1.5rem;
-      cursor: pointer;
-      @include transition; 
+  @include transition;
+
+  &--closed {
+    width: 64px;
+
+    .navbar__user {
+      align-items: center;
+
+      &__name, &__email, &__logo
+      { display: none; }
+
+      &__img {
+        width: 36px;
+        height: 36px;
+        @include transition;
+      }
     }
-  }
 
-  &__content {
-    display: flex;
-    flex-direction: column;
+    .navbar__login span 
+    { display: none; }
 
-    position: absolute;
-    top: 62px;
-    left: 0;
-    width: 400px;
-    height: calc(100vh - 62px);
+    .navbar__links, .navbar__options {
+      align-items: center;
+    }
 
-    background-color: $grey-700;
+    .navbar__link {
+      width: 100%;
+      justify-content: center;
+      gap: 0px;
 
-    @include transition;
+      &__name 
+      { display: none; }
+    }
+
+    .navbar__signout {
+      justify-content: center;
+      
+      span 
+      { display: none; }
+    }
   }
 
   &__user {
@@ -47,13 +61,10 @@
    
     overflow: hidden;
     position: relative;
-    top: -64px;
     min-height: 160px;
-    padding: 24px 16px 16px 16px;
-    margin-bottom: -64px;
+    padding: 64px 16px 16px 16px;
     border-bottom-left-radius: $br-s;
     border-bottom-right-radius: $br-s;
-    box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.2);
 
     color: $grey-700;
     background-color: $blue-50;
@@ -66,6 +77,9 @@
       border-radius: 50%;
 
       color: $grey-700;
+
+      user-select: none;
+      @include transition;
     }
 
     &__name
@@ -77,6 +91,7 @@
       right: -8px;
       width: 96px;
 
+      user-select: none;
       transform: rotate(-45deg);
       filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.1));
     }
@@ -87,14 +102,20 @@
       top: 20px;
       right: 20px;
 
+      color: $blue-400;
+
       font-size: 1.5rem;
       cursor: pointer;
       @include transition; 
     }
   }
 
-  &__credentials, &__login
-  { svg { font-size: 3.5rem }}
+  &__credentials, &__login { 
+    svg { 
+      font-size: 3.5rem;
+      user-select: none;
+    }
+  }
 
   &__login {
     display: flex;
@@ -115,10 +136,8 @@
   &__links, &__options {
     display: flex;
     flex-direction: column;
+    margin-bottom: 32px;
   }
-
-  &__links, &__options 
-  { border-bottom: 2px solid $grey-650 }
 
   &__link {
     display: flex;
@@ -131,8 +150,15 @@
     font-weight: 600;
     text-decoration: none;
 
+    @include transition;
+
     &--active, &:hover
     { background-color: $grey-650 }
+
+    &__icon {
+      display: grid;
+      place-items: center;
+    }
   }
 
   &__signout {

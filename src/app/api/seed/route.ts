@@ -5,9 +5,6 @@ import bcrypt from 'bcrypt';
 import User from '@/app/models/User';
 import users from './data_users.json' assert { type: "json" };
 
-import Category from '@/app/models/Category';
-import categories from './data_categories.json' assert { type: "json" };
-
 export async function POST(req: NextRequest) {
   const url = new URL(req.url);
   const type = url.searchParams.get('type');
@@ -37,6 +34,7 @@ export async function POST(req: NextRequest) {
         name: user.name,
         email: user.email,
         password: hash,
+        provider: user.provider
       });
   
       await User.create(newUser);
@@ -48,7 +46,6 @@ export async function POST(req: NextRequest) {
     
     switch (type) {
       case 'users': await seedUsers(); break;
-      case 'categories': await seedCollection({ Model: Category, data: categories }); break;
     }
 
     await mongoose.connection.close();

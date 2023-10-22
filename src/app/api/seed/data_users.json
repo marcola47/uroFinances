@@ -4,6 +4,13 @@
     "name": "Marcos Eduardo Mori Kaminski",
     "email": "marcosemk1005@gmail.com",
     "password": "1234567890",
-    "provider": "credentials"
+    "provider": "credentials",
+    "categories": [
+      { 
+        "id": "968c0feb-a19d-41d2-a501-c1b365cd541f", 
+        "name": "Uncategorized",
+        "icon": "uncategorized.svg"
+      }
+    ]
   }
 ]

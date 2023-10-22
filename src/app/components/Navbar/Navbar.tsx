@@ -4,54 +4,47 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useUIContext } from "@/app/context/Ui";
-import { FaBarsStaggered, FaCircleUser, FaTableColumns, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
+import { 
+  FaArrowRight, 
+  FaTableColumns, 
+  FaBuildingColumns, 
+  FaMoneyBill,
+  FaPercent,
+  FaBullseye,
+  FaGear, 
+  FaInfo, 
+  FaRightFromBracket 
+} from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
   const { navbarOpen, setNavbarOpen } = useUIContext();
   const { data: session } = useSession();
   const pathname = usePathname();
 
-  type NavbarLinkProps = {
-    href: string,
-    name: string,
-    icon: JSX.Element
-  }
-
-  function NavbarLink(props: NavbarLinkProps): JSX.Element {
-    const { href, name, icon } = props;
-    
+  function NavbarLink({ 
+    href, name, icon 
+  }: { 
+    href: string, name: string, icon: JSX.Element 
+  }): JSX.Element {    
     return (
-      <div onClick={ () => {setNavbarOpen(false)} }>
-        <Link 
-          href={ href }
-          className={`navbar__link ${pathname === href ? 'navbar__link--active' : ''}`}
-        >
-          { icon }
+      <Link
+        href={ href }
+        className={`navbar__link ${pathname === href ? 'navbar__link--active' : ''}`}
+      > 
+        <div className="navbar__link__icon">
+          { icon } 
+        </div>
+
+        <div className="navbar__link__name">
           { name }
-        </Link>
-      </div>
+        </div>
+      </Link>
     )
   }
   
-  function NavbarHeader(): JSX.Element {
-    return (
-      <div className="navbar__header">
-        <div 
-          className="navbar__burger"
-          onClick={ () => setNavbarOpen(!navbarOpen) }
-          children={ <FaBarsStaggered/> }
-        />
-      </div>
-    )
-  }
-
   function NavbarUser({ session }: { session: any }): JSX.Element {
     const [userImgSrc, setUserImgSrc] = useState(session?.user?.image || '/user.svg')
-
-    const burgerStyle = navbarOpen
-    ? { display: "block" }
-    : { display: "none"  }
-    
+ 
     return (
       <div className="navbar__user">
         {
@@ -78,7 +71,13 @@ export default function Navbar(): JSX.Element {
               className="navbar__login"
               onClick={ () => signIn() }
             >
-              <FaCircleUser/>
+              <img 
+                src={ userImgSrc } 
+                alt="user-image"
+                className="navbar__user__img" 
+                referrerPolicy="no-referrer"
+                onError={() => { setUserImgSrc('user.svg') }}
+              />
               <span>Login or Sign up</span>
             </div>
         }
@@ -91,70 +90,88 @@ export default function Navbar(): JSX.Element {
 
         <div 
           className="navbar__user__burger"
-          style={ burgerStyle }
           onClick={ () => setNavbarOpen(!navbarOpen) }
-          children={ <FaBarsStaggered/> }
+          style={{ transform: navbarOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          children={ <FaArrowRight/> }
         />
       </div>
     )
   }
 
-  const style = navbarOpen
-  ? { transform: 'translateX(0%)'   }
-  : { transform: 'translateX(-111%)' }
-
   return (
-    <div className="navbar">
-      <NavbarHeader/>
+    <div 
+      className={`navbar ${navbarOpen ? '' : 'navbar--closed'}`}
+      onMouseEnter={ () => { if (session?.user?.settings?.open_navbar_on_hover) setNavbarOpen(true) } }
+      onMouseLeave={ () => { if (session?.user?.settings?.open_navbar_on_hover) setNavbarOpen(false) } }
+    >
+      <NavbarUser session={ session }/>
+      {
+        session 
+        ? <>
+            <div className="navbar__links">
+              <NavbarLink 
+                href="/" 
+                name="Dashboard" 
+                icon={ <FaTableColumns/> }
+              />
 
-      <div 
-        className="navbar__content"
-        style={ style }
-      >
-        <NavbarUser session={ session }/>
-        {
-          session 
-          ? <>
-              <div className="navbar__links">
-                <NavbarLink 
-                  href="/" 
-                  name="Dashboard" 
-                  icon={ <FaTableColumns/> }
-                />
-              </div>
+              <NavbarLink 
+                href="/accounts" 
+                name="Accounts" 
+                icon={ <FaBuildingColumns/> }
+              />
 
-              <div className="navbar__options">
-                <NavbarLink 
-                  href="/settings" 
-                  name="Settings" 
-                  icon={ <FaGear/> }
-                />
+              <NavbarLink 
+                href="/transactions" 
+                name="Transactions" 
+                icon={ <FaMoneyBill/> }
+              />
 
-                <NavbarLink 
-                  href="/about" 
-                  name="About uroFinances" 
-                  icon={ <FaInfo/> }
-                />
-              </div>
 
-              <div 
-                className="navbar__signout"
-                onClick={ () => signOut() } 
-              >
-                <FaRightFromBracket/>
-                <span>Log out</span>
-              </div>
-            </>
+              <NavbarLink 
+                href="/budgets" 
+                name="Budgets" 
+                icon={ <FaPercent/> }
+              />
 
-          : <div className="navbar__options">
+              <NavbarLink 
+                href="/goals" 
+                name="Goals" 
+                icon={ <FaBullseye/> }
+              />
+            </div>
+
+            <div className="navbar__options">
+              <NavbarLink 
+                href="/settings" 
+                name="Settings" 
+                icon={ <FaGear/> }
+              />
+
               <NavbarLink 
                 href="/about" 
-                name="About uroGroceries" 
+                name="About uroFinances" 
                 icon={ <FaInfo/> }
               />
             </div>
-        }
-      </div>
+
+            <div 
+              className="navbar__signout"
+              onClick={ () => signOut() } 
+            >
+              <FaRightFromBracket/>
+              <span>Log out</span>
+            </div>
+          </>
+
+        : <div className="navbar__options">
+            <NavbarLink 
+              href="/about" 
+              name="About uroGroceries" 
+              icon={ <FaInfo/> }
+            />
+          </div>
+      }
     </div>
   );
 }

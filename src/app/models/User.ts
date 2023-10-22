@@ -1,41 +1,46 @@
 import mongoose from "mongoose";
 import idSchema from './_id';
 
-const purchaseSchema = new mongoose.Schema({
-  list: {
+const userAccountSchema = new mongoose.Schema({
+  id: idSchema,
+
+  name: {
     type: String,
-    ref: 'List',
-    required: true
-  },
-
-  store: {
-    type: String,
-    ref: 'Store',
-    default: null,
-    required: false
-  },
-
-  date: {
-    type: Date,
-    default: Date.now,
-    required: true
-  },
-
-  price: {
-    type: Number,
     required: true,
-    min: [0, 'Price must be greater than 0']
+    maxlength: 128
+  },
+
+  icon: {
+    type: String,
+    required: false
   }
+  
 }, { _id: false })
+
+const userCategorySchema = new mongoose.Schema({
+  id: idSchema,
+
+  name: {
+    type: String,
+    required: true,
+    maxlength: 128
+  },
+
+  icon: {
+    type: String,
+    default: 'default',
+    required: true
+  },
+
+  parent: {
+    type: String,
+    default: null,
+    required: true
+  }
+})
 
 const userSchema = new mongoose.Schema({
   id: idSchema,
-  
-  picture: {
-    type: String,
-    default: null,
-    required: false
-  },
 
   name: { 
     type: String, 
@@ -78,9 +83,34 @@ const userSchema = new mongoose.Schema({
     required: false
   },
 
-  purchases: {
-    type: [purchaseSchema],
+  picture: {
+    type: String,
+    default: null,
     required: false
+  },
+
+  accounts: {
+    type: [userAccountSchema],
+    default: [{ id: "2d593098-48b9-40cc-bb4f-7e71f38a71c9", name: "Main Account", icon: "default" }],
+    required: true
+  },
+
+  categories: {
+    type: [userCategorySchema],
+    default: [{ 
+      id: "968c0feb-a19d-41d2-a501-c1b365cd541f", 
+      name: "Main Category", 
+      icon: "default", 
+      parent: null 
+    }],
+  },
+
+  settings: {
+    open_navbar_on_hover: {
+      type: Boolean,
+      default: false,
+      required: true
+    }
   }
 });
 
