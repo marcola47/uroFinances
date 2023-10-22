@@ -1,22 +1,20 @@
 "use client";
-import { useSession } from "next-auth/react"
-import Navbar from "@/app/components/Navbar/Navbar"
-import { ResetPassword } from "@/app/components/ModifyPassword/ModifyPassword"
-
+import { useSession } from "next-auth/react";
 import { FaShieldHalved } from "react-icons/fa6";
+
+import { ResetPassword } from "@/app/components/ModifyPassword/ModifyPassword";
+import AccessDenied from "@/app/components/AccessDenied/AccessDenied";
 
 export default function CreatePasswordPage(): JSX.Element {
   const { data: session } = useSession();
 
-  return (
-    <div className="app">
-      <Navbar/>
-
+  if (session?.user?.missingPassword) {
+    return (
       <div className="create-pwd">
         <div className="create-pwd__icon">
           <FaShieldHalved/>
         </div>
-
+  
         <h1 className="create-pwd__header">
           CREATE A PASSWORD 
         </h1>
@@ -24,7 +22,7 @@ export default function CreatePasswordPage(): JSX.Element {
           You have previously logged in with a provider account like Google or Github. 
           Please create a password to continue with your credentials.
         </p>
-
+  
         <ResetPassword 
           type="create"
           id={ session?.user?.id } 
@@ -32,6 +30,12 @@ export default function CreatePasswordPage(): JSX.Element {
           email={ session?.user?.email }
         />
       </div>
-    </div>
-  )
+    )
+  }
+
+  else if (session?.user?.missingPassword === false) 
+    return <AccessDenied/>
+
+  else 
+    return <div/>
 }

@@ -26,9 +26,18 @@ input, button, textarea {
   color: inherit; 
 }
 
+button {
+  color: white;
+  background-color: black;
+}
+
 .app
 {
+  display: flex;
+  flex-direction: column;
+
   position: relative;
+  min-height: 100dvh;
   padding-top: 80px; 
 }
 
@@ -36,7 +45,7 @@ input, button, textarea {
   cursor: pointer;
   @include transition;
 
-  &--reset-pwd {
+  &--bg-blue {
     padding: 16px;
     border-radius: $br-s;
 

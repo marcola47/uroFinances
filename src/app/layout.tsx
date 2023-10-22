@@ -16,12 +16,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body>
-        <UIContextProvider>
-          <SessionProvider session={ session }>
+        <SessionProvider session={ session }>
+          <UIContextProvider>
             <VerifyCredentials/>
             { children }
-          </SessionProvider>
-        </UIContextProvider>
+          </UIContextProvider>
+        </SessionProvider>
       </body>
     </html>
   )

@@ -1,4 +1,7 @@
+@import '../app/components/AccessDenied/_AccessDenied.scss';
+@import '../app/components/Footer/_Footer.scss';
 @import '../app/components/Forms/_Forms.scss';
 @import '../app/components/Navbar/_Navbar.scss';
-@import '../app/(routes)/auth/create-password/_style.scss';
+@import '../app/(routes)/auth/email/sent/_style.scss';
+@import '../app/(routes)/auth/password/create/_style.scss';
 @import '../app/(routes)/seeder/_style.scss';
