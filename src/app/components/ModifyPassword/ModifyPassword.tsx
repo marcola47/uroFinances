@@ -23,7 +23,7 @@ export function ResetPassword({
     })
 
     const { status, err } = await res.json();
-    switch(true) {
+    switch (true) {
       case status < 300: 
         router.push('/auth/email/sent'); 
         break;

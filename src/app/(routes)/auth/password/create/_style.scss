@@ -4,7 +4,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 64px 16px 64px 16px;
+
+  width: 420px;
+  padding: 96px 16px;
+  margin-inline: auto;
 
   &__icon svg {
     font-size: 10rem;

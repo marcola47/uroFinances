@@ -49,7 +49,7 @@ export default function CreatePasswordPage(): JSX.Element {
     });
 
     const { status, err } = await res.json();
-    switch(true) {
+    switch (true) {
       case status < 300:
         router.push(`${session?.user ? '/' : '/login'}`); 
         break;

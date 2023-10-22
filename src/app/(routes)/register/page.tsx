@@ -1,19 +1,24 @@
-import Navbar from "@/app/components/Navbar/Navbar";
 import { FormRegister } from "@/app/components/Forms/Forms";
 
 export default function RegisterPage(): JSX.Element {
   return (
-    <div className="app">
-      <Navbar/>
-
+    <div className="app">      
       <div className="register">
-        <img 
-          src="/next.svg" 
-          alt="" 
-          className="register__logo"
-        />
+        <div className="register__content">
+          <img 
+            src="/next.svg" 
+            alt="" 
+            className="register__logo"
+          />
 
-        <FormRegister/>
+          <FormRegister/>
+        </div>
+        
+        <img 
+          src="/bg/credentials__bg--dark.png" 
+          alt="background" 
+          className="register__bg"
+        />
       </div>
     </div>
   );

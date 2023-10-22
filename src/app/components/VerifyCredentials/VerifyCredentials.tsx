@@ -10,7 +10,7 @@ export default function VerifyCredentials(): JSX.Element {
   useEffect(() => {
     console.log(session)
 
-    if (session?.user?.missingPassword === true && !pathname.includes("/auth/password/create"))
+    if (session?.user?.missingPassword === true && (!pathname.includes("/auth/password/create") && !pathname.includes("/auth/email/sent")))
       redirect('/auth/password/create');
 
     else if (session?.user?.emailVerified === false && pathname !== '/auth/email/verify')

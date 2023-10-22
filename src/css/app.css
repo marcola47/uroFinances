@@ -24,18 +24,34 @@
 
 .register, .login {
   display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100dvh;
+}
+.register__content, .login__content {
+  display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 24px;
-  padding: 24px;
+  width: 480px;
+  height: 100dvh;
+  padding: 96px 32px;
+}
+.register__logo, .login__logo {
+  width: 356px;
+  margin-bottom: 64px;
+}
+.register__bg, .login__bg {
+  width: calc(100% - 480px);
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 100%;
 }
 .form__oauth {
   display: flex;
@@ -49,7 +65,7 @@
   gap: 12px;
   padding: 16px;
   border-radius: 3px;
-  color: hsl(210, 14%, 15%);
+  color: hsl(210, 15%, 15%);
   background-color: hsl(0, 0%, 100%);
   font-size: 1.2rem;
   font-weight: 600;
@@ -58,7 +74,7 @@
 }
 .form__btn:hover {
   color: hsl(0, 0%, 100%);
-  background-color: hsl(210, 14%, 5%);
+  background-color: hsl(210, 15%, 5%);
 }
 .form__btn:hover img {
   filter: invert(100%);
@@ -69,14 +85,14 @@
 .form__divider {
   position: relative;
   height: 3px;
-  background-color: hsl(210, 14%, 45%);
+  background-color: hsl(210, 15%, 45%);
 }
 .form__divider__text {
   position: absolute;
   top: -9px;
   left: 50%;
   padding: 0 8px;
-  background-color: hsl(210, 14%, 15%);
+  background-color: hsl(210, 15%, 15%);
   transform: translate(-50%, 0);
 }
 .form__inputs {
@@ -96,13 +112,13 @@
   width: 100%;
   padding: 16px 16px 16px 48px;
   border-radius: 3px;
-  background-color: hsl(210, 14%, 30%);
+  background-color: hsl(210, 15%, 30%);
 }
 .form__input input::-moz-placeholder {
-  color: hsl(210, 14%, 65%);
+  color: hsl(210, 15%, 65%);
 }
 .form__input input::placeholder {
-  color: hsl(210, 14%, 65%);
+  color: hsl(210, 15%, 65%);
 }
 .form__cta {
   text-decoration: underline;
@@ -110,21 +126,21 @@
   transition: all 0.1s ease-in-out;
 }
 .form__cta:hover {
-  color: hsl(211, 95%, 58%);
+  color: hsl(210, 95%, 58%);
 }
 .form__submit {
   padding: 16px;
   margin-top: 32px;
   border-radius: 3px;
   color: hsl(210, 100%, 98%);
-  background-color: hsl(218, 80%, 46%);
+  background-color: hsl(210, 80%, 46%);
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
 .form__submit:hover {
-  background-color: hsl(215, 85%, 51%);
+  background-color: hsl(210, 85%, 51%);
 }
 
 .navbar {
@@ -133,13 +149,11 @@
   top: 0;
   width: 100%;
   height: 64px;
-  background-color: hsl(208, 15%, 23%);
 }
 .navbar__header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-end;
-  z-index: 1;
   position: relative;
   width: 100%;
   height: 100%;
@@ -156,8 +170,8 @@
   position: absolute;
   top: 62px;
   left: 0;
-  width: 100%;
-  height: 100dvh;
+  width: 400px;
+  height: calc(100vh - 62px);
   background-color: hsl(208, 15%, 23%);
   transition: all 0.1s ease-in-out;
 }
@@ -171,17 +185,17 @@
   min-height: 160px;
   padding: 24px 16px 16px 16px;
   margin-bottom: -64px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
   box-shadow: 0px 0px 30px rgba(255, 255, 255, 0.2);
   color: hsl(208, 15%, 23%);
-  background-color: hsl(206, 100%, 97%);
+  background-color: hsl(210, 100%, 97%);
 }
 .navbar__user__img {
   width: 72px;
   height: 72px;
   margin-bottom: 16px;
-  border: 3px solid hsl(207, 100%, 66%);
+  border: 3px solid hsl(210, 100%, 66%);
   border-radius: 50%;
   color: hsl(208, 15%, 23%);
 }
@@ -195,6 +209,15 @@
   width: 96px;
   transform: rotate(-45deg);
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.1));
+}
+.navbar__user__burger {
+  z-index: 10;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
 .navbar__credentials svg, .navbar__login svg {
   font-size: 3.5rem;
@@ -216,28 +239,32 @@
   flex-direction: column;
 }
 .navbar__links, .navbar__options {
-  border-bottom: 2px solid hsl(210, 14%, 30%);
+  border-bottom: 2px solid hsl(210, 15%, 30%);
 }
 .navbar__link {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 16px;
-  color: hsl(0, 0%, 100%);
   font-size: 1.2rem;
   font-weight: 600;
   text-decoration: none;
 }
-.navbar__link--active {
-  background-color: hsl(210, 14%, 30%);
+.navbar__link--active, .navbar__link:hover {
+  background-color: hsl(210, 15%, 30%);
 }
 .navbar__signout {
   display: flex;
+  align-items: center;
   gap: 8px;
   padding: 24px 16px;
+  margin-top: auto;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
+}
+.navbar__signout--active, .navbar__signout:hover {
+  background-color: hsl(210, 15%, 30%);
 }
 
 .email-sent {
@@ -245,7 +272,9 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding: 24px;
+  width: 520px;
+  padding: 96px 16px;
+  margin-inline: auto;
 }
 .email-sent__icon svg {
   font-size: 10rem;
@@ -255,11 +284,30 @@
   text-align: center;
 }
 
+.email-verify {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 520px;
+  padding: 96px 16px;
+  margin-inline: auto;
+}
+.email-verify__icon svg {
+  font-size: 10rem;
+  margin-block: 32px;
+}
+.email-verify__header, .email-verify__text {
+  text-align: center;
+}
+
 .create-pwd {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 64px 16px 64px 16px;
+  width: 420px;
+  padding: 96px 16px;
+  margin-inline: auto;
 }
 .create-pwd__icon svg {
   font-size: 10rem;
@@ -270,7 +318,7 @@
 }
 .create-pwd__text {
   margin-bottom: 32px;
-  color: hsl(210, 14%, 80%);
+  color: hsl(210, 15%, 80%);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -309,10 +357,10 @@ html {
 
 body {
   color: hsl(0, 0%, 100%);
-  background-color: hsl(210, 14%, 15%);
+  background-color: hsl(210, 15%, 15%);
 }
 
-input, button, textarea {
+input, button, textarea, a {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
@@ -328,21 +376,24 @@ button {
   flex-direction: column;
   position: relative;
   min-height: 100dvh;
-  padding-top: 80px;
 }
 
 .btn {
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
+.btn--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 .btn--bg-blue {
   padding: 16px;
   border-radius: 3px;
   color: hsl(0, 0%, 100%);
-  background-color: hsl(215, 85%, 51%);
+  background-color: hsl(210, 85%, 51%);
   font-size: 1.2rem;
   font-weight: 600;
 }
 .btn--bg-blue:hover {
-  background-color: hsl(211, 95%, 58%);
+  background-color: hsl(210, 95%, 58%);
 }/*# sourceMappingURL=app.css.map */

@@ -4,7 +4,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useUIContext } from "@/app/context/Ui";
-import { FaBarsStaggered, FaCircleUser, FaFileLines, FaBasketShopping, FaList, FaRuler, FaStore, FaDollarSign, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
+import { FaBarsStaggered, FaCircleUser, FaTableColumns, FaGear, FaInfo, FaRightFromBracket } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
   const { navbarOpen, setNavbarOpen } = useUIContext();
@@ -34,15 +34,10 @@ export default function Navbar(): JSX.Element {
   }
   
   function NavbarHeader(): JSX.Element {
-    const style = navbarOpen
-    ? { color: "#323b43" }
-    : { color: "#fff"    }
-
     return (
       <div className="navbar__header">
         <div 
           className="navbar__burger"
-          style={ style }
           onClick={ () => setNavbarOpen(!navbarOpen) }
           children={ <FaBarsStaggered/> }
         />
@@ -53,6 +48,10 @@ export default function Navbar(): JSX.Element {
   function NavbarUser({ session }: { session: any }): JSX.Element {
     const [userImgSrc, setUserImgSrc] = useState(session?.user?.image || '/user.svg')
 
+    const burgerStyle = navbarOpen
+    ? { display: "block" }
+    : { display: "none"  }
+    
     return (
       <div className="navbar__user">
         {
@@ -89,13 +88,20 @@ export default function Navbar(): JSX.Element {
           alt="logo"
           className="navbar__user__logo" 
         />
+
+        <div 
+          className="navbar__user__burger"
+          style={ burgerStyle }
+          onClick={ () => setNavbarOpen(!navbarOpen) }
+          children={ <FaBarsStaggered/> }
+        />
       </div>
     )
   }
 
   const style = navbarOpen
   ? { transform: 'translateX(0%)'   }
-  : { transform: 'translateX(111%)' }
+  : { transform: 'translateX(-111%)' }
 
   return (
     <div className="navbar">
@@ -106,45 +112,14 @@ export default function Navbar(): JSX.Element {
         style={ style }
       >
         <NavbarUser session={ session }/>
-
         {
           session 
           ? <>
               <div className="navbar__links">
                 <NavbarLink 
-                  href="/lists" 
-                  name="Lists" 
-                  icon={ <FaFileLines/> }
-                />
-
-                <NavbarLink 
-                  href="/products" 
-                  name="Products" 
-                  icon={ <FaBasketShopping/> }
-                />
-
-                <NavbarLink 
-                  href="/categories" 
-                  name="Categories" 
-                  icon={ <FaList/> }
-                />
-
-                <NavbarLink 
-                  href="/units" 
-                  name="Measurement Units" 
-                  icon={ <FaRuler/> }
-                />
-
-                <NavbarLink 
-                  href="/stores" 
-                  name="Stores" 
-                  icon={ <FaStore/> }
-                />
-
-                <NavbarLink 
-                  href="/expenses" 
-                  name="My Expenses" 
-                  icon={ <FaDollarSign/> }
+                  href="/" 
+                  name="Dashboard" 
+                  icon={ <FaTableColumns/> }
                 />
               </div>
 
@@ -157,7 +132,7 @@ export default function Navbar(): JSX.Element {
 
                 <NavbarLink 
                   href="/about" 
-                  name="About uroGroceries" 
+                  name="About uroFinances" 
                   icon={ <FaInfo/> }
                 />
               </div>

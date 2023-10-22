@@ -1,21 +1,87 @@
 "use client";
+import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Navbar from "@/app/components/Navbar/Navbar"
+
+import { FaEnvelope } from "react-icons/fa6";
 
 export default function VerifyEmailPage(): JSX.Element {
+  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const { data: session } = useSession();
 
   if (session?.user.emailVerified === true)
-    redirect('/auth/email-verified');
+    redirect('/auth/email/verified');
+
+  useEffect(() => {
+    if (error.length > 0)
+      throw new Error(error);
+  }, [error])
+
+  async function handleSendEmail(): Promise<void> {
+    const res = await fetch('/api/auth/email/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        id: session?.user?.id, 
+        name: session?.user?.name, 
+        email: session?.user.email 
+      })
+    });
+
+    const { status, err } = await res.json();
+    switch (true) {
+      case status < 300: 
+        setEmailSent(true); 
+        break;
+
+      case status >= 300 && status < 400:
+        setEmailSent(true);
+        break;
+      
+      case status >= 400 && status < 500: 
+        console.log(err);
+        setError("There was a problem processing the submitted data"); 
+        break;
+      
+      case status >= 500:
+        console.log(err); 
+        setError("There was a problem processing your request in the server"); 
+        break;
+      
+      default: 
+        console.log(err);
+        setError("There was a problem processing your request. Error unknown, please try again later");
+    }
+  }
 
   return (
-    <div className="app">
-      <Navbar/>
-
-      <div className="ver-email">
-        verify email
+    <div className="email-verify">
+      <div className="email-verify__icon">
+        <FaEnvelope/>
       </div>
+
+      <h1 className="email-verify__header">
+        VERIFY YOUR EMAIL
+      </h1>
+
+      <p className="email-verify__text">
+        We sent a verification link to your registered email.
+      </p>
+
+      {
+        !emailSent
+        ? <button 
+            className="btn btn--bg-blue"
+            onClick={ handleSendEmail }
+            children="SEND EMAIL AGAIN"
+          />
+        
+        : <button 
+            className="btn btn--disabled btn--bg-blue"
+            children="EMAIL SENT"
+          />
+      }
     </div>
   )
 }

@@ -18,12 +18,6 @@ export function FormLogin(props: Props): JSX.Element {
 
   const router = useRouter();
 
-  async function handleOAuthLogin(provider: string): Promise<void> {
-    await signIn(provider, {
-      callbackUrl: props.callbackUrl || "/",
-    });
-  }
-
   async function handleCredentialsLogin(): Promise<void> {
     await signIn("credentials", {
       email: emailRef.current?.value,

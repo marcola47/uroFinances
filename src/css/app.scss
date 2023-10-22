@@ -20,7 +20,7 @@ body {
   background-color: $grey-800;
 }
 
-input, button, textarea {
+input, button, textarea, a {
   font-family: inherit; 
   font-size: inherit;
   color: inherit; 
@@ -38,12 +38,16 @@ button {
 
   position: relative;
   min-height: 100dvh;
-  padding-top: 80px; 
 }
 
 .btn {
   cursor: pointer;
   @include transition;
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
   &--bg-blue {
     padding: 16px;
