@@ -19,7 +19,7 @@ export default function CreatePasswordPage(): JSX.Element {
           CREATE A PASSWORD 
         </h1>
         <p className="create-pwd__text">
-          You have previously logged in with a provider account like Google or Github. 
+          You have previously logged in with a provider account like Google or GitHub. 
           Please create a password to continue with your credentials.
         </p>
   

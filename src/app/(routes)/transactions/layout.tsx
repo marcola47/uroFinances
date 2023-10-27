@@ -1,5 +1,4 @@
 import Navbar from "@/app/components/Navbar/Navbar"
-import Footer from "@/app/components/Footer/Footer"
 
 export default function TransactionsLayout({ 
   children 
@@ -10,7 +9,6 @@ export default function TransactionsLayout({
     <div className="app">
       <Navbar/>
       { children }
-      <Footer/>
     </div>
   )
 }

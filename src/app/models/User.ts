@@ -35,7 +35,13 @@ const userCategorySchema = new mongoose.Schema({
   parent: {
     type: String,
     default: null,
-    required: true
+    required: false
+  },
+
+  grandparent: {
+    type: String,
+    default: null,
+    required: false
   }
 })
 

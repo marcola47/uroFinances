@@ -29,10 +29,16 @@ const TransactionSchema = new mongoose.Schema({
     required: true
   },
 
-  categories: {
-    type: [String],
-    default: ["968c0feb-a19d-41d2-a501-c1b365cd541f"],
+  category: {
+    type: String,
+    default: "968c0feb-a19d-41d2-a501-c1b365cd541f",
     required: true,
+  },
+
+  amount: {
+    type: Number,
+    required: true,
+    min: 0
   },
 
   due_date: {
@@ -47,10 +53,25 @@ const TransactionSchema = new mongoose.Schema({
     required: true,
   },
 
-  amount: {
+  recurring: {
+    type: Boolean,
+    required: false
+  },
+
+  recurring_period: {
+    type: String,
+    enum: ["daily", "weekly", "monthly", "yearly"],
+    required: false
+  },
+
+  in_stallments: {
+    type: Boolean,
+    required: false
+  },
+
+  stallments_count : {
     type: Number,
-    required: true,
-    min: 0
+    required: false
   }
 }, { timestamps: true });
 

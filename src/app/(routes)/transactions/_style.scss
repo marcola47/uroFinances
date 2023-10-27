@@ -1,0 +1,9 @@
+@import "../../../css/variables";
+
+.transactions {
+  position: relative;
+  left: 64px;
+  width: calc(100dvw - 64px);
+  min-height: 100dvh;
+  padding: 32px;
+}

@@ -12,16 +12,6 @@
   margin-top: 24px;
 }
 
-.footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: auto;
-  padding: 16px;
-  color: hsl(0, 0%, 100%);
-  background-color: hsl(208, 15%, 23%);
-}
-
 .register, .login {
   display: flex;
   align-items: center;
@@ -143,9 +133,44 @@
   background-color: hsl(210, 85%, 51%);
 }
 
+.month-tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 9px;
+  background-color: hsl(210, 15%, 15%);
+}
+.month-tab__btn {
+  display: flex;
+  align-items: center;
+  width: 32px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.month-tab__btn--prev {
+  justify-content: flex-end;
+}
+.month-tab__btn--prev:hover {
+  padding-right: 4px;
+}
+.month-tab__btn--next {
+  justify-content: flex-start;
+}
+.month-tab__btn--next:hover {
+  padding-left: 4px;
+}
+.month-tab__month {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
 .navbar {
   display: flex;
   flex-direction: column;
+  z-index: 10;
   position: absolute;
   left: 0;
   width: 400px;
@@ -271,7 +296,7 @@
   transition: all 0.1s ease-in-out;
 }
 .navbar__link--active, .navbar__link:hover {
-  background-color: hsl(210, 15%, 30%);
+  color: hsl(210, 100%, 66%);
 }
 .navbar__link__icon {
   display: grid;
@@ -286,6 +311,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
 .navbar__signout--active, .navbar__signout:hover {
   background-color: hsl(210, 15%, 30%);
@@ -366,6 +392,14 @@
   font-weight: 600;
 }
 
+.transactions {
+  position: relative;
+  left: 64px;
+  width: calc(100dvw - 64px);
+  min-height: 100dvh;
+  padding: 32px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -381,7 +415,7 @@ html {
 
 body {
   color: hsl(0, 0%, 100%);
-  background-color: hsl(210, 15%, 15%);
+  background-color: hsl(210, 15%, 10%);
 }
 
 input, button, textarea, a {
