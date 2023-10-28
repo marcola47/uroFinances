@@ -3,13 +3,61 @@
     "id": "2f713bd2-2a04-46d7-930b-bba65597fd46",
     "name": "Marcos Eduardo Mori Kaminski",
     "email": "marcosemk1005@gmail.com",
-    "password": "1234567890",
+    "password": "123123123",
+    "image": "https://media.licdn.com/dms/image/D4D03AQE2_RMh8F3YrA/profile-displayphoto-shrink_800_800/0/1666885286202?e=1703721600&v=beta&t=YXKyFAlT04INle1MSeLBO9HJCU0Mi_K21fTMr4DlFWU",
     "provider": "credentials",
+    "providerID": "2f713bd2-2a04-46d7-930b-bba65597fd46",
+    "emailVerified": true,
     "categories": [
       { 
         "id": "968c0feb-a19d-41d2-a501-c1b365cd541f", 
         "name": "Uncategorized",
-        "icon": "uncategorized.svg"
+        "icon": "uncategorized"
+      },
+      {
+        "id": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+        "name": "Shopping",
+        "icon": "uncategorized"
+      },
+        {
+          "id": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+          "name": "Clothing",
+          "icon": "uncategorized",
+          "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+        },
+          {
+            "id": "762d9437-33b5-4c8a-b828-762fe2f7190d",
+            "name": "Sportswear",
+            "icon": "uncategorized",
+            "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+            "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+          },
+          {
+            "id": "81aa775f-ad2d-4564-9266-e0cbfedbb306",
+            "name": "Fashion",
+            "icon": "uncategorized",
+            "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+            "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+          },
+        {
+          "id": "e11b0914-f21b-4045-9add-3cfa64d1013b",
+          "name": "Electronics",
+          "icon": "uncategorized",
+          "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+        },
+        {
+          "id": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
+          "name": "Home Stuff",
+          "icon": "uncategorized",
+          "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+        }
+    ],
+    "accounts": [
+      { 
+        "id": "2d593098-48b9-40cc-bb4f-7e71f38a71c9", 
+        "name": "Main Account",
+        "type": "checking",
+        "icon": "default.svg" 
       }
     ]
   }

@@ -10,6 +10,12 @@ const userAccountSchema = new mongoose.Schema({
     maxlength: 128
   },
 
+  type: {
+    type: String,
+    enum: ['checking', 'savings', 'wallet'],
+    required: true
+  },
+
   icon: {
     type: String,
     required: false
@@ -89,7 +95,7 @@ const userSchema = new mongoose.Schema({
     required: false
   },
 
-  picture: {
+  image: {
     type: String,
     default: null,
     required: false
@@ -105,9 +111,8 @@ const userSchema = new mongoose.Schema({
     type: [userCategorySchema],
     default: [{ 
       id: "968c0feb-a19d-41d2-a501-c1b365cd541f", 
-      name: "Main Category", 
-      icon: "default", 
-      parent: null 
+      name: "Uncategorized", 
+      icon: "uncategorized",
     }],
   },
 

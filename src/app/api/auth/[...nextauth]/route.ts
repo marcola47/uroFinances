@@ -60,17 +60,19 @@ export const authOptions = {
       token.id = user.id;
       token.emailVerified = user.emailVerified;
       token.provider = user.provider;
+      token.image = user.image;
       token.missingPassword = user.provider === 'credentials' && !user.password;
-      token.settings = user.settings;
+      // token.settings = user.settings;
 
       return token;
     },
 
     async session({ session, token }: { session: any, token: any }) {
       session.user.id = token.id;
+      session.user.image = token.image;
       session.user.emailVerified = token.emailVerified;
       session.user.missingPassword = token.missingPassword;
-      session.user.settings = token.settings;
+      // session.user.settings = token.settings;
 
       return session;
     },

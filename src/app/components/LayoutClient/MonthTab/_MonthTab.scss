@@ -6,7 +6,7 @@
   align-items: center;
   gap: 16px;
 
-  padding: 24px;
+  padding: 20px;
   border-radius: $br-b;
 
   background-color: $grey-800;
@@ -17,7 +17,7 @@
 
     width: 32px;
 
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
     @include transition;
 
@@ -25,19 +25,20 @@
       justify-content: flex-end;
 
       &:hover
-      { padding-right: 4px; }
+      { padding-right: 4px }
     }
 
     &--next {
       justify-content: flex-start;
 
       &:hover
-      { padding-left: 4px; }
+      { padding-left: 4px }
     }
   }
 
   &__month {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 600;
+    user-select: none;
   }
 }

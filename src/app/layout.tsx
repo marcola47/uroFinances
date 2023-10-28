@@ -1,9 +1,10 @@
-import { UIContextProvider } from './context/Ui';
-import SessionProvider from './context/SessionProvider';
 import { getServerSession } from 'next-auth';
+import SessionProvider from './context/SessionProvider';
+import { UIContextProvider } from './context/Ui';
+import { authOptions } from './api/auth/[...nextauth]/route';
 import '@/css/app.css';
 
-import VerifyCredentials from './components/VerifyCredentials/VerifyCredentials';
+import VerifyCredentials from './components/Auth/VerifyCredentials/VerifyCredentials';
 
 export const metadata = {
   title: 'Next.js',
@@ -11,8 +12,8 @@ export const metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession();
-  
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <body>

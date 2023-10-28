@@ -2,8 +2,8 @@
 import { useSession } from "next-auth/react";
 import { FaShieldHalved } from "react-icons/fa6";
 
-import { ResetPassword } from "@/app/components/ModifyPassword/ModifyPassword";
-import AccessDenied from "@/app/components/AccessDenied/AccessDenied";
+import { ResetPassword } from "@/app/components/Auth/ModifyPassword/ModifyPassword";
+import AccessDenied from "@/app/components/Auth/AccessDenied/AccessDenied";
 
 export default function CreatePasswordPage(): JSX.Element {
   const { data: session } = useSession();

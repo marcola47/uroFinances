@@ -1,4 +1,5 @@
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
+"use client";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 export default function MonthTab(): JSX.Element {
   return (

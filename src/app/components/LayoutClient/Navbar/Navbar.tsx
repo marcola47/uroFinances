@@ -13,7 +13,7 @@ import {
   FaBullseye,
   FaGear, 
   FaInfo, 
-  FaRightFromBracket 
+  FaRightFromBracket,
 } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {

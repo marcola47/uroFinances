@@ -30,8 +30,8 @@ const TransactionSchema = new mongoose.Schema({
   },
 
   category: {
-    type: String,
-    default: "968c0feb-a19d-41d2-a501-c1b365cd541f",
+    type: [String],
+    default: ["968c0feb-a19d-41d2-a501-c1b365cd541f", "", ""],
     required: true,
   },
 
@@ -69,7 +69,12 @@ const TransactionSchema = new mongoose.Schema({
     required: false
   },
 
-  stallments_count : {
+  stallments_count: {
+    type: Number,
+    required: false
+  },
+
+  stallments_paid: {
     type: Number,
     required: false
   }

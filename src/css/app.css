@@ -1,4 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;900&display=swap");
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .access-denied {
   display: flex;
   flex-direction: column;
@@ -12,6 +20,14 @@
   margin-top: 24px;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .register, .login {
   display: flex;
   align-items: center;
@@ -133,12 +149,20 @@
   background-color: hsl(210, 85%, 51%);
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .month-tab {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
-  padding: 24px;
+  padding: 20px;
   border-radius: 9px;
   background-color: hsl(210, 15%, 15%);
 }
@@ -146,7 +170,7 @@
   display: flex;
   align-items: center;
   width: 32px;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
@@ -163,10 +187,21 @@
   padding-left: 4px;
 }
 .month-tab__month {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .navbar {
   display: flex;
   flex-direction: column;
@@ -317,6 +352,28 @@
   background-color: hsl(210, 15%, 30%);
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.page-header {
+  padding-bottom: 16px;
+  border-bottom: 2px solid hsl(210, 15%, 20%);
+  text-align: center;
+}
+
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .email-sent {
   display: flex;
   flex-direction: column;
@@ -334,6 +391,14 @@
   text-align: center;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .email-verify {
   display: flex;
   flex-direction: column;
@@ -351,6 +416,14 @@
   text-align: center;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .create-pwd {
   display: flex;
   flex-direction: column;
@@ -392,14 +465,37 @@
   font-weight: 600;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .transactions {
   position: relative;
   left: 64px;
   width: calc(100dvw - 64px);
   min-height: 100dvh;
   padding: 32px;
+  animation: fade_in 0.15s forwards ease-in-out;
+}
+.transactions .upper-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 48px;
 }
 
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 * {
   margin: 0;
   padding: 0;
