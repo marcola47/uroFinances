@@ -56,6 +56,7 @@ export const authOptions = {
     async jwt({ token }: { token: any }) {
       await dbConnection();
       const user = await User.findOne({ email: token.email });
+      console.log(user)
 
       token.id = user.id;
       token.emailVerified = user.emailVerified;
@@ -80,6 +81,7 @@ export const authOptions = {
     async signIn({ user, account }: { user: any, account: any }) {
       try {
         await dbConnection();
+
         const existingUser = await User.findOne({ email: user.email });
 
         if (!existingUser) {
@@ -88,7 +90,7 @@ export const authOptions = {
             provider: account.provider,
             name: user.name,
             email: user.email,
-            picture: user.image,     
+            image: user.image,     
             emailVerified: true
           })
         }
@@ -97,7 +99,7 @@ export const authOptions = {
           await User.updateOne(
             { email: user.email }, 
             { 
-              picture: user.image, 
+              image: user.image, 
               provider: account.provider,
               providerID: user.id,
               emailVerified: true

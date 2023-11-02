@@ -1,3 +1,66 @@
 [
-  
+  {
+    "id": "1499cb7f-ea07-4d61-b140-c19b3fbe070b",
+    "name": "recurring test",
+    "user": "2f713bd2-2a04-46d7-930b-bba65597fd46",
+    "account": "398819b5-263c-4e88-9a46-829bf0058b7e",
+    "type": "expense",
+    "category": {
+      "root": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+      "child": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+      "grandchild": "762d9437-33b5-4c8a-b828-762fe2f7190d"
+    },
+    "amount": 50,
+    "confirmed": true,
+    "recurring": true,
+    "recurring_period": "monthly"
+  },
+  {
+    "id": "7ce72e8e-5bc0-4702-ba12-2c6d9c0a5279",
+    "name": "recurring test",
+    "user": "2f713bd2-2a04-46d7-930b-bba65597fd46",
+    "account": "398819b5-263c-4e88-9a46-829bf0058b7e",
+    "type": "expense",
+    "category": {
+      "root": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+      "child": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+      "grandchild": "762d9437-33b5-4c8a-b828-762fe2f7190d"
+    },
+    "amount": 100,
+    "confirmed": true,
+    "recurring": true,
+    "recurring_period": "quarterly"
+  },
+  {
+    "id": "0c4e8a8d-dbe1-4a66-93e6-b626a82c60a7",
+    "name": "recurring test",
+    "user": "2f713bd2-2a04-46d7-930b-bba65597fd46",
+    "account": "398819b5-263c-4e88-9a46-829bf0058b7e",
+    "type": "expense",
+    "category": {
+      "root": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+      "child": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+      "grandchild": "762d9437-33b5-4c8a-b828-762fe2f7190d"
+    },
+    "amount": 150,
+    "confirmed": true,
+    "recurring": true,
+    "recurring_period": "semi-annual"
+  },
+  {
+    "id": "bee66ac6-419e-421f-a67e-484ad3eb8c23",
+    "name": "recurring test",
+    "user": "2f713bd2-2a04-46d7-930b-bba65597fd46",
+    "account": "398819b5-263c-4e88-9a46-829bf0058b7e",
+    "type": "expense",
+    "category": {
+      "root": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+      "child": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+      "grandchild": "762d9437-33b5-4c8a-b828-762fe2f7190d"
+    },
+    "amount": 200,
+    "confirmed": true,
+    "recurring": true,
+    "recurring_period": "annual"
+  }
 ]

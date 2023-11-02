@@ -98,7 +98,7 @@
   top: -9px;
   left: 50%;
   padding: 0 8px;
-  background-color: hsl(210, 15%, 15%);
+  background-color: hsl(210, 15%, 10%);
   transform: translate(-50%, 0);
 }
 .form__inputs {

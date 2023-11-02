@@ -1,6 +1,24 @@
 import mongoose from "mongoose";
 import idSchema from "./_id";
 
+const TransactionCategorySchema = new mongoose.Schema({
+  root: {
+    type: String,
+    required: false,
+  },
+
+  child: {
+    type: String,
+    required: false,
+  },
+
+  grandchild: {
+    type: String,
+    required: false,
+  }
+
+}, { _id: false })
+
 const TransactionSchema = new mongoose.Schema({
   id: idSchema,
 
@@ -20,7 +38,7 @@ const TransactionSchema = new mongoose.Schema({
   account: {
     type: String,
     default: "2d593098-48b9-40cc-bb4f-7e71f38a71c9",
-    required: true,
+    required: true
   },
 
   type: {
@@ -30,15 +48,20 @@ const TransactionSchema = new mongoose.Schema({
   },
 
   category: {
-    type: [String],
-    default: ["968c0feb-a19d-41d2-a501-c1b365cd541f", "", ""],
-    required: true,
+    type: TransactionCategorySchema,
+    required: false,
   },
 
   amount: {
     type: Number,
     required: true,
     min: 0
+  },
+
+  registration_date: {
+    type: Date,
+    default: Date.now,
+    required: true,
   },
 
   due_date: {
@@ -60,7 +83,17 @@ const TransactionSchema = new mongoose.Schema({
 
   recurring_period: {
     type: String,
-    enum: ["daily", "weekly", "monthly", "yearly"],
+    enum: ["monthly", "quarterly", "semi-annual", "annual"],
+    required: false
+  },
+
+  recurring_months: {
+    type: [Number],
+    required: false
+  },
+
+  recurring_months_paid: {
+    type: [Date],
     required: false
   },
 
@@ -71,13 +104,35 @@ const TransactionSchema = new mongoose.Schema({
 
   stallments_count: {
     type: Number,
-    required: false
-  },
-
-  stallments_paid: {
-    type: Number,
-    required: false
+    required: false,
+    min: 1
   }
-}, { timestamps: true });
+}, { timestamps: false });
+
+//fill recurring_months
+TransactionSchema.pre('save', function(next) {
+  if (this.recurring) {
+    const newDate: Date = new Date(this.due_date);
+    const startMonth: number = newDate.getMonth();
+    const chargeMonths: number[] = [];
+    let period: number = 0;
+  
+    switch (this.recurring_period) {
+      case 'monthly'    : period = 1;  break;
+      case 'quarterly'  : period = 3;  break;
+      case 'semi-annual': period = 6;  break;
+      case 'annual'     : period = 12; break;
+      default: break;
+    }
+  
+    for (let i = period; i <= 12; i += period) 
+      if (!chargeMonths.includes(((startMonth + i) % 12) + 1))
+        chargeMonths.push(((startMonth + i) % 12) + 1);
+  
+    this.recurring_months = chargeMonths;
+  }
+
+  next();
+})
 
 export default mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);

@@ -103,17 +103,13 @@ const userSchema = new mongoose.Schema({
 
   accounts: {
     type: [userAccountSchema],
-    default: [{ id: "2d593098-48b9-40cc-bb4f-7e71f38a71c9", name: "Main Account", icon: "default" }],
+    default: [{ id: "2d593098-48b9-40cc-bb4f-7e71f38a71c9", name: "Main Account", type: "checking", icon: "default" }],
     required: true
   },
 
   categories: {
     type: [userCategorySchema],
-    default: [{ 
-      id: "968c0feb-a19d-41d2-a501-c1b365cd541f", 
-      name: "Uncategorized", 
-      icon: "uncategorized",
-    }],
+    required: false,
   },
 
   settings: {
