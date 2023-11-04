@@ -89,11 +89,13 @@ const TransactionSchema = new mongoose.Schema({
 
   recurring_months: {
     type: [Number],
+    default: undefined,
     required: false
   },
 
   recurring_months_paid: {
-    type: [Date],
+    type: [{ due_month: Date, paid_month: Date }, { _id: false }],
+    default: undefined,
     required: false
   },
 
@@ -106,12 +108,18 @@ const TransactionSchema = new mongoose.Schema({
     type: Number,
     required: false,
     min: 1
+  },
+
+  stallments_current: {
+    type: Number,
+    required: false,
+    min: 1
   }
 }, { timestamps: false });
 
 //fill recurring_months
 TransactionSchema.pre('save', function(next) {
-  if (this.recurring) {
+  if ((this.isModified('due_date') || this.isNew) && this.recurring) {
     const newDate: Date = new Date(this.due_date);
     const startMonth: number = newDate.getMonth();
     const chargeMonths: number[] = [];
@@ -126,8 +134,8 @@ TransactionSchema.pre('save', function(next) {
     }
   
     for (let i = period; i <= 12; i += period) 
-      if (!chargeMonths.includes(((startMonth + i) % 12) + 1))
-        chargeMonths.push(((startMonth + i) % 12) + 1);
+      if (!chargeMonths.includes((startMonth + i) % 12))
+        chargeMonths.push((startMonth + i) % 12);
   
     this.recurring_months = chargeMonths;
   }

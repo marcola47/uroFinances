@@ -1,0 +1,150 @@
+[
+  {
+    "id": "f07a1d30-619d-43ba-ae3e-d985926623d4",
+    "name": "Shopping",
+    "type": "expense"
+  },
+    {
+      "id": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+      "name": "Clothing",
+      "type": "expense",
+      "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+    },
+      {
+        "id": "762d9437-33b5-4c8a-b828-762fe2f7190d",
+        "name": "Sportswear",
+        "type": "expense",
+        "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+        "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+      },
+      {
+        "id": "81aa775f-ad2d-4564-9266-e0cbfedbb306",
+        "name": "Fashion",
+        "type": "expense",
+        "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
+        "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+      },
+    {
+      "id": "e11b0914-f21b-4045-9add-3cfa64d1013b",
+      "name": "Electronics",
+      "type": "expense",
+      "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+    },
+    {
+      "id": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
+      "name": "Home Stuff",
+      "type": "expense",
+      "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+    },
+      {
+        "id": "bf83d49d-f4db-4856-b2db-57c085844372",
+        "name": "Decoration",
+        "type": "expense",
+        "parent": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
+        "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+      },
+      {
+        "id": "6fde5242-488d-473c-a307-13dd6f19c237",
+        "name": "Appliances",
+        "type": "expense",
+        "parent": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
+        "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
+      },
+  {
+    "id": "5b65e596-18b7-401b-b775-869f4848f686",
+    "name": "Leasure",
+    "type": "expense"
+  },
+    {
+      "id": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
+      "name": "Food & Drink",
+      "type": "expense",
+      "parent": "5b65e596-18b7-401b-b775-869f4848f686"
+    },
+      {
+        "id": "a8acef65-e264-4290-9dfa-89e43233d4d1",
+        "name": "Sushi",
+        "type": "expense",
+        "parent": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
+        "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
+      },
+      {
+        "id": "2dea3e41-7640-487e-a647-e4b7ff6059bb",
+        "name": "Pizza & Burgers",
+        "type": "expense",
+        "parent": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
+        "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
+      },
+    {
+      "id": "247046b4-7203-496a-aec7-cc3d51503e2d",
+      "name": "Night-outs",
+      "type": "expense",
+      "parent": "5b65e596-18b7-401b-b775-869f4848f686"
+    },
+      {
+        "id": "2dea3e41-7640-487e-a647-e4b7ff6059bb",
+        "name": "Clubs",
+        "type": "expense",
+        "parent": "247046b4-7203-496a-aec7-cc3d51503e2d",
+        "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
+      },
+      {
+        "id": "a512b2f8-ab43-44a6-9b87-56ac7eb871e6",
+        "name": "Home Parties",
+        "type": "expense",
+        "parent": "247046b4-7203-496a-aec7-cc3d51503e2d",
+        "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
+      },
+  {
+    "id": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f",
+    "name": "Essentials",
+    "type": "expense"
+  },
+    {
+      "id": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
+      "name": "Health & Hygiene",
+      "type": "expense",
+      "parent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+    },
+      {
+        "id": "67bd20e1-9222-472f-ba62-a50f7310068f",
+        "name": "Hair",
+        "type": "expense",
+        "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
+        "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+      },
+      {
+        "id": "ab53406b-e37f-4557-b7db-2983b6b43633",
+        "name": "Body",
+        "type": "expense",
+        "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
+        "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+      },
+      {
+        "id": "5e0b6209-611c-40a3-a034-86a19fdb1d1c",
+        "name": "Meds",
+        "type": "expense",
+        "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
+        "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+      },
+    {
+      "id": "6cb6b507-dd4b-453e-809f-fca0228014b5",
+      "name": "Groceries",
+      "type": "expense",
+      "parent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+    },
+      {
+        "id": "4747ad61-0124-4a55-9660-67dbfaa370ef",
+        "name": "Everyday Cooking",
+        "type": "expense",
+        "parent": "6cb6b507-dd4b-453e-809f-fca0228014b5",
+        "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+      },
+      {
+        "id": "48833b26-ea93-4175-95c5-264645c085fc",
+        "name": "Snacks & Junkfood",
+        "type": "expense",
+        "parent": "6cb6b507-dd4b-453e-809f-fca0228014b5",
+        "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
+      }
+]

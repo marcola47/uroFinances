@@ -12,18 +12,23 @@
       {
         "id": "f07a1d30-619d-43ba-ae3e-d985926623d4",
         "name": "Shopping",
-        "icon": "uncategorized"
+        "icon": "uncategorized",
+        "type": "expense"
       },
         {
           "id": "8325be2d-6615-430e-9de7-c8f4c8c47598",
           "name": "Clothing",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
         },
           {
             "id": "762d9437-33b5-4c8a-b828-762fe2f7190d",
             "name": "Sportswear",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
             "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
           },
@@ -31,6 +36,8 @@
             "id": "81aa775f-ad2d-4564-9266-e0cbfedbb306",
             "name": "Fashion",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "8325be2d-6615-430e-9de7-c8f4c8c47598",
             "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
           },
@@ -38,18 +45,24 @@
           "id": "e11b0914-f21b-4045-9add-3cfa64d1013b",
           "name": "Electronics",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
         },
         {
           "id": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
           "name": "Home Stuff",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
         },
           {
             "id": "bf83d49d-f4db-4856-b2db-57c085844372",
             "name": "Decoration",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
             "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
           },
@@ -57,24 +70,31 @@
             "id": "6fde5242-488d-473c-a307-13dd6f19c237",
             "name": "Appliances",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "d0eb3252-a721-4e62-b3f0-fe910bf3610a",
             "grandparent": "f07a1d30-619d-43ba-ae3e-d985926623d4"
           },
       {
         "id": "5b65e596-18b7-401b-b775-869f4848f686",
         "name": "Leasure",
-        "icon": "uncategorized"
+        "icon": "uncategorized",
+        "type": "expense"
       },
         {
           "id": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
           "name": "Food & Drink",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "5b65e596-18b7-401b-b775-869f4848f686"
         },
           {
             "id": "a8acef65-e264-4290-9dfa-89e43233d4d1",
             "name": "Sushi",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
             "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
           },
@@ -82,6 +102,8 @@
             "id": "2dea3e41-7640-487e-a647-e4b7ff6059bb",
             "name": "Pizza & Burgers",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "2096b050-7a0f-49ba-88f3-e781d32bdd7a",
             "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
           },
@@ -89,12 +111,16 @@
           "id": "247046b4-7203-496a-aec7-cc3d51503e2d",
           "name": "Night-outs",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "5b65e596-18b7-401b-b775-869f4848f686"
         },
           {
             "id": "2dea3e41-7640-487e-a647-e4b7ff6059bb",
             "name": "Clubs",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "247046b4-7203-496a-aec7-cc3d51503e2d",
             "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
           },
@@ -102,24 +128,31 @@
             "id": "a512b2f8-ab43-44a6-9b87-56ac7eb871e6",
             "name": "Home Parties",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "247046b4-7203-496a-aec7-cc3d51503e2d",
             "grandparent": "5b65e596-18b7-401b-b775-869f4848f686"
           },
       {
         "id": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f",
         "name": "Essentials",
-        "icon": "uncategorized"
+        "icon": "uncategorized",
+        "type": "expense"
       },
         {
           "id": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
           "name": "Health & Hygiene",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
         },
           {
             "id": "67bd20e1-9222-472f-ba62-a50f7310068f",
             "name": "Hair",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
             "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
           },
@@ -127,6 +160,8 @@
             "id": "ab53406b-e37f-4557-b7db-2983b6b43633",
             "name": "Body",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
             "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
           },
@@ -134,6 +169,8 @@
             "id": "5e0b6209-611c-40a3-a034-86a19fdb1d1c",
             "name": "Meds",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "b5efd4fc-fad9-40d4-ac44-780b8b7051c7",
             "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
           },
@@ -141,12 +178,16 @@
           "id": "6cb6b507-dd4b-453e-809f-fca0228014b5",
           "name": "Groceries",
           "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "expense",
           "parent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
         },
           {
             "id": "4747ad61-0124-4a55-9660-67dbfaa370ef",
             "name": "Everyday Cooking",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "6cb6b507-dd4b-453e-809f-fca0228014b5",
             "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
           },
@@ -154,9 +195,161 @@
             "id": "48833b26-ea93-4175-95c5-264645c085fc",
             "name": "Snacks & Junkfood",
             "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "expense",
             "parent": "6cb6b507-dd4b-453e-809f-fca0228014b5",
             "grandparent": "7a23cc80-bb4e-4320-8763-4194bf0fcf4f"
-          }
+          },
+      {
+        "id": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17",
+        "name": "Job",
+        "icon": "uncategorized",
+        "type": "income"
+      },
+        {
+          "id": "499865d9-4dba-40fa-bfa4-7b6f6e796927",
+          "name": "Paycheck",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17"
+        },
+        {
+          "id": "be94c3bd-3b22-49e9-b9b8-442da3ac8111",
+          "name": "Overtime",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17"
+        },
+      {
+        "id": "c4b7049f-dd18-4770-82d8-672e74fd18ad",
+        "name": "Freelance",
+        "icon": "uncategorized",
+        "type": "income"
+      },
+        {
+          "id": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+          "name": "Coding",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+        },
+          {
+            "id": "71bd3587-57eb-4c51-947d-e9e17576bfd4",
+            "name": "Web",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+          {
+            "id": "7b270d7b-56d7-430b-857d-f7191ecd5861",
+            "name": "Mobile",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+          {
+            "id": "6fb3e7bc-06a1-49dc-83fd-0e64e13ed9f4",
+            "name": "Assistance",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+        {
+          "id": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+          "name": "Music",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+        },
+          {
+            "id": "7095323b-0cdd-4ab8-b7dd-671468263b94",
+            "name": "Writing",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+          {
+            "id": "852a2ae3-10f2-4e48-8157-706af9a74f2d",
+            "name": "Producing",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+          {
+            "id": "d8b18bfe-4a90-4ad8-929c-d9ebe05667dc",
+            "name": "Artist Fees",
+            "icon": "uncategorized",
+            "color": "#ffffff",
+            "type": "income",
+            "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+            "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+          },
+      {
+        "id": "a8e7082f-20f7-47b5-836f-965e9e34e781",
+        "name": "Gifts",
+        "icon": "uncategorized",
+        "type": "income"
+      },
+        {
+          "id": "24c5addf-b982-4a68-b324-d03983cf6c73",
+          "name": "Holidays",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "a8e7082f-20f7-47b5-836f-965e9e34e781"
+        },
+        {
+          "id": "41813775-d294-45f0-9f0a-755f4fcba2f4",
+          "name": "Birthdays",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "a8e7082f-20f7-47b5-836f-965e9e34e781"
+        },
+      {
+        "id": "689ed984-36e1-44b9-bb87-43412929b7e4",
+        "name": "Drug Deals",
+        "icon": "uncategorized",
+        "type": "income"
+      },
+        {
+          "id": "5ab79e18-1374-44f4-ae56-fb72805d7934",
+          "name": "Zaza",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+        },
+        {
+          "id": "a6e55c11-bd38-4cd0-bf88-dbac2d8122a7",
+          "name": "Cocaine",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+        },
+        {
+          "id": "23461064-0c1e-4eaa-8862-5a1798fcd977",
+          "name": "Weed",
+          "icon": "uncategorized",
+          "color": "#ffffff",
+          "type": "income",
+          "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+        }
     ],
     "accounts": [
       { 
@@ -179,7 +372,7 @@
       },
       { 
         "id": "a1c61540-548b-4448-831b-f530428a8327", 
-        "name": "Wallter",
+        "name": "Wallet",
         "type": "wallet",
         "icon": "default.svg" 
       }

@@ -1,0 +1,118 @@
+[
+  {
+    "id": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17",
+    "name": "Job",
+    "type": "income"
+  },
+    {
+      "id": "499865d9-4dba-40fa-bfa4-7b6f6e796927",
+      "name": "Paycheck",
+      "type": "income",
+      "parent": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17"
+    },
+    {
+      "id": "be94c3bd-3b22-49e9-b9b8-442da3ac8111",
+      "name": "Overtime",
+      "type": "income",
+      "parent": "595f1346-275a-40e2-bbb9-eb7f7dcd5b17"
+    },
+  {
+    "id": "c4b7049f-dd18-4770-82d8-672e74fd18ad",
+    "name": "Freelance",
+    "type": "income"
+  },
+    {
+      "id": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+      "name": "Coding",
+      "type": "income",
+      "parent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+    },
+      {
+        "id": "71bd3587-57eb-4c51-947d-e9e17576bfd4",
+        "name": "Web",
+        "type": "income",
+        "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+      {
+        "id": "7b270d7b-56d7-430b-857d-f7191ecd5861",
+        "name": "Mobile",
+        "type": "income",
+        "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+      {
+        "id": "6fb3e7bc-06a1-49dc-83fd-0e64e13ed9f4",
+        "name": "Assistance",
+        "type": "income",
+        "parent": "d26eb328-23c1-4686-a1ea-79ef402aa757",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+    {
+      "id": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+      "name": "Music",
+      "type": "income",
+      "parent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+    },
+      {
+        "id": "7095323b-0cdd-4ab8-b7dd-671468263b94",
+        "name": "Writing",
+        "type": "income",
+        "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+      {
+        "id": "852a2ae3-10f2-4e48-8157-706af9a74f2d",
+        "name": "Producing",
+        "type": "income",
+        "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+      {
+        "id": "d8b18bfe-4a90-4ad8-929c-d9ebe05667dc",
+        "name": "Artist Fees",
+        "type": "income",
+        "parent": "ef75378b-4eaa-463d-ada6-60fdffcd4539",
+        "grandparent": "c4b7049f-dd18-4770-82d8-672e74fd18ad"
+      },
+  {
+    "id": "a8e7082f-20f7-47b5-836f-965e9e34e781",
+    "name": "Gifts",
+    "type": "income"
+  },
+    {
+      "id": "24c5addf-b982-4a68-b324-d03983cf6c73",
+      "name": "Holidays",
+      "type": "income",
+      "parent": "a8e7082f-20f7-47b5-836f-965e9e34e781"
+    },
+    {
+      "id": "41813775-d294-45f0-9f0a-755f4fcba2f4",
+      "name": "Birthdays",
+      "type": "income",
+      "parent": "a8e7082f-20f7-47b5-836f-965e9e34e781"
+    },
+  {
+    "id": "689ed984-36e1-44b9-bb87-43412929b7e4",
+    "name": "Drug Deals",
+    "type": "income"
+  },
+    {
+      "id": "5ab79e18-1374-44f4-ae56-fb72805d7934",
+      "name": "Zaza",
+      "type": "income",
+      "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+    },
+    {
+      "id": "a6e55c11-bd38-4cd0-bf88-dbac2d8122a7",
+      "name": "Cocaine",
+      "type": "income",
+      "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+    },
+    {
+      "id": "23461064-0c1e-4eaa-8862-5a1798fcd977",
+      "name": "Weed",
+      "type": "income",
+      "parent": "689ed984-36e1-44b9-bb87-43412929b7e4"
+    }
+]

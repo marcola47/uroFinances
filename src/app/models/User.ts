@@ -34,22 +34,33 @@ const userCategorySchema = new mongoose.Schema({
 
   icon: {
     type: String,
-    default: 'default',
+    default: 'uncategorized',
+    required: true
+  },
+
+  color: {
+    type: String,
+    default: '#ffffff',
+    required: true,
+    maxlength: 7
+  },
+
+  type: {
+    type: String,
+    enum: ['income', 'expense'],
     required: true
   },
 
   parent: {
     type: String,
-    default: null,
     required: false
   },
 
   grandparent: {
     type: String,
-    default: null,
     required: false
   }
-})
+}, { _id: false })
 
 const userSchema = new mongoose.Schema({
   id: idSchema,

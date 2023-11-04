@@ -9,6 +9,15 @@ export default function SeederPage() {
 
     console.log(await res.json());
   }
+
+  async function seedTransactions() {
+    const res = await fetch(`/api/seed/transactions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+
+    console.log(await res.json());
+  }
   
   return (
     <div className="seeder">
@@ -18,7 +27,7 @@ export default function SeederPage() {
       > SEED USERS</div>
 
       <div 
-        onClick={ () => {seedModel('transactions')} }
+        onClick={ seedTransactions }
         className="seeder__btn"
       > SEED TRANSACTIONS</div>
     </div>

@@ -5,9 +5,6 @@ import bcrypt from 'bcrypt';
 import User from '@/app/models/User';
 import users from './data_users.json' assert { type: "json" };
 
-import Transaction from '@/app/models/Transaction';
-import transactions from './data_transactions.json' assert { type: "json" };
-
 export async function POST(req: NextRequest) {
   const url = new URL(req.url);
   const type = url.searchParams.get('type');
@@ -40,6 +37,8 @@ export async function POST(req: NextRequest) {
         provider: user.provider,
         image: user.image,
         emailVerified: user.emailVerified,
+        categories: user.categories,
+        accounts: user.accounts,
       });
   
       await User.create(newUser);
@@ -51,7 +50,6 @@ export async function POST(req: NextRequest) {
     
     switch (type) {
       case 'users': await seedUsers(); break;
-      case 'transactions': await seedCollection({ Model: Transaction, data: transactions }); break;
     }
 
     await mongoose.connection.close();
