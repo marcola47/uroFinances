@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { useUIContext } from "@/app/context/Ui";
+import Link from "next/link";
 import { 
   FaArrowRight, 
   FaTableColumns, 

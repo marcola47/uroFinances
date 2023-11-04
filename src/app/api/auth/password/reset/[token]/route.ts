@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
 
-import dbConnection from "@/libs/dbConnection";
+import dbConnection from "@/libs/configs/dbConnection";
 import PasswordToken from "@/app/models/PasswordToken";
 import User from "@/app/models/User";
 

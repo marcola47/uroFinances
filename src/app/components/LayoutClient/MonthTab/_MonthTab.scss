@@ -37,8 +37,10 @@
   }
 
   &__month {
+    width: 192px;
     font-size: 1.4rem;
     font-weight: 600;
+    text-align: center;
     user-select: none;
   }
 }

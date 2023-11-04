@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { faker } from "@faker-js/faker";
 
 import Transaction from "@/app/models/Transaction";
-import dbConnection from "@/libs/dbConnection";
+import dbConnection from "@/libs/configs/dbConnection";
 
 import expenseCategories from "./expense_categories.json" assert { type: "json" };
 import incomeCategories from "./income_categories.json" assert { type: "json" };
@@ -27,7 +27,6 @@ export async function POST() {
     for (let i = 0; i < 1000; i++) {
       const type = Math.round(Math.random()) ? "expense" : "income";
       const recurrence = Math.floor(Math.random() * 10); //0 - none | 1 - recurring | 2 - in stallments
-      // const recurrence = 2;
 
       interface Category { root: string | null, child: string | null, grandchild: string | null };
       const category: Category = { root: null, child: null, grandchild: null };

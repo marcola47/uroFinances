@@ -187,8 +187,10 @@
   padding-left: 4px;
 }
 .month-tab__month {
+  width: 192px;
   font-size: 1.4rem;
   font-weight: 600;
+  text-align: center;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;

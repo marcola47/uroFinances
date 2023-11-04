@@ -3,7 +3,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 import MonthTab from "@/app/components/LayoutClient/MonthTab/MonthTab"
 import PageHeader from "@/app/components/LayoutServer/PageHeader/PageHeader"
-import { TransactionsControl } from "@/app/components/Transactions/Transactions";
+import { TransactionsControl, TransactionList } from "@/app/components/Transactions/Transactions";
 
 export default async function TransactionsPage(): Promise<JSX.Element> {
   const session = await getServerSession(authOptions);
@@ -31,6 +31,8 @@ export default async function TransactionsPage(): Promise<JSX.Element> {
             <TransactionsControl type="filter"/>
             <TransactionsControl type="sort"/>
           </div>
+
+          <TransactionList type="income"/> 
         </div>
       </div>
     </div>

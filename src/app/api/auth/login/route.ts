@@ -1,6 +1,6 @@
 //@ts-nocheck
 import bcrypt from 'bcrypt';
-import dbConnection from "@/libs/dbConnection";
+import dbConnection from "@/libs/configs/dbConnection";
 import User from "@/app/models/User";
 
 export default async function login(email: string, password: string): Promise<any> {

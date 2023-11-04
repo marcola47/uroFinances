@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import login from "../login/route";
 import User from "@/app/models/User";
-import dbConnection from "@/libs/dbConnection";
+import dbConnection from "@/libs/configs/dbConnection";
 
 export const authOptions = {
   providers: [
@@ -56,7 +56,6 @@ export const authOptions = {
     async jwt({ token }: { token: any }) {
       await dbConnection();
       const user = await User.findOne({ email: token.email });
-      console.log(user)
 
       token.id = user.id;
       token.emailVerified = user.emailVerified;

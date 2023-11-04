@@ -78,11 +78,13 @@ const TransactionSchema = new mongoose.Schema({
 
   recurring: {
     type: Boolean,
-    required: false
+    default: false,
+    required: true
   },
 
   recurring_period: {
     type: String,
+    default: undefined,
     enum: ["monthly", "quarterly", "semi-annual", "annual"],
     required: false
   },
@@ -101,17 +103,20 @@ const TransactionSchema = new mongoose.Schema({
 
   in_stallments: {
     type: Boolean,
-    required: false
+    default: false,
+    required: true
   },
 
   stallments_count: {
     type: Number,
+    default: undefined,
     required: false,
     min: 1
   },
 
   stallments_current: {
     type: Number,
+    default: undefined,
     required: false,
     min: 1
   }

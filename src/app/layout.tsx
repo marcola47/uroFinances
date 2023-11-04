@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth';
 import SessionProvider from './context/SessionProvider';
 import { UIContextProvider } from './context/Ui';
+import { DateContextProvider } from './context/Date';
 import { authOptions } from './api/auth/[...nextauth]/route';
 import '@/css/app.css';
 
@@ -18,10 +19,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body>
         <SessionProvider session={ session }>
-          <UIContextProvider>
-            <VerifyCredentials/>
-            { children }
-          </UIContextProvider>
+        <UIContextProvider>
+        <DateContextProvider>
+          <VerifyCredentials/>
+          { children }
+        </DateContextProvider>
+        </UIContextProvider>
         </SessionProvider>
       </body>
     </html>

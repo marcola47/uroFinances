@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
-import dbConnection from '@/libs/dbConnection';
-import sendEmail from '@/libs/nodemailer';
+import dbConnection from '@/libs/configs/dbConnection';
+import sendEmail from '@/libs/helpers/nodemailer';
 
 import User from '@/app/models/User';
 import EmailToken from '@/app/models/EmailToken';

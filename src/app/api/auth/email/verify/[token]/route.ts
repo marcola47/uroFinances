@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 
-import dbConnection from "@/libs/dbConnection";
+import dbConnection from "@/libs/configs/dbConnection";
 import User from "@/app/models/User";
 import EmailToken from "@/app/models/EmailToken";
 
