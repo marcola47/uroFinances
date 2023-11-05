@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useDateContext } from "@/app/context/Date";
 import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
+
+import { Transaction } from "@/types/types";
+
 import List from "../List/List";
+import { PageHeader } from "../LayoutServer/Headers/Headers";
 
 export function TransactionsControl({ type }: { type: string }): JSX.Element {
   function handleInvoice() {
@@ -29,42 +33,69 @@ export function TransactionsControl({ type }: { type: string }): JSX.Element {
   }
 }
 
-export function Transaction(): JSX.Element {
+export function Transaction({ itemData: transaction }: { itemData: Transaction }): JSX.Element {
+
+  const dateOptions = { 
+    year: "numeric", 
+    month: "2-digit",
+    day: "2-digit" , 
+    hour: "2-digit", 
+    minute: "2-digit",
+    hour12: false
+  } as const;
+  
+  const dueDate = new Date(transaction.due_date);
+  const formattedDate = new Intl.DateTimeFormat('en-GB', dateOptions).format(dueDate);
+  
   return (
     <div className="transaction">
+      <div className="transaction__name">
+        { transaction.name }
+      </div>
+      
+      <div className="transaction__info">
+        <div className="transaction__account">
+          { transaction.account }
+        </div>
 
+        <div className="transaction__due-date">
+          { formattedDate.replace(",", "") }
+        </div>
+
+        {
+          transaction.recurring &&
+          <div className="transaction__recurrance">
+            { transaction.recurring_period }
+          </div>
+        }
+
+        <div className="transaction__categories">
+          <div className="transaction__category">
+            { transaction.category.root }
+          </div>
+
+          {
+            transaction.category.child &&
+            <div className="transaction__category">
+              { transaction.category.child }
+            </div>
+          }
+
+          {
+            transaction.category.grandchild &&
+            <div className="transaction__category">
+              { transaction.category.grandchild }
+            </div>
+          }
+        </div>
+      </div>
     </div>
   )
 }
 
 export function TransactionList({ type }: { type: string }): JSX.Element {
-  type Transaction = {
-    id: string,
-    name: string,
-    user: string,
-    account: string,
-    type: string,
-    amount: number,
-    registration_date: Date,
-    due_date: Date,
-    confirmed: boolean,
-    recurring: boolean | null,
-    recurring_period: string | null,
-    recurring_months: number[] | null,
-    recurring_months_paid: [{
-      due_month: Date,
-      paid_month: Date
-    }],
-    in_stallments: boolean | null,
-    in_stallments_count: number | null,
-    in_stallments_current: number | null,
-    category: {
-      root: string,
-      child: string | null,
-      grandchild: string | null
-    }
-  }; const [transactions, setTransactions] = useState<Transaction[]>([]);
-
+  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { data: session } = useSession();
   const { date } = useDateContext();
 
@@ -74,18 +105,35 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
       headers: { "type": "application/json" }
     });
 
-    const { err, data } = await res.json();
-    console.log(data);
-
-    if (err)
+    const { status, err, data } = await res.json();
+    
+    if (status !== 200)
       console.log(err);
+  
+    else
+      setTransactions(data);
   }
 
-  useEffect(() => { getTransactions()  }, [type, date])
+  useEffect(() => { getTransactions() }, [date])
 
   return (
-    <div className="transaction-list">
+    <div className="transactions__group">
+      <div className="transactions__header">
+        <h4 className="transactions__label">
+          { type === "income" ? "Incomes" : "Expenses" }
+        </h4>
 
+        <h3 className="transactions__amount">
+          { BRL.format(transactions.reduce((acc, cur) => acc + cur.amount, 0)) }
+        </h3>
+      </div>
+      <List
+        className="transactions__list"
+        ids={`list:transactions:${type}`}
+        elements={ transactions }
+        ListItem={ Transaction }
+        unwrapped={ false }
+      />
     </div>
   )
 }

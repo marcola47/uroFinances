@@ -1,7 +1,7 @@
 "use client";
 // import { useEffect } from "react";
 import { useDateContext } from "@/app/context/Date";
-import getMonthName from "@/libs/helpers/getMonthName";
+import { getMonthName } from "@/libs/helpers/dateFunctions";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 export default function MonthTab(): JSX.Element {

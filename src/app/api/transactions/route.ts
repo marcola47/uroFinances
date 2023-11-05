@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import dbConnection from "@/libs/configs/dbConnection";
-import getMonthRange from "@/libs/helpers/getMonthRange";
+import { getMonthRange } from "@/libs/helpers/dateFunctions";
 import Transaction from "@/app/models/Transaction";
 
-type GETParams = { user: string, date: Date };
 export async function GET(req: NextRequest) {
   try {
     await dbConnection();
@@ -22,8 +22,12 @@ export async function GET(req: NextRequest) {
         $lte: endDate 
       } 
     }).sort({ due_date: 1 });
-    
-    return NextResponse.json({ status: 200, err: null, data: transactions })
+     
+    return NextResponse.json({ 
+      status: 200, 
+      err: null, 
+      data: transactions 
+    })
   }
 
   catch (err) {

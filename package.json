@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "importSass": "node src/libs/importSassFiles.cjs"
+    "importSass": "node src/libs/helpers/importSassFiles.cjs"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

@@ -9,9 +9,6 @@ declare module "next-auth" {
       image: string;
       emailVerified: boolean;
       missingPassword: boolean;
-      settings: {
-        open_navbar_on_hover: boolean;
-      };
     };
   }
 }

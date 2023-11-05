@@ -1,0 +1,28 @@
+@import '../../../css/variables';
+
+.transactions {
+  &__lists {
+    display: flex;
+    gap: 16px;
+
+    width: 100%;
+  }
+  
+  &__group {
+    flex: 1;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.transaction {
+  padding: 16px;
+  border-radius: $br-m;
+  
+  color: $grey-0;
+  background-color: $grey-750;
+}

@@ -25,8 +25,8 @@ function getComponentFiles(dirPath, fileExt = '.scss')
 
 function generateImportStatements() 
 {
-  const componentsDir = path.join(__dirname, '../app/components');
-  const routesDir = path.join(__dirname, '../app/(routes)');
+  const componentsDir = path.join(__dirname, '../../app/components');
+  const routesDir = path.join(__dirname, '../../app/(routes)');
   const componentFiles = getComponentFiles(componentsDir);
   const routesFiles = getComponentFiles(routesDir);
   const allFiles = componentFiles.concat(routesFiles);
@@ -34,12 +34,11 @@ function generateImportStatements()
   const importStatements = allFiles.map(filePath => 
   {
     const relativePath = path.relative(__dirname, filePath).replace(/\\/g, '/');
-    return `@import '${relativePath}';`;
+    return `@import '${relativePath.substring(3)}';`; //remove the extra ../
   });
 
   const output = importStatements.join('\n');
-  fs.writeFileSync(path.join(__dirname, '../css/_imports.scss'), output, 'utf-8');
-
+  fs.writeFileSync(path.join(__dirname, '../../css/_imports.scss'), output, 'utf-8');
   console.log('sass files successfully imported')
 }
 
