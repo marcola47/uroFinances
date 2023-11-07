@@ -52,6 +52,11 @@ export const authOptions = {
     })
   ],
 
+  session: {
+    jwt: true,
+    maxAge: 365 * 24 * 60 * 60
+  },
+
   callbacks: {
     async jwt({ token }: { token: any }) {
       await dbConnection();

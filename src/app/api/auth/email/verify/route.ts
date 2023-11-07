@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuid } from 'uuid';
 
-import sendEmail from '@/libs/nodemailer';
+import sendEmail from '@/libs/helpers/nodemailer';
 import EmailToken from '@/app/models/EmailToken';
 
 export async function POST(req: NextRequest) {

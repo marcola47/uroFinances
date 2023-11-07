@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
 import PasswordToken from "@/app/models/PasswordToken";
-import sendEmail from "@/libs/nodemailer";
+import sendEmail from "@/libs/helpers/nodemailer";
 
 export async function POST(req: NextRequest) {
   try {

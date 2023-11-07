@@ -1,11 +1,11 @@
-export type Account = {
+export type TypeAccount = {
   id: string,
   name: string,
   type: "checking" | "savings" | "wallet" | null,
   icon: string
 }
 
-export type Category = {
+export type TypeCategory = {
   id: string,
   name: string,
   icon: string,
@@ -15,7 +15,7 @@ export type Category = {
   grandparent: string | null
 };
 
-export type User = {
+export type TypeUser = {
   id: string,
   name: string,
   email: string,
@@ -24,13 +24,13 @@ export type User = {
   providerID: string | number,
   image: string,
   acounts: Accounts[],
-  categories: Category[],
+  categories: UserCategory[],
   settings: {
     open_navbar_on_hover: boolean
   }
 };
 
-export type Transaction = {
+export type TypeTransaction = {
   id: string,
   name: string,
   user: string,

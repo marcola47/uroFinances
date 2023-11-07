@@ -1,11 +1,14 @@
 import { getServerSession } from 'next-auth';
 import SessionProvider from './context/SessionProvider';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+
+import { UserContextProvider } from './context/User';
 import { UIContextProvider } from './context/Ui';
 import { DateContextProvider } from './context/Date';
+
 import { authOptions } from './api/auth/[...nextauth]/route';
 import '@/css/app.css';
-
-import VerifyCredentials from './components/Auth/VerifyCredentials/VerifyCredentials';
 
 export const metadata = {
   title: 'Next.js',
@@ -14,17 +17,25 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
+  const headersList = headers();
+  const url = headersList.get('x-url') || "";
+
+  console.log(url);
+
+  // if (session?.user?.missingPassword === true)
+  //   redirect("/auth/password/create");
 
   return (
     <html lang="en">
       <body>
         <SessionProvider session={ session }>
-        <UIContextProvider>
-        <DateContextProvider>
-          <VerifyCredentials/>
-          { children }
-        </DateContextProvider>
-        </UIContextProvider>
+          <UserContextProvider>
+            <UIContextProvider>
+              <DateContextProvider>
+                { children }
+              </DateContextProvider>
+            </UIContextProvider>
+          </UserContextProvider>
         </SessionProvider>
       </body>
     </html>

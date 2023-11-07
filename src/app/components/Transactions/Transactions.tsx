@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useDateContext } from "@/app/context/Date";
 import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
 
-import { Transaction } from "@/types/types";
+import { TypeTransaction } from "@/types/types";
 
 import List from "../List/List";
 import { PageHeader } from "../LayoutServer/Headers/Headers";
@@ -33,7 +33,7 @@ export function TransactionsControl({ type }: { type: string }): JSX.Element {
   }
 }
 
-export function Transaction({ itemData: transaction }: { itemData: Transaction }): JSX.Element {
+export function Transaction({ itemData: transaction }: { itemData: TypeTransaction }): JSX.Element {
 
   const dateOptions = { 
     year: "numeric", 
@@ -95,7 +95,7 @@ export function Transaction({ itemData: transaction }: { itemData: Transaction }
 
 export function TransactionList({ type }: { type: string }): JSX.Element {
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<TypeTransaction[]>([]);
   const { data: session } = useSession();
   const { date } = useDateContext();
 

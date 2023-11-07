@@ -1,49 +1,58 @@
 "use client";
-import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
+import { useState, useContext, useEffect, createContext, Dispatch, SetStateAction } from "react";
+import { useSession } from "next-auth/react";
+import { redirect, usePathname } from 'next/navigation';
 
-interface UserProps {
-  id: string,
-  name: string,
-  email: string,
-  image: string,
-  emailVerified: boolean,
-  provider: string,
-  providerID: string | number,
-  
-  categories: {
-    root: string,
-    child: string | null,
-    grandchild: string | null
-  }[]
-}
+import { TypeUser } from "@/types/types";
 
 interface UserContextProps {
-
+  user: TypeUser | null;
+  setUser: Dispatch<SetStateAction<TypeUser | null>>;
 }
 
 const UserContext = createContext<UserContextProps>({
-  date: new Date(),
-  setDate: () => {},
+  user: null,
+  setUser: () => {},
 });
 
 export const UserContextProvider = ({ children }: { children: any }) => {
-  const [date, setDate] = useState<Date>(new Date());
+  const [user, setUser] = useState<TypeUser | null>(null);
+  const { data: session } = useSession();
+  const pathname = usePathname();
+
+  async function getUser() {
+    console.log(session);
+
+    if (!user && session?.user) {
+      const res = await fetch(`/api/user?user=${session?.user?.id}`);
+      const { status, data, error } = await res.json();
+  
+      if (status !== 200)
+        console.error(error);
+  
+      else
+        setUser(data);
+    }
+  }
+
+  useEffect(() => { 
+    getUser();
+
+    const notPasswordRoute = !pathname.includes('/auth/password/create') && !pathname.includes('/auth/email/sent');
+    const notEmailRoute = !pathname.includes('/auth/email/verify') && !pathname.includes('/auth/email/sent');
+
+    if (session?.user?.missingPassword === true && notPasswordRoute && notEmailRoute)
+      redirect('/auth/password/create');
+
+    else if (session?.user?.emailVerified === false && notEmailRoute && notPasswordRoute)
+      redirect('/auth/email/verify');
+  }, [user, session, pathname])
 
   return (
-    <UserContext.Provider value={{ date, setDate }}>
+    <UserContext.Provider value={{ user, setUser }}>
       { children }
     </UserContext.Provider>
   )
 }
 
 export const useUserContext = () => useContext(UserContext);
-
-// if (session?.user) {
-//   const res = await fetch(`http://localhost:3000/api/user?user=${session?.user?.id}&data=categories`, {
-//     method: 'GET',
-//     headers: { 'Content-Type': 'application/json' }
-//   });
-
-//   const { data } = await res.json();
-//   session.user.categories = data;
-// }
