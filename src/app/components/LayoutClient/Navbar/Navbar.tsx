@@ -1,8 +1,12 @@
 "use client";
 import { useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+
+import { TypeUser } from "@/types/types";
 import { useUIContext } from "@/app/context/Ui";
+import { useUserContext } from "@/app/context/User";
+
 import Link from "next/link";
 import { 
   FaArrowRight, 
@@ -17,8 +21,8 @@ import {
 } from "react-icons/fa6";
 
 export default function Navbar(): JSX.Element {
+  const { user } = useUserContext(); 
   const { navbarOpen, setNavbarOpen } = useUIContext();
-  const { data: session } = useSession();
   const pathname = usePathname();
 
   function NavbarLink({ 
@@ -42,13 +46,13 @@ export default function Navbar(): JSX.Element {
     )
   }
   
-  function NavbarUser({ session }: { session: any }): JSX.Element {
-    const [userImgSrc, setUserImgSrc] = useState(session?.user?.image || '/user.svg')
+  function NavbarUser({ user }: { user: TypeUser | null }): JSX.Element {
+    const [userImgSrc, setUserImgSrc] = useState(user?.image || '/user.svg')
  
     return (
       <div className="navbar__user">
         {
-          session?.user
+          user
           ? <div className="navbar__credentials">
               <img 
                 src={ userImgSrc } 
@@ -59,11 +63,11 @@ export default function Navbar(): JSX.Element {
               />
 
               <div className="navbar__user__name">
-                { session?.user?.name }
+                { user.name }
               </div>
             
               <div className="navbar__user__email">
-                { session?.user?.email }
+                { user.email }
               </div>
             </div>
 
@@ -101,58 +105,24 @@ export default function Navbar(): JSX.Element {
   return (
     <div 
       className={`navbar ${navbarOpen ? '' : 'navbar--closed'}`}
-      onMouseEnter={ () => { if (session?.user?.settings?.open_navbar_on_hover) setNavbarOpen(true) } }
-      onMouseLeave={ () => { if (session?.user?.settings?.open_navbar_on_hover) setNavbarOpen(false) } }
+      onMouseEnter={ () => { if (user?.settings?.open_navbar_on_hover) setNavbarOpen(true) } }
+      onMouseLeave={ () => { if (user?.settings?.open_navbar_on_hover) setNavbarOpen(false) } }
     >
-      <NavbarUser session={ session }/>
+      <NavbarUser user={ user }/>
       {
-        session 
+        user 
         ? <>
             <div className="navbar__links">
-              <NavbarLink 
-                href="/" 
-                name="Dashboard" 
-                icon={ <FaTableColumns/> }
-              />
-
-              <NavbarLink 
-                href="/accounts" 
-                name="Accounts" 
-                icon={ <FaBuildingColumns/> }
-              />
-
-              <NavbarLink 
-                href="/transactions" 
-                name="Transactions" 
-                icon={ <FaMoneyBill/> }
-              />
-
-
-              <NavbarLink 
-                href="/budgets" 
-                name="Budgets" 
-                icon={ <FaPercent/> }
-              />
-
-              <NavbarLink 
-                href="/goals" 
-                name="Goals" 
-                icon={ <FaBullseye/> }
-              />
+              <NavbarLink href="/" name="Dashboard" icon={ <FaTableColumns/> }/>
+              <NavbarLink href="/accounts" name="Accounts" icon={ <FaBuildingColumns/> }/>
+              <NavbarLink href="/transactions" name="Transactions" icon={ <FaMoneyBill/> }/>
+              <NavbarLink href="/budgets" name="Budgets" icon={ <FaPercent/> }/>
+              <NavbarLink href="/goals" name="Goals" icon={ <FaBullseye/> }/>
             </div>
 
             <div className="navbar__options">
-              <NavbarLink 
-                href="/settings" 
-                name="Settings" 
-                icon={ <FaGear/> }
-              />
-
-              <NavbarLink 
-                href="/about" 
-                name="About uroFinances" 
-                icon={ <FaInfo/> }
-              />
+              <NavbarLink href="/settings" name="Settings" icon={ <FaGear/> }/>
+              <NavbarLink href="/about" name="About uroFinances" icon={ <FaInfo/> }/>
             </div>
 
             <div 

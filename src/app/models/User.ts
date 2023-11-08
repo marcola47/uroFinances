@@ -128,6 +128,12 @@ const userSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
       required: true
+    },
+
+    show_scrollbars: {
+      type: Boolean,
+      default: true,
+      required: true
     }
   }
 });

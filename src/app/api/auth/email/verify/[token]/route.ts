@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { token: strin
     await User.updateOne({ id: emailToken.user }, { emailVerified: true });
     await EmailToken.updateOne({ token }, { verified_at: Date.now() });
   
-    redirect('/auth/email/verified');
+    return NextResponse.redirect(new URL("/auth/email/verified", req.url));
   }
 
   catch (err) {

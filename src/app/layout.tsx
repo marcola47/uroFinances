@@ -1,7 +1,5 @@
 import { getServerSession } from 'next-auth';
 import SessionProvider from './context/SessionProvider';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
 
 import { UserContextProvider } from './context/User';
 import { UIContextProvider } from './context/Ui';
@@ -17,13 +15,6 @@ export const metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
-  const headersList = headers();
-  const url = headersList.get('x-url') || "";
-
-  console.log(url);
-
-  // if (session?.user?.missingPassword === true)
-  //   redirect("/auth/password/create");
 
   return (
     <html lang="en">

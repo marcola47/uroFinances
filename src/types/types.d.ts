@@ -23,10 +23,11 @@ export type TypeUser = {
   provider: string,
   providerID: string | number,
   image: string,
-  acounts: Accounts[],
+  accounts: Accounts[],
   categories: UserCategory[],
   settings: {
-    open_navbar_on_hover: boolean
+    open_navbar_on_hover: boolean,
+    show_scrollbars: boolean
   }
 };
 
@@ -51,7 +52,7 @@ export type TypeTransaction = {
   in_stallments_count: number | null,
   in_stallments_current: number | null,
   category: {
-    root: string,
+    root: string | null,
     child: string | null,
     grandchild: string | null
   }

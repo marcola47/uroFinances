@@ -1,10 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import { useSession } from "next-auth/react";
-import { useDateContext } from "@/app/context/Date";
-import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
 
 import { TypeTransaction } from "@/types/types";
+import { useUserContext } from "@/app/context/User";
+import { useDateContext } from "@/app/context/Date";
+
+import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
 
 import List from "../List/List";
 import { PageHeader } from "../LayoutServer/Headers/Headers";
@@ -34,6 +36,22 @@ export function TransactionsControl({ type }: { type: string }): JSX.Element {
 }
 
 export function Transaction({ itemData: transaction }: { itemData: TypeTransaction }): JSX.Element {
+  const { user } = useUserContext();
+  
+  const transactionAccountName = user?.accounts.find(account => account.id === transaction.account)?.name;
+  const transactionCategory = {
+    root: { name: null, color: null },
+    child: { name: null, color: null },
+    grandchild: { name: null, color: null }
+  } 
+
+  for (const key in transactionCategory) {    
+    if (transaction.category[key as keyof typeof transactionCategory] !== null) {
+      const category = user?.categories.find(category => category.id === transaction.category[key as keyof typeof transactionCategory]);
+      transactionCategory[key as keyof typeof transactionCategory].name = category?.name;
+      transactionCategory[key as keyof typeof transactionCategory].color = category?.color;
+    }
+  }
 
   const dateOptions = { 
     year: "numeric", 
@@ -55,7 +73,7 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
       
       <div className="transaction__info">
         <div className="transaction__account">
-          { transaction.account }
+          { transactionAccountName }
         </div>
 
         <div className="transaction__due-date">
@@ -71,20 +89,20 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
 
         <div className="transaction__categories">
           <div className="transaction__category">
-            { transaction.category.root }
+            { transactionCategory.root.name }
           </div>
 
           {
             transaction.category.child &&
             <div className="transaction__category">
-              { transaction.category.child }
+              { transactionCategory.child.name }
             </div>
           }
 
           {
             transaction.category.grandchild &&
             <div className="transaction__category">
-              { transaction.category.grandchild }
+              { transactionCategory.grandchild.name }
             </div>
           }
         </div>
@@ -94,27 +112,56 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
 }
 
 export function TransactionList({ type }: { type: string }): JSX.Element {
-  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const [transactions, setTransactions] = useState<TypeTransaction[]>([]);
+  const [height, setHeight] = useState<number>(0);
+
   const { data: session } = useSession();
   const { date } = useDateContext();
 
-  async function getTransactions() {
-    const res = await fetch(`/api/transactions?user=${session?.user?.id}&date=${date}&type=${type}`, {
-      method: "GET",
-      headers: { "type": "application/json" }
-    });
+  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  const transactionsRef = useRef<HTMLUListElement>(null);
 
-    const { status, err, data } = await res.json();
-    
-    if (status !== 200)
-      console.log(err);
+  useEffect(() => { 
+    async function getTransactions() {
+      const res = await fetch(`/api/transactions?user=${session?.user?.id}&date=${date}&type=${type}`, {
+        method: "GET",
+        headers: { "type": "application/json" }
+      });
   
-    else
-      setTransactions(data);
-  }
+      const { status, err, data } = await res.json();
+      
+      if (status !== 200)
+        console.log(err);
+    
+      else
+        setTransactions(data);
+    }
+    
+    getTransactions();
+  }, [date])
+  
+  useEffect(() => {
+    const calculateDistances = () => {
+      const element = transactionsRef.current;
+      
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const elementHeight = window.innerHeight - rect.bottom - 16;
+        
+        if (elementHeight > 0)
+          setHeight(elementHeight);
+      }
+    };
 
-  useEffect(() => { getTransactions() }, [date])
+    calculateDistances();
+    window.addEventListener('scroll', calculateDistances);
+    window.addEventListener('resize', calculateDistances);
+
+    return () => {
+      window.removeEventListener('scroll', calculateDistances);
+      window.removeEventListener('resize', calculateDistances);
+    };
+  }, []);
 
   return (
     <div className="transactions__group">
@@ -127,12 +174,14 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
           { BRL.format(transactions.reduce((acc, cur) => acc + cur.amount, 0)) }
         </h3>
       </div>
+      
       <List
         className="transactions__list"
         ids={`list:transactions:${type}`}
         elements={ transactions }
         ListItem={ Transaction }
-        unwrapped={ false }
+        style={{ height: height }}
+        forwardedRef={ transactionsRef }
       />
     </div>
   )

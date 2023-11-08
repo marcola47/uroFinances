@@ -18,42 +18,53 @@ export default function VerifyEmailPage(): JSX.Element {
       throw new Error(error);
   }, [error])
 
-  async function handleSendEmail(): Promise<void> {
+  async function handleSendEmail(type: string): Promise<void> {
+    if (!session?.user)
+      return;
+
     const res = await fetch('/api/auth/email/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
-        id: session?.user?.id, 
-        name: session?.user?.name, 
-        email: session?.user.email 
+        id: session!.user!.id, 
+        name: session!.user!.name, 
+        email: session!.user!.email 
       })
     });
 
-    const { status, err } = await res.json();
-    switch (true) {
-      case status < 300: 
-        setEmailSent(true); 
-        break;
-
-      case status >= 300 && status < 400:
-        setEmailSent(true);
-        break;
-      
-      case status >= 400 && status < 500: 
-        console.log(err);
-        setError("There was a problem processing the submitted data"); 
-        break;
-      
-      case status >= 500:
-        console.log(err); 
-        setError("There was a problem processing your request in the server"); 
-        break;
-      
-      default: 
-        console.log(err);
-        setError("There was a problem processing your request. Error unknown, please try again later");
+    if (type === 'resend') {
+      const { status, err } = await res.json();
+      switch (true) {
+        case status < 300: 
+          setEmailSent(true); 
+          break;
+  
+        case status >= 300 && status < 400:
+          setEmailSent(true);
+          break;
+        
+        case status >= 400 && status < 500: 
+          console.log(err);
+          setError("There was a problem processing the submitted data"); 
+          break;
+        
+        case status >= 500:
+          console.log(err); 
+          setError("There was a problem processing your request in the server"); 
+          break;
+        
+        default: 
+          console.log(err);
+          setError("There was a problem processing your request. Error unknown, please try again later");
+      }
     }
   }
+
+  // verify if already sent initial email first
+  // useEffect(() => {
+  //   if (sessio n?.user)
+  //     handleSendEmail("initial")
+  // }, [])
 
   return (
     <div className="email-verify">
@@ -73,7 +84,7 @@ export default function VerifyEmailPage(): JSX.Element {
         !emailSent
         ? <button 
             className="btn btn--bg-blue"
-            onClick={ handleSendEmail }
+            onClick={ () => {handleSendEmail("resend")} }
             children="SEND EMAIL AGAIN"
           />
         

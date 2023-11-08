@@ -21,7 +21,8 @@ export const UserContextProvider = ({ children }: { children: any }) => {
   const pathname = usePathname();
 
   async function getUser() {
-    console.log(session);
+    // console.log(session);
+    // console.log(user)
 
     if (!user && session?.user) {
       const res = await fetch(`/api/user?user=${session?.user?.id}`);

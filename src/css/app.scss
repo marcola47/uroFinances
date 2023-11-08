@@ -36,7 +36,8 @@ button {
   display: flex;
   flex-direction: column;
   
-  min-height: 100dvh;
+  overflow: hidden;
+  height: 100dvh;
   position: relative;
 }
 
