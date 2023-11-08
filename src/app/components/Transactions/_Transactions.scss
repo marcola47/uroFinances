@@ -11,6 +11,13 @@
     flex: 1;
   }
 
+  &__header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   &__list {
     display: flex;
     flex-direction: column;

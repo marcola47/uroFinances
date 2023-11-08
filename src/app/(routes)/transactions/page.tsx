@@ -13,12 +13,6 @@ export default async function TransactionsPage(): Promise<JSX.Element> {
 
       <div className="transactions__container">
         <div className="transactions__header">          
-          <div className="transactions_controls">
-            <TransactionsControl type="invoice"/>
-            <TransactionsControl type="filter"/>
-            <TransactionsControl type="sort"/>
-          </div>
-
           <div className="transactions__lists">
             <TransactionList type="income"/> 
             <TransactionList type="expense"/> 

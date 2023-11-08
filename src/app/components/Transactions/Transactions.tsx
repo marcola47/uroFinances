@@ -7,33 +7,7 @@ import { useUserContext } from "@/app/context/User";
 import { useDateContext } from "@/app/context/Date";
 
 import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
-
 import List from "../List/List";
-import { PageHeader } from "../LayoutServer/Headers/Headers";
-
-export function TransactionsControl({ type }: { type: string }): JSX.Element {
-  function handleInvoice() {
-    console.log("invoice");
-    return;
-  }
-
-  function handleFilter() {
-    console.log("filter");
-    return;
-  }
-
-  function handleSort() {
-    console.log("sort");
-    return;
-  }
-
-  switch (type) {
-    case "invoice": return <div className="transactions__control transactions__invoice" onClick={ handleInvoice } children={ <FaReceipt/> }/>
-    case "filter" : return <div className="transactions__control transactions__filter " onClick={ handleFilter  } children={ <FaFilter/>  }/>
-    case "sort"   : return <div className="transactions__control transactions__sort   " onClick={ handleSort    } children={ <FaSort/>    }/>
-    default: return <></>;
-  }
-}
 
 export function Transaction({ itemData: transaction }: { itemData: TypeTransaction }): JSX.Element {
   const { user } = useUserContext();
@@ -86,27 +60,27 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
             { transaction.recurring_period }
           </div>
         }
-
-        <div className="transaction__categories">
-          <div className="transaction__category">
-            { transactionCategory.root.name }
-          </div>
-
-          {
-            transaction.category.child &&
-            <div className="transaction__category">
-              { transactionCategory.child.name }
-            </div>
-          }
-
-          {
-            transaction.category.grandchild &&
-            <div className="transaction__category">
-              { transactionCategory.grandchild.name }
-            </div>
-          }
-        </div>
       </div>
+
+      <div className="transaction__categories">
+        <div className="transaction__category">
+          { transactionCategory.root.name }
+        </div>
+
+        {
+          transaction.category.child &&
+          <div className="transaction__category">
+            { transactionCategory.child.name }
+          </div>
+        }
+
+        {
+          transaction.category.grandchild &&
+          <div className="transaction__category">
+            { transactionCategory.grandchild.name }
+          </div>
+        }
+        </div>
     </div>
   )
 }
@@ -166,13 +140,19 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
   return (
     <div className="transactions__group">
       <div className="transactions__header">
-        <h4 className="transactions__label">
+        <h4 className={`transactions__label ${type === "income" ? "transaction__label--green" : "transaction__label--red"}`}>
           { type === "income" ? "Incomes" : "Expenses" }
         </h4>
 
-        <h3 className="transactions__amount">
+        <h3 className={`transactions__amount ${type === "income" ? "transaction__amount--green" : "transaction__amount--red"}`}>
           { BRL.format(transactions.reduce((acc, cur) => acc + cur.amount, 0)) }
         </h3>
+
+        <div className="transactions_controls">
+          <TransactionsControl type="invoice"/>
+          <TransactionsControl type="filter"/>
+          <TransactionsControl type="sort"/>
+        </div>
       </div>
       
       <List
@@ -184,5 +164,47 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
         forwardedRef={ transactionsRef }
       />
     </div>
+  )
+}
+
+export function TransactionsControl({ type }: { type: string }): JSX.Element {
+  function handleInvoice() {
+    console.log("invoice");
+    return;
+  }
+
+  function handleFilter() {
+    console.log("filter");
+    return;
+  }
+
+  function handleSort() {
+    console.log("sort");
+    return;
+  }
+
+  switch (type) {
+    case "invoice": return <div className="transactions__control transactions__invoice" onClick={ handleInvoice } children={ <FaReceipt/> }/>
+    case "filter" : return <div className="transactions__control transactions__filter " onClick={ handleFilter  } children={ <FaFilter/>  }/>
+    case "sort"   : return <div className="transactions__control transactions__sort   " onClick={ handleSort    } children={ <FaSort/>    }/>
+    default: return <></>;
+  }
+}
+
+export function TransactionAdd({ type }: { type: string }): JSX.Element {
+  const className = type === 'income'
+    ? "btn btn--green"
+    : "btn btn--red"
+  
+  function handleAddTransaction() {
+    return true;
+  }
+
+  return (
+    <button 
+      className={ className }
+      onClick={ handleAddTransaction }
+      children={`ADD ${type.toUpperCase}`}
+    />
   )
 }

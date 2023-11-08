@@ -384,6 +384,12 @@
 .transactions__group {
   flex: 1;
 }
+.transactions__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .transactions__list {
   display: flex;
   flex-direction: column;

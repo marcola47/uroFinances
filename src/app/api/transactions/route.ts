@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
         $lte: endDate 
       } 
     }).sort({ due_date: 1 });
-     
+
     return NextResponse.json({ 
       status: 200, 
       err: null, 
