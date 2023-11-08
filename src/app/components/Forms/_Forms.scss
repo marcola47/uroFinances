@@ -51,7 +51,7 @@
     border-radius: $br-s;
 
     color: $grey-800;
-    background-color: $grey-0;
+    background-color: white;
 
     font-size: 1.2rem;
     font-weight: 600;
@@ -60,7 +60,7 @@
     @include transition;
 
     &:hover {
-      color: $grey-0;
+      color: white;
       background-color: $grey-900;
 
       img

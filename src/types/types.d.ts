@@ -27,7 +27,7 @@ export type TypeUser = {
   categories: UserCategory[],
   settings: {
     open_navbar_on_hover: boolean,
-    show_scrollbars: boolean
+    hide_scrollbars: boolean
   }
 };
 

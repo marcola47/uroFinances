@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, forwardRef } from "react";
 import { useSession } from "next-auth/react";
 
+import getTextColor from "@/libs/helpers/getTextColor";
 import { TypeTransaction } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useDateContext } from "@/app/context/Date";
@@ -10,20 +11,24 @@ import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6"
 import List from "../List/List";
 
 export function Transaction({ itemData: transaction }: { itemData: TypeTransaction }): JSX.Element {
+  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const { user } = useUserContext();
   
   const transactionAccountName = user?.accounts.find(account => account.id === transaction.account)?.name;
   const transactionCategory = {
-    root: { name: null, color: null },
-    child: { name: null, color: null },
-    grandchild: { name: null, color: null }
+    root: { name: undefined, style: { backgroundColor: undefined, color: undefined } },
+    child: { name: undefined, style: { backgroundColor: undefined, color: undefined } },
+    grandchild: { name: undefined, style: { backgroundColor: undefined, color: undefined} }
   } 
 
   for (const key in transactionCategory) {    
     if (transaction.category[key as keyof typeof transactionCategory] !== null) {
       const category = user?.categories.find(category => category.id === transaction.category[key as keyof typeof transactionCategory]);
       transactionCategory[key as keyof typeof transactionCategory].name = category?.name;
-      transactionCategory[key as keyof typeof transactionCategory].color = category?.color;
+      transactionCategory[key as keyof typeof transactionCategory].style = {
+        backgroundColor: category?.color, 
+        color: (category?.color && getTextColor(category?.color)) ?? undefined
+      };
     }
   }
 
@@ -63,8 +68,10 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
       </div>
 
       <div className="transaction__categories">
-        <div className="transaction__category">
-          { transactionCategory.root.name }
+        <div 
+          className="transaction__category"
+          style={ transactionCategory.root.style }
+        > { transactionCategory.root.name }
         </div>
 
         {
@@ -80,6 +87,12 @@ export function Transaction({ itemData: transaction }: { itemData: TypeTransacti
             { transactionCategory.grandchild.name }
           </div>
         }
+        </div>
+
+        <div className="transaction__status">
+          <div className="transaction__amount">
+            { BRL.format(transaction.amount) }
+          </div>
         </div>
     </div>
   )
@@ -120,7 +133,7 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
       
       if (element) {
         const rect = element.getBoundingClientRect();
-        const elementHeight = window.innerHeight - rect.bottom - 16;
+        const elementHeight = window.innerHeight - rect.bottom - 80;
         
         if (elementHeight > 0)
           setHeight(elementHeight);
@@ -140,15 +153,15 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
   return (
     <div className="transactions__group">
       <div className="transactions__header">
-        <h4 className={`transactions__label ${type === "income" ? "transaction__label--green" : "transaction__label--red"}`}>
+        <h4 className={`transactions__label ${type === "income" ? "transactions__label--green" : "transactions__label--red"}`}>
           { type === "income" ? "Incomes" : "Expenses" }
         </h4>
 
-        <h3 className={`transactions__amount ${type === "income" ? "transaction__amount--green" : "transaction__amount--red"}`}>
+        <h3 className={`transactions__amount ${type === "income" ? "transactions__amount--green" : "transactions__amount--red"}`}>
           { BRL.format(transactions.reduce((acc, cur) => acc + cur.amount, 0)) }
         </h3>
 
-        <div className="transactions_controls">
+        <div className="transactions__controls">
           <TransactionsControl type="invoice"/>
           <TransactionsControl type="filter"/>
           <TransactionsControl type="sort"/>
@@ -163,6 +176,8 @@ export function TransactionList({ type }: { type: string }): JSX.Element {
         style={{ height: height }}
         forwardedRef={ transactionsRef }
       />
+
+      <TransactionAdd type={ type }/>
     </div>
   )
 }
@@ -193,8 +208,8 @@ export function TransactionsControl({ type }: { type: string }): JSX.Element {
 
 export function TransactionAdd({ type }: { type: string }): JSX.Element {
   const className = type === 'income'
-    ? "btn btn--green"
-    : "btn btn--red"
+    ? "btn btn--full btn--bg-green"
+    : "btn btn--full btn--bg-red"
   
   function handleAddTransaction() {
     return true;
@@ -204,7 +219,7 @@ export function TransactionAdd({ type }: { type: string }): JSX.Element {
     <button 
       className={ className }
       onClick={ handleAddTransaction }
-      children={`ADD ${type.toUpperCase}`}
+      children={`ADD ${type.toUpperCase()}`}
     />
   )
 }

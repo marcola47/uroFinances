@@ -72,14 +72,14 @@
   padding: 16px;
   border-radius: 3px;
   color: hsl(210, 15%, 15%);
-  background-color: hsl(0, 0%, 100%);
+  background-color: white;
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
 .form__btn:hover {
-  color: hsl(0, 0%, 100%);
+  color: white;
   background-color: hsl(210, 15%, 5%);
 }
 .form__btn:hover img {
@@ -132,21 +132,21 @@
   transition: all 0.1s ease-in-out;
 }
 .form__cta:hover {
-  color: hsl(210, 95%, 58%);
+  color: hsl(210, 90%, 60%);
 }
 .form__submit {
   padding: 16px;
   margin-top: 32px;
   border-radius: 3px;
-  color: hsl(210, 100%, 98%);
-  background-color: hsl(210, 80%, 46%);
+  color: hsl(210, 90%, 98%);
+  background-color: hsl(210, 90%, 45%);
   font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
 .form__submit:hover {
-  background-color: hsl(210, 85%, 51%);
+  background-color: hsl(210, 90%, 50%);
 }
 
 @keyframes fade_in {
@@ -261,13 +261,13 @@
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   color: hsl(208, 15%, 23%);
-  background-color: hsl(210, 100%, 97%);
+  background-color: hsl(210, 90%, 95%);
 }
 .navbar__user__img {
   width: 72px;
   height: 72px;
   margin-bottom: 16px;
-  border: 3px solid hsl(210, 100%, 66%);
+  border: 3px solid hsl(210, 90%, 65%);
   border-radius: 50%;
   color: hsl(208, 15%, 23%);
   -webkit-user-select: none;
@@ -294,7 +294,7 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  color: hsl(210, 100%, 66%);
+  color: hsl(210, 90%, 65%);
   font-size: 1.5rem;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
@@ -333,7 +333,7 @@
   transition: all 0.1s ease-in-out;
 }
 .navbar__link--active, .navbar__link:hover {
-  color: hsl(210, 100%, 66%);
+  color: hsl(210, 90%, 65%);
 }
 .navbar__link__icon {
   display: grid;
@@ -389,19 +389,68 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid hsl(210, 15%, 20%);
+}
+.transactions__label {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.transactions__label--green {
+  color: hsl(155, 90%, 40%);
+}
+.transactions__label--red {
+  color: hsl(0, 90%, 55%);
+}
+.transactions__amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.transactions__amount--green {
+  color: #0df293;
+}
+.transactions__amount--red {
+  color: #f65555;
+}
+.transactions__controls {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  bottom: 8px;
+  right: 0px;
+}
+.transactions__control {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border-radius: 3px;
+  color: hsl(210, 15%, 70%);
+  background-color: hsl(210, 15%, 20%);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.transactions__control:hover {
+  color: hsl(210, 15%, 85%);
+}
+.transactions__control:active {
+  color: hsl(210, 15%, 95%);
 }
 .transactions__list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   overflow-y: scroll;
+  margin-bottom: 12px;
   border-radius: 6px;
 }
 
 .transaction {
   padding: 16px;
   border-radius: 6px;
-  color: hsl(0, 0%, 100%);
+  color: white;
   background-color: hsl(210, 15%, 20%);
 }
 
@@ -499,7 +548,7 @@
   padding: 16px;
   border-radius: 3px;
   color: hsl(208, 15%, 23%);
-  background-color: hsl(0, 0%, 100%);
+  background-color: white;
   text-align: center;
   font-weight: 600;
 }
@@ -549,7 +598,7 @@ html {
 }
 
 body {
-  color: hsl(0, 0%, 100%);
+  color: white;
   background-color: hsl(210, 15%, 10%);
 }
 
@@ -564,6 +613,20 @@ button {
   background-color: black;
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .app {
   display: flex;
   flex-direction: column;
@@ -573,21 +636,40 @@ button {
 }
 
 .btn {
+  padding: 16px;
+  border-radius: 3px;
+  color: black;
+  background-color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+}
+.btn--full {
+  width: 100%;
 }
 .btn--disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 .btn--bg-blue {
-  padding: 16px;
-  border-radius: 3px;
-  color: hsl(0, 0%, 100%);
-  background-color: hsl(210, 85%, 51%);
-  font-size: 1.2rem;
-  font-weight: 600;
+  color: white;
+  background-color: hsl(210, 90%, 50%);
 }
 .btn--bg-blue:hover {
-  background-color: hsl(210, 95%, 58%);
+  background-color: hsl(210, 90%, 60%);
+}
+.btn--bg-green {
+  color: white;
+  background-color: hsl(155, 90%, 40%);
+}
+.btn--bg-green:hover {
+  background-color: hsl(155, 90%, 50%);
+}
+.btn--bg-red {
+  color: white;
+  background-color: hsl(0, 90%, 55%);
+}
+.btn--bg-red:hover {
+  background-color: hsl(0, 90%, 60%);
 }/*# sourceMappingURL=app.css.map */

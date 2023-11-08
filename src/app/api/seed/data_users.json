@@ -376,6 +376,10 @@
         "type": "wallet",
         "icon": "default.svg" 
       }
-    ]
+    ],
+    "settings": {
+      "open_navbar_on_hover": false,
+      "hide_scrollbars": true
+    }
   }
 ]

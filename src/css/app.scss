@@ -16,7 +16,7 @@ html {
 }
 
 body { 
-  color: $grey-0;
+  color: white;
   background-color: $grey-850;
 }
 
@@ -31,6 +31,21 @@ button {
   background-color: black;
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0; 
+  }
+
+  &::-webkit-scrollbar-thumb 
+  { background: transparent }
+
+  &::-webkit-scrollbar-track 
+  { background: transparent }
+}
+
 .app
 {
   display: flex;
@@ -42,8 +57,20 @@ button {
 }
 
 .btn {
+  padding: 16px;
+  border-radius: $br-s;
+
+  color: black;
+  background-color: white;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+
   cursor: pointer;
   @include transition;
+
+  &--full 
+  { width: 100%; }
 
   &--disabled {
     cursor: not-allowed;
@@ -51,16 +78,26 @@ button {
   }
 
   &--bg-blue {
-    padding: 16px;
-    border-radius: $br-s;
-
-    color: $grey-0;
+    color: white;
     background-color: $blue-600;
-
-    font-size: 1.2rem;
-    font-weight: 600;
 
     &:hover 
     { background-color: $blue-500 }
+  }
+
+  &--bg-green {
+    color: white;
+    background-color: $green-500;
+
+    &:hover 
+    { background-color: $green-400 }
+  }
+
+  &--bg-red {
+    color: white;
+    background-color: $red-500;
+
+    &:hover 
+    { background-color: $red-400 }
   }
 }

@@ -130,9 +130,9 @@ const userSchema = new mongoose.Schema({
       required: true
     },
 
-    show_scrollbars: {
+    hide_scrollbars: {
       type: Boolean,
-      default: true,
+      default: false,
       required: true
     }
   }

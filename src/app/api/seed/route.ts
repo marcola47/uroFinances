@@ -14,15 +14,6 @@ export async function POST(req: NextRequest) {
     data: any[];
   }
 
-  async function seedCollection(params: SeedCollectionParams) {
-    const { Model, data } = params;
-
-    await Model.deleteMany({});
-
-    for (const item of data) 
-      await Model.create(item);
-  }
-
   async function seedUsers() {
     await User.deleteMany({})
     
@@ -39,6 +30,10 @@ export async function POST(req: NextRequest) {
         emailVerified: user.emailVerified,
         categories: user.categories,
         accounts: user.accounts,
+        settings: {
+          open_navbar_on_hover: user.settings.open_navbar_on_hover,
+          hide_scrollbars: user.settings.hide_scrollbars
+        }
       });
   
       await User.create(newUser);
