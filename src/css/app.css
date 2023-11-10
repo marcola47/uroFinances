@@ -71,7 +71,7 @@
   gap: 12px;
   padding: 16px;
   border-radius: 3px;
-  color: hsl(210, 15%, 15%);
+  color: hsl(215, 15%, 15%);
   background-color: white;
   font-size: 1.2rem;
   font-weight: 600;
@@ -80,7 +80,7 @@
 }
 .form__btn:hover {
   color: white;
-  background-color: hsl(210, 15%, 5%);
+  background-color: hsl(215, 15%, 5%);
 }
 .form__btn:hover img {
   filter: invert(100%);
@@ -91,14 +91,14 @@
 .form__divider {
   position: relative;
   height: 3px;
-  background-color: hsl(210, 15%, 45%);
+  background-color: hsl(215, 15%, 45%);
 }
 .form__divider__text {
   position: absolute;
   top: -9px;
   left: 50%;
   padding: 0 8px;
-  background-color: hsl(210, 15%, 10%);
+  background-color: hsl(215, 15%, 10%);
   transform: translate(-50%, 0);
 }
 .form__inputs {
@@ -118,13 +118,13 @@
   width: 100%;
   padding: 16px 16px 16px 48px;
   border-radius: 3px;
-  background-color: hsl(210, 15%, 30%);
+  background-color: hsl(215, 15%, 30%);
 }
 .form__input input::-moz-placeholder {
-  color: hsl(210, 15%, 65%);
+  color: hsl(215, 15%, 65%);
 }
 .form__input input::placeholder {
-  color: hsl(210, 15%, 65%);
+  color: hsl(215, 15%, 65%);
 }
 .form__cta {
   text-decoration: underline;
@@ -161,15 +161,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
   border-radius: 9px;
-  background-color: hsl(210, 15%, 15%);
+  background-color: hsl(215, 15%, 15%);
 }
 .month-tab__btn {
   display: flex;
   align-items: center;
-  width: 32px;
+  width: 64px;
+  height: 56px;
   font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
@@ -187,7 +186,7 @@
   padding-left: 4px;
 }
 .month-tab__month {
-  width: 192px;
+  width: 208px;
   font-size: 1.4rem;
   font-weight: 600;
   text-align: center;
@@ -212,7 +211,7 @@
   left: 0;
   width: 400px;
   height: 100dvh;
-  background-color: hsl(208, 15%, 23%);
+  background-color: hsl(215, 15%, 23%);
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.1s ease-in-out;
 }
@@ -260,7 +259,7 @@
   padding: 64px 16px 16px 16px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
-  color: hsl(208, 15%, 23%);
+  color: hsl(215, 15%, 23%);
   background-color: hsl(210, 90%, 95%);
 }
 .navbar__user__img {
@@ -269,7 +268,7 @@
   margin-bottom: 16px;
   border: 3px solid hsl(210, 90%, 65%);
   border-radius: 50%;
-  color: hsl(208, 15%, 23%);
+  color: hsl(215, 15%, 23%);
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
@@ -309,7 +308,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: hsl(208, 15%, 23%);
+  color: hsl(215, 15%, 23%);
   font-size: 1.3rem;
   font-weight: 600;
   cursor: pointer;
@@ -351,7 +350,7 @@
   transition: all 0.1s ease-in-out;
 }
 .navbar__signout--active, .navbar__signout:hover {
-  background-color: hsl(210, 15%, 30%);
+  background-color: hsl(215, 15%, 30%);
 }
 
 @keyframes fade_in {
@@ -364,7 +363,7 @@
 }
 .page-header {
   padding-bottom: 16px;
-  border-bottom: 2px solid hsl(210, 15%, 20%);
+  border-bottom: 2px solid hsl(215, 15%, 20%);
   text-align: center;
 }
 
@@ -392,7 +391,7 @@
   position: relative;
   padding-bottom: 8px;
   margin-bottom: 16px;
-  border-bottom: 2px solid hsl(210, 15%, 20%);
+  border-bottom: 2px solid hsl(215, 15%, 20%);
 }
 .transactions__label {
   font-size: 1.1rem;
@@ -426,32 +425,120 @@
   place-items: center;
   padding: 8px;
   border-radius: 3px;
-  color: hsl(210, 15%, 70%);
-  background-color: hsl(210, 15%, 20%);
+  color: hsl(215, 15%, 70%);
+  background-color: hsl(215, 15%, 20%);
   font-size: 1.4rem;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
 .transactions__control:hover {
-  color: hsl(210, 15%, 85%);
+  color: hsl(215, 15%, 85%);
 }
 .transactions__control:active {
-  color: hsl(210, 15%, 95%);
+  color: hsl(215, 15%, 95%);
 }
 .transactions__list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   overflow-y: scroll;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   border-radius: 6px;
 }
 
 .transaction {
-  padding: 16px;
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
   border-radius: 6px;
   color: white;
-  background-color: hsl(210, 15%, 20%);
+  background-color: hsl(215, 15%, 20%);
+}
+.transaction__indicator {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-block: auto;
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 50%;
+}
+.transaction__indicator--income {
+  border-color: hsl(155, 90%, 40%);
+  color: hsl(215, 15%, 20%);
+  background-color: hsl(155, 90%, 40%);
+}
+.transaction__indicator--expense {
+  border-color: hsl(0, 90%, 55%);
+  color: hsl(215, 15%, 20%);
+  background-color: hsl(0, 90%, 55%);
+}
+.transaction__indicator__icon {
+  font-size: 1.6rem;
+}
+.transaction__content {
+  display: flex;
+  flex-direction: column;
+}
+.transaction__info {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: hsl(215, 15%, 70%);
+}
+.transaction__categories {
+  display: flex;
+  gap: 8px;
+}
+.transaction__category {
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.transaction__name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.transaction__status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+.transaction__amount {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.transaction__toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.transaction__toggle--confirmed {
+  border-color: hsl(155, 90%, 40%);
+  color: hsl(215, 15%, 20%);
+  background-color: hsl(155, 90%, 40%);
+}
+.transaction__toggle--confirmed:hover {
+  border-color: hsl(155, 90%, 50%);
+  background-color: hsl(155, 90%, 50%);
+}
+.transaction__toggle--unconfirmed {
+  border-color: hsl(50, 100%, 50%);
+  color: hsl(50, 100%, 50%);
+}
+.transaction__toggle--unconfirmed:hover {
+  border-color: hsl(50, 100%, 60%);
+  color: hsl(215, 15%, 20%);
+  background-color: hsl(50, 100%, 60%);
+}
+.transaction__toggle__icon {
+  font-size: 1.6rem;
 }
 
 @keyframes fade_in {
@@ -529,7 +616,7 @@
 }
 .create-pwd__text {
   margin-bottom: 32px;
-  color: hsl(210, 15%, 80%);
+  color: hsl(215, 15%, 80%);
   font-size: 0.9rem;
   text-align: center;
 }
@@ -547,7 +634,7 @@
   width: 100%;
   padding: 16px;
   border-radius: 3px;
-  color: hsl(208, 15%, 23%);
+  color: hsl(215, 15%, 23%);
   background-color: white;
   text-align: center;
   font-weight: 600;
@@ -599,7 +686,7 @@ html {
 
 body {
   color: white;
-  background-color: hsl(210, 15%, 10%);
+  background-color: hsl(215, 15%, 10%);
 }
 
 input, button, textarea, a {

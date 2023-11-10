@@ -17,16 +17,16 @@ export async function GET(req: NextRequest) {
     const transactions = await Transaction.find({ 
       user: user, 
       type: type, 
-      due_date: { 
-        $gte: startDate, 
-        $lte: endDate 
-      } 
-    }).sort({ due_date: 1 });
+      $or: [
+        { due_date: { $gte: startDate, $lte: endDate } },
+        { recurring: true, $and: [{ 'recurring_months': { $in: [startDate.getMonth() + 1] } }] }
+      ]
+    });
 
     return NextResponse.json({ 
       status: 200, 
       err: null, 
-      data: transactions 
+      data: transactions
     })
   }
 

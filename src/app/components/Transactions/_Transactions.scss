@@ -37,12 +37,12 @@
   &__amount {
     font-size: 1.5rem;
     font-weight: 700;
+   
     &--green 
     { color: lighten($green-500, 10%) }
 
     &--red 
     { color: lighten($red-500, 10%) }
-
   }
 
   &__controls {
@@ -80,15 +80,123 @@
     gap: 16px;
 
     overflow-y: scroll;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     border-radius: $br-m;
   }
 }
 
 .transaction {
-  padding: 16px;
+  display: flex;
+  gap: 16px;
+
+  padding: 16px 24px;
   border-radius: $br-m;
   
   color: white;
   background-color: $grey-750;
+
+  &__indicator {
+    display: grid;
+    place-items: center;
+
+    width: 40px;
+    height: 40px;
+    margin-block: auto;
+    border: 2px solid #00000000;
+    border-radius: 50%;
+
+    &--income {
+      border-color: $green-500;
+      color: $grey-750;
+      background-color: $green-500;
+    }
+
+    &--expense {
+      border-color: $red-500;
+      color: $grey-750;
+      background-color: $red-500;
+    }
+
+    &__icon 
+    { font-size: 1.6rem }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__info {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: $grey-250;
+  }
+
+  &__categories {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__category {
+    padding: 4px 8px;
+    border-radius: $br-s;
+    font-weight: 600;
+  }
+
+  &__name {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    margin-left: auto;
+  }
+
+  &__amount {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  &__toggle {
+    display: grid;
+    place-items: center;
+
+    width: 40px;
+    height: 40px;
+    border: 2px solid #00000000;
+    border-radius: 50%;
+
+    cursor: pointer;
+    @include transition;
+
+    &--confirmed {
+      border-color: $green-500;
+      color: $grey-750;
+      background-color: $green-500;
+
+      &:hover { 
+        border-color: $green-400;
+        background-color: $green-400; 
+      }
+    }
+
+    &--unconfirmed {
+      border-color: $yellow-600;
+      color: $yellow-600;
+
+      &:hover { 
+        border-color: $yellow-400;
+        color: $grey-750;
+        background-color: $yellow-400; 
+      }
+    }
+
+    &__icon 
+    { font-size: 1.6rem }
+  }
 }
