@@ -25,6 +25,6 @@ export function getMonthRange(date) {
   const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
   startDate.setUTCHours(0, 0, 0, 0);
-  endDate.setUTCHours(0, 0, 0, 0);
+  endDate.setUTCHours(23, 59, 59, 999);
   return { startDate, endDate };
 }

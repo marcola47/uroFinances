@@ -10,18 +10,29 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const user = searchParams.get('user');
-    const type = searchParams.get('type');
     const date = searchParams.get('date');
     const { startDate, endDate } = getMonthRange(new Date(date!));
 
     const transactions = await Transaction.find({ 
       user: user, 
-      type: type, 
       $or: [
-        { due_date: { $gte: startDate, $lte: endDate } },
-        { recurring: true, $and: [{ 'recurring_months': { $in: [startDate.getMonth() + 1] } }] }
+        { 
+          due_date: { 
+            $gte: startDate, 
+            $lte: endDate 
+          } 
+        },
+        { 
+          recurring: true, 
+          $and: [
+            { 'recurring_months': { $in: [startDate.getMonth() + 1] } },
+            { 'due_date': { $lte: endDate } }
+          ] 
+        }
       ]
-    });
+    })
+    .lean()
+    .select('-_id -__v');
 
     return NextResponse.json({ 
       status: 200, 
