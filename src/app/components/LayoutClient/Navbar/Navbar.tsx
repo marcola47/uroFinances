@@ -3,7 +3,7 @@ import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-import { TypeUser } from "@/types/types";
+import { TUser } from "@/types/types";
 import { useUIContext } from "@/app/context/Ui";
 import { useUserContext } from "@/app/context/User";
 
@@ -46,7 +46,7 @@ export default function Navbar(): JSX.Element {
     )
   }
   
-  function NavbarUser({ user }: { user: TypeUser | null }): JSX.Element {
+  function NavbarUser({ user }: { user: TUser | null }): JSX.Element {
     const [userImgSrc, setUserImgSrc] = useState(user?.image || '/user.svg')
  
     return (

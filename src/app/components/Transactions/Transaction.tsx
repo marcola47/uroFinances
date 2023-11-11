@@ -1,23 +1,30 @@
 "use client";
-import { TypeTransaction } from "@/types/types";
+import { TTransaction } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useTransactionsContext } from "@/app/context/Transactions";
 
 import getTextColor from "@/libs/helpers/getTextColor";
 import { FaDollarSign, FaCheck, FaExclamation } from "react-icons/fa6";
 
-export default function Transaction({ itemData: transaction }: { itemData: TypeTransaction }): JSX.Element {
+export default function Transaction({ itemData: transaction }: { itemData: TTransaction }): JSX.Element {
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const { transactions, setTransactions } = useTransactionsContext();
   const { user } = useUserContext();
   
-  const transactionAccountName = user?.accounts.find(account => account.id === transaction.account)?.name;
-  const transactionCategory = {
+  const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
+  
+  type TransactionCategoryProps = {
+    root:       { name?: string, style: { backgroundColor?: string, color?: string } },
+    child:      { name?: string, style: { backgroundColor?: string, color?: string } },
+    grandchild: { name?: string, style: { backgroundColor?: string, color?: string } },
+  }
+  
+  const transactionCategory: TransactionCategoryProps = {
     root:       { name: undefined, style: { backgroundColor: undefined, color: undefined } },
     child:      { name: undefined, style: { backgroundColor: undefined, color: undefined } },
     grandchild: { name: undefined, style: { backgroundColor: undefined, color: undefined } }
-  } 
-
+  };
+  
   for (const key in transactionCategory) { 
     const transKey = key as keyof typeof transactionCategory;
     
@@ -61,7 +68,7 @@ export default function Transaction({ itemData: transaction }: { itemData: TypeT
       body: JSON.stringify({ confirmed: !transaction.confirmed })
     });
 
-    const { status, err, data } = await res.json();
+    const { status, err } = await res.json();
 
     if (status < 200 || status >= 400) 
       console.log(err);

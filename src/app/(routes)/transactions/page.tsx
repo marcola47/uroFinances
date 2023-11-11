@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from "react";
 
-import { TypeTransaction } from "@/types/types";
+import { TTransaction } from "@/types/types";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useDateContext } from "@/app/context/Date";
 import { useSession } from "next-auth/react";

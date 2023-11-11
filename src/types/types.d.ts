@@ -1,3 +1,21 @@
+// Type for handling user data and params/settings
+export type TUser = {
+  id: string,
+  name: string,
+  email: string,
+  emailVerified: boolean,
+  provider: string,
+  providerID: string | number,
+  image: string,
+  accounts: Accounts[],
+  categories: TUserCategory[],
+  settings: {
+    open_navbar_on_hover: boolean,
+    hide_scrollbars: boolean
+  }
+};
+
+// Type for abstracting the user's accounts
 export type TypeAccount = {
   id: string,
   name: string,
@@ -5,7 +23,8 @@ export type TypeAccount = {
   icon: string
 }
 
-export type TypeCategory = {
+// Type for abstracting the user's categories
+export type TUserCategory = {
   id: string,
   name: string,
   icon: string,
@@ -15,23 +34,8 @@ export type TypeCategory = {
   grandparent: string | null
 };
 
-export type TypeUser = {
-  id: string,
-  name: string,
-  email: string,
-  emailVerified: boolean,
-  provider: string,
-  providerID: string | number,
-  image: string,
-  accounts: Accounts[],
-  categories: UserCategory[],
-  settings: {
-    open_navbar_on_hover: boolean,
-    hide_scrollbars: boolean
-  }
-};
-
-export type TypeTransaction = {
+// Type used for everything that needs to handle transactions
+export type TTransaction = {
   id: string,
   name: string,
   user: string,

@@ -3,11 +3,11 @@ import { useState, useContext, useEffect, createContext, Dispatch, SetStateActio
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from 'next/navigation';
 
-import { TypeUser } from "@/types/types";
+import { TUser } from "@/types/types";
 
 interface UserContextProps {
-  user: TypeUser | null;
-  setUser: Dispatch<SetStateAction<TypeUser | null>>;
+  user: TUser | null;
+  setUser: Dispatch<SetStateAction<TUser | null>>;
 }
 
 const UserContext = createContext<UserContextProps>({
@@ -16,7 +16,7 @@ const UserContext = createContext<UserContextProps>({
 });
 
 export const UserContextProvider = ({ children }: { children: any }) => {
-  const [user, setUser] = useState<TypeUser | null>(null);
+  const [user, setUser] = useState<TUser | null>(null);
   const { data: session } = useSession();
   const pathname = usePathname();
 
@@ -28,7 +28,7 @@ export const UserContextProvider = ({ children }: { children: any }) => {
       const res = await fetch(`/api/user?user=${session?.user?.id}`);
       const { status, data, error } = await res.json();
   
-      if (status !== 200)
+      if (status < 200 || status >= 400)
         console.error(error);
   
       else

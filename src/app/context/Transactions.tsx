@@ -1,10 +1,10 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
-import { TypeTransaction } from "@/types/types";
+import { TTransaction } from "@/types/types";
 
 interface TransactionsContextProps {
-  transactions: TypeTransaction[];
-  setTransactions: Dispatch<SetStateAction<TypeTransaction[]>>;
+  transactions: TTransaction[];
+  setTransactions: Dispatch<SetStateAction<TTransaction[]>>;
 }
 
 const TransactionsContext = createContext<TransactionsContextProps>({
@@ -13,7 +13,7 @@ const TransactionsContext = createContext<TransactionsContextProps>({
 });
 
 export const TransactionsContextProvider = ({ children }: { children: any }) => {
-  const [transactions, setTransactions] = useState<TypeTransaction[]>([]);
+  const [transactions, setTransactions] = useState<TTransaction[]>([]);
 
   return (
     <TransactionsContext.Provider value={{ transactions, setTransactions }}>

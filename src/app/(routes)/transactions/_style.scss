@@ -114,7 +114,7 @@
   @include transition;
 
   &:hover 
-  { background-color: $grey-700; }
+  { background-color: $grey-700 }
 
   &__indicator {
     display: grid;

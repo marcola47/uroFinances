@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnection from "@/libs/configs/dbConnection";
 
-import { TypeUser } from "@/types/types";
+import { TUser } from "@/types/types";
 import User from "@/app/models/User";
 
 export async function GET(req: NextRequest) {
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const user = searchParams.get('user');
-    const userData = await User.findOne({ id: user }).lean().select('-_id -__v -password') as TypeUser;
+    const userData = await User.findOne({ id: user }).lean().select('-_id -__v -password') as TUser;
 
     return NextResponse.json({ 
       status: 200, 

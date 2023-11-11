@@ -1,19 +1,20 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { TypeTransaction } from "@/types/types";
+import { TTransaction } from "@/types/types";
+import { useUIContext } from "@/app/context/Ui";
 
 import List from "../List/List";
 import Transaction from "./Transaction";
-import TransactionAdd from "./TransactionAdd";
 import TransactionsControl from "./TransactionsControls";
 
 interface TransactionListProps {
-  transactions: TypeTransaction[];
+  transactions: TTransaction[];
   type: string;
 }
 
 export function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
   const [height, setHeight] = useState<number>(0);
+  const { setTransactionModalOpen } = useUIContext();
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const transactionsRef = useRef<HTMLUListElement>(null);
@@ -71,7 +72,11 @@ export function TransactionList({ transactions, type }: TransactionListProps): J
         forwardedRef={ transactionsRef }
       />
 
-      <TransactionAdd type={ type }/>
+      <button 
+        className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}
+        onClick={ () => setTransactionModalOpen(true) }
+        children={`ADD ${type.toUpperCase()}`}
+      />
     </div>
   )
 }
