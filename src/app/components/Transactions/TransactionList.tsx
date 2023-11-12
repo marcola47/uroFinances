@@ -12,7 +12,7 @@ interface TransactionListProps {
   type: string;
 }
 
-export function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
+export default function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
   const [height, setHeight] = useState<number>(0);
   const { setTransactionModalOpen } = useUIContext();
 
