@@ -1,21 +1,18 @@
 "use client"
 import { useEffect } from "react";
 
-import { TTransaction } from "@/types/types";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useDateContext } from "@/app/context/Date";
+import { useUIContext } from "@/app/context/Ui";
 import { useSession } from "next-auth/react";
 
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
-import { DatePicker } from "@mui/x-date-pickers";
 import MonthTab from "@/app/components/LayoutClient/MonthTab/MonthTab"
 import TransactionList from "@/app/components/Transactions/TransactionList";
 import TransactionModal from "@/app/components/Transactions/TransactionModal";
 
 export default function TransactionsPage(): JSX.Element {
   const { transactions, setTransactions } = useTransactionsContext();
+  const { transactionModalShown, transactionModalData } = useUIContext();
   const { data: session } = useSession();
   const { date } = useDateContext();
 
@@ -39,8 +36,8 @@ export default function TransactionsPage(): JSX.Element {
   }, [date])
 
   return (
-    <LocalizationProvider dateAdapter={ AdapterDateFns }>
-      {/* <div className="transactions">
+    <>
+      <div className="transactions">
         <div className="transactions__top">
           <MonthTab/>
         </div>
@@ -58,9 +55,12 @@ export default function TransactionsPage(): JSX.Element {
             /> 
           </div>
         </div>
-      </div> */}
+      </div>
 
-      <DatePicker/>
-    </LocalizationProvider>
+      {
+        transactionModalShown &&
+        <TransactionModal/>
+      }
+    </>
   )
 }

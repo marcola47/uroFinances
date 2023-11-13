@@ -659,6 +659,22 @@
   font-size: 1.6rem;
 }
 
+/*******************************************************************/
+.Mui-focused {
+  background-color: hsl(215, 15%, 30%);
+}
+.Mui-focused > * {
+  border: 0;
+}
+
+.Mui-selected {
+  border-radius: 6px;
+}
+
+.Mui-disabled {
+  color: hsl(215, 15%, 40%) !important;
+}
+
 .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
   border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
@@ -667,15 +683,7 @@
   font-weight: 600;
   font-family: "Montserrat", sans-serif;
 }
-
-.Mui-focused {
-  background-color: hsl(215, 15%, 30%);
-}
-.Mui-focused > * {
-  border: 0;
-}
-
-.css-i4bv87-MuiSvgIcon-root {
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-i4bv87-MuiSvgIcon-root {
   color: #fff;
 }
 
@@ -688,7 +696,7 @@
 .css-1q04gal-MuiDateCalendar-root {
   border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
-  background-color: hsl(215, 15%, 30%);
+  background-color: hsl(215, 15%, 20%);
 }
 
 .css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
@@ -704,6 +712,14 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.MuiPickersDay-today {
+  border: 2px solid #fff !important;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+
 .css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
 .css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
 .css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon {
@@ -714,7 +730,81 @@
 .css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
 .css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
 .css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon:hover {
+  background-color: transparent !important;
+}
+
+.css-1vs7z2v-MuiYearCalendar-root {
+  scrollbar-width: none;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.css-innj4t-MuiPickersYear-yearButton {
+  border-radius: 6px;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.1s ease-in-out;
+}
+.css-innj4t-MuiPickersYear-yearButton:hover {
   background-color: hsl(215, 15%, 45%);
+}
+
+/*******************************************************************/
+.css-4pax7l-MuiPickersLayout-root {
+  max-width: 320px;
+  border: 2px solid hsl(215, 15%, 55%);
+  border-radius: 6px;
+  background-color: hsl(215, 15%, 20%);
+}
+
+.css-1hbyad5-MuiTypography-root {
+  color: #fff;
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+
+.css-mvmxd9-MuiTypography-root-MuiPickersToolbarText-root,
+.css-1f43ekz-MuiTypography-root-MuiPickersToolbarText-root-MuiTimePickerToolbar-separator {
+  color: #fff !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.css-1j9v0by-MuiClock-root {
+  margin-top: 64px;
+}
+
+.css-tfwo93-MuiClock-squareMask {
+  background-color: hsl(215, 15%, 30%);
+}
+
+.css-zddqwy-MuiClockNumber-root,
+.css-53ccts-MuiClockNumber-root {
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+}
+
+.css-2x8kvt-MuiPickersArrowSwitcher-root-MuiTimeClock-arrowSwitcher {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 24px;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+  color: hsl(210, 90%, 50%);
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
+  background-color: hsl(215, 15%, 30%);
 }
 
 @keyframes fade_in {

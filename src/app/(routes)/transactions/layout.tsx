@@ -7,7 +7,7 @@ export default function TransactionsLayout({
 }): JSX.Element {
   return (
     <div className="app">
-      {/* <Navbar/> */}
+      <Navbar/>
       { children }
     </div>
   )

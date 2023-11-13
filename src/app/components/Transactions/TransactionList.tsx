@@ -14,7 +14,7 @@ interface TransactionListProps {
 
 export default function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
   const [height, setHeight] = useState<number>(0);
-  const { setTransactionModalOpen } = useUIContext();
+  const { setTransactionModalShown } = useUIContext();
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const transactionsRef = useRef<HTMLUListElement>(null);
@@ -74,7 +74,7 @@ export default function TransactionList({ transactions, type }: TransactionListP
 
       <button 
         className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}
-        onClick={ () => setTransactionModalOpen(true) }
+        onClick={ () => setTransactionModalShown(true) }
         children={`ADD ${type.toUpperCase()}`}
       />
     </div>
