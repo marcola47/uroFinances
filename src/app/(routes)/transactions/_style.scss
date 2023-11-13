@@ -222,173 +222,93 @@
   }
 }
 
-/*******************************************************************/
-// Date selector \\
-
-// Focused elements
-.Mui-focused {
-  background-color: $grey-650;
-  & > * { border: 0 }
-}
-
-// Selected elements
-.Mui-selected 
-{ border-radius: $br-m }
-
-// Disabled elements
-.Mui-disabled 
-{ color: $grey-550 !important }
-
-// Input field
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
-  border: 2px solid $grey-400;
-  border-radius: $br-m;
+.transaction-modal {
+  position: relative;
+  width: 640px;
+  height: 800px;
+  padding: 24px;
+  border-radius: $br-b;
   
-  color: #fff;
-  background-color: $grey-750;
+  background-color: $grey-800;
 
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
-
-  .css-i4bv87-MuiSvgIcon-root 
-  { color: #fff }
-}
-
-// Calendar frame wrappers
-.css-1k4oq0i-MuiPaper-root-MuiPickersPopper-paper,
-.css-16b5y55-MuiPickersLayout-contentWrapper,
-.css-1g7nc1s-MuiPickersLayout-root 
-{ border-radius: $br-g }
-
-// Calendar frame
-.css-1q04gal-MuiDateCalendar-root {
-  border: 2px solid $grey-400;
-  border-radius: $br-m;
-  background-color: $grey-750;
-}
-
-// Weekday label
-.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
-  color: $grey-250;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 600;
-}
-
-// Month day
-.css-1u23akw-MuiButtonBase-root-MuiPickersDay-root,
-.css-31ca4x-MuiPickersFadeTransitionGroup-root {
-  color: #fff;
-
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
-}
-
-// Current day
-.MuiPickersDay-today {
-  border: 2px solid #fff !important;
-  border-radius: $br-m;
-
-  color: #fff;
-
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
-}
-
-// Buttons and selectors
-.css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
-.css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
-.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon {
-  border-radius: $br-m;
-  color: #fff;
-  @include transition;
-
-  &:hover 
-  { background-color: transparent !important }
-}
-
-// Year selector
-.css-1vs7z2v-MuiYearCalendar-root {
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0; 
+  &__header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    
+    margin-bottom: 32px;
   }
 
-  &::-webkit-scrollbar-thumb 
-  { background: transparent }
+  &__close {
+    margin-left: auto;
+    font-size: 2rem;
+    cursor: pointer;
+    @include transition;
 
-  &::-webkit-scrollbar-track 
-  { background: transparent }
-}
+    &:hover
+    { color: $blue-400; }
+  }
 
-// Year selector button
-.css-innj4t-MuiPickersYear-yearButton {
-  border-radius: $br-m;
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  @include transition;
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
-  &:hover 
-  { background-color: $grey-500; }
-}
+  &__row {
+    display: grid;
+    gap: 16px;
 
-/*******************************************************************/
-// Time selector \\
+    &--0 
+    { grid-template-columns: 7fr 3fr }
 
-// Time selector frame 
-.css-4pax7l-MuiPickersLayout-root {
-  max-width: 320px;
-  border: 2px solid $grey-400;
-  border-radius: $br-m;
-  background-color: $grey-750;
-}
+    &--1 
+    { grid-template-columns: 1fr 1fr; }
+  }
 
-// Select time label
-.css-1hbyad5-MuiTypography-root {
-  color: #fff;
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
-}
+  &__input {
+    display: flex;
+    
+    position: relative;
+    border: 2px solid $grey-400;
+    border-radius: $br-m;
 
-// Digital clock
-.css-mvmxd9-MuiTypography-root-MuiPickersToolbarText-root,
-.css-1f43ekz-MuiTypography-root-MuiPickersToolbarText-root-MuiTimePickerToolbar-separator {
-  color: #fff !important;
-  font-family: 'Montserrat', sans-serif !important;
-}
+    &--time > *
+    { cursor: pointer }
+  }
 
-// Analog clock wrapper 
-.css-1j9v0by-MuiClock-root
-{ margin-top: 64px; }
+  &__icon {
+    display: grid;
+    place-items: center;
 
-// Analog clock background 
-.css-tfwo93-MuiClock-squareMask {
-  background-color: $grey-650;
-}
+    width: 56px;
+    height: 56px;
+    padding: 15px;
+    border-top-left-radius: $br-m;
+    border-bottom-left-radius: $br-m;
 
-// Analog clock times 
-.css-zddqwy-MuiClockNumber-root,
-.css-53ccts-MuiClockNumber-root {
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-}
+    color: $grey-400;
+    background-color: $grey-750;
+  }
 
-// Analog clock switchers
-.css-2x8kvt-MuiPickersArrowSwitcher-root-MuiTimeClock-arrowSwitcher {
-  display: flex;
-  justify-content: space-between;
-  
-  width: 100%;
-  padding-left: 24px;
-}
+  &__field {
+    width: 100%;
+    border-top-right-radius: $br-m;
+    border-bottom-right-radius: $br-m;
+    
+    background-color: $grey-750;
+    font-weight: 600;
 
-// Time selector buttons
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
-  color: $blue-600;
-  font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
+    &::placeholder { 
+      color: $grey-400; 
+      font-weight: 600;
+    }
+  }
 
-  &:hover 
-  { background-color: $grey-650 }
+  &__clock {
+    position: absolute;
+    top: 60px;
+    left: -2px;
+  }
 }

@@ -6,9 +6,9 @@ import { useSession } from "next-auth/react";
 import { FaEnvelope } from "react-icons/fa6";
 
 export default function VerifyEmailPage(): JSX.Element {
+  const { data: session } = useSession();
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const { data: session } = useSession();
 
   if (session?.user.emailVerified === true)
     redirect('/auth/email/verified');

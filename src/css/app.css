@@ -659,152 +659,84 @@
   font-size: 1.6rem;
 }
 
-/*******************************************************************/
-.Mui-focused {
-  background-color: hsl(215, 15%, 30%);
+.transaction-modal {
+  position: relative;
+  width: 640px;
+  height: 800px;
+  padding: 24px;
+  border-radius: 9px;
+  background-color: hsl(215, 15%, 15%);
 }
-.Mui-focused > * {
-  border: 0;
-}
-
-.Mui-selected {
-  border-radius: 6px;
-}
-
-.Mui-disabled {
-  color: hsl(215, 15%, 40%) !important;
-}
-
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
-  border: 2px solid hsl(215, 15%, 55%);
-  border-radius: 6px;
-  color: #fff;
-  background-color: hsl(215, 15%, 20%);
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-}
-.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-i4bv87-MuiSvgIcon-root {
-  color: #fff;
-}
-
-.css-1k4oq0i-MuiPaper-root-MuiPickersPopper-paper,
-.css-16b5y55-MuiPickersLayout-contentWrapper,
-.css-1g7nc1s-MuiPickersLayout-root {
-  border-radius: 12px;
-}
-
-.css-1q04gal-MuiDateCalendar-root {
-  border: 2px solid hsl(215, 15%, 55%);
-  border-radius: 6px;
-  background-color: hsl(215, 15%, 20%);
-}
-
-.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
-  color: hsl(215, 15%, 70%);
-  font-family: "Montserrat", sans-serif;
-  font-weight: 600;
-}
-
-.css-1u23akw-MuiButtonBase-root-MuiPickersDay-root,
-.css-31ca4x-MuiPickersFadeTransitionGroup-root {
-  color: #fff;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-}
-
-.MuiPickersDay-today {
-  border: 2px solid #fff !important;
-  border-radius: 6px;
-  color: #fff;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-}
-
-.css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
-.css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
-.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon {
-  border-radius: 6px;
-  color: #fff;
-  transition: all 0.1s ease-in-out;
-}
-.css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
-.css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
-.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon:hover {
-  background-color: transparent !important;
-}
-
-.css-1vs7z2v-MuiYearCalendar-root {
-  scrollbar-width: none;
-}
-.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.css-innj4t-MuiPickersYear-yearButton {
-  border-radius: 6px;
-  color: #fff;
-  font-family: "Montserrat", sans-serif;
-  transition: all 0.1s ease-in-out;
-}
-.css-innj4t-MuiPickersYear-yearButton:hover {
-  background-color: hsl(215, 15%, 45%);
-}
-
-/*******************************************************************/
-.css-4pax7l-MuiPickersLayout-root {
-  max-width: 320px;
-  border: 2px solid hsl(215, 15%, 55%);
-  border-radius: 6px;
-  background-color: hsl(215, 15%, 20%);
-}
-
-.css-1hbyad5-MuiTypography-root {
-  color: #fff;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-}
-
-.css-mvmxd9-MuiTypography-root-MuiPickersToolbarText-root,
-.css-1f43ekz-MuiTypography-root-MuiPickersToolbarText-root-MuiTimePickerToolbar-separator {
-  color: #fff !important;
-  font-family: "Montserrat", sans-serif !important;
-}
-
-.css-1j9v0by-MuiClock-root {
-  margin-top: 64px;
-}
-
-.css-tfwo93-MuiClock-squareMask {
-  background-color: hsl(215, 15%, 30%);
-}
-
-.css-zddqwy-MuiClockNumber-root,
-.css-53ccts-MuiClockNumber-root {
-  color: #fff;
-  font-family: "Montserrat", sans-serif;
-}
-
-.css-2x8kvt-MuiPickersArrowSwitcher-root-MuiTimeClock-arrowSwitcher {
+.transaction-modal__header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.transaction-modal__close {
+  margin-left: auto;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.transaction-modal__close:hover {
+  color: hsl(210, 90%, 65%);
+}
+.transaction-modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.transaction-modal__row {
+  display: grid;
+  gap: 16px;
+}
+.transaction-modal__row--0 {
+  grid-template-columns: 7fr 3fr;
+}
+.transaction-modal__row--1 {
+  grid-template-columns: 1fr 1fr;
+}
+.transaction-modal__input {
+  display: flex;
+  position: relative;
+  border: 2px solid hsl(215, 15%, 55%);
+  border-radius: 6px;
+}
+.transaction-modal__input--time > * {
+  cursor: pointer;
+}
+.transaction-modal__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 15px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  color: hsl(215, 15%, 55%);
+  background-color: hsl(215, 15%, 20%);
+}
+.transaction-modal__field {
   width: 100%;
-  padding-left: 24px;
-}
-
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
-  color: hsl(210, 90%, 50%);
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background-color: hsl(215, 15%, 20%);
   font-weight: 600;
-  font-family: "Montserrat", sans-serif;
 }
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
-  background-color: hsl(215, 15%, 30%);
+.transaction-modal__field::-moz-placeholder {
+  color: hsl(215, 15%, 55%);
+  font-weight: 600;
+}
+.transaction-modal__field::placeholder {
+  color: hsl(215, 15%, 55%);
+  font-weight: 600;
+}
+.transaction-modal__clock {
+  position: absolute;
+  top: 60px;
+  left: -2px;
 }
 
 @keyframes fade_in {
@@ -866,6 +798,14 @@ button {
   position: relative;
 }
 
+.modal-bg {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 .btn {
   padding: 16px;
   border-radius: 3px;
@@ -903,4 +843,160 @@ button {
 }
 .btn--bg-red:hover {
   background-color: hsl(0, 90%, 60%);
+}
+
+/*******************************************************************/
+.Mui-focused {
+  background-color: hsl(215, 15%, 30%) !important;
+}
+.Mui-focused > * {
+  border: 0 !important;
+}
+
+.Mui-selected {
+  border-radius: 6px !important;
+}
+
+.Mui-disabled {
+  color: hsl(215, 15%, 40%) !important;
+}
+
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+  border: 2px solid hsl(215, 15%, 55%) !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  background-color: hsl(215, 15%, 20%) !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-i4bv87-MuiSvgIcon-root {
+  color: hsl(215, 15%, 55%) !important;
+  transition: all 0.1s ease-in-out;
+}
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root .css-i4bv87-MuiSvgIcon-root:hover {
+  color: #fff !important;
+}
+
+.css-1k4oq0i-MuiPaper-root-MuiPickersPopper-paper {
+  margin-top: 4px;
+}
+
+.css-1k4oq0i-MuiPaper-root-MuiPickersPopper-paper,
+.css-16b5y55-MuiPickersLayout-contentWrapper,
+.css-1g7nc1s-MuiPickersLayout-root {
+  border-radius: 12px !important;
+}
+
+.css-1q04gal-MuiDateCalendar-root {
+  border: 2px solid hsl(215, 15%, 55%) !important;
+  border-radius: 6px !important;
+  background-color: hsl(215, 15%, 20%) !important;
+}
+
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel {
+  color: hsl(215, 15%, 70%) !important;
+  font-family: "Montserrat", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.css-1u23akw-MuiButtonBase-root-MuiPickersDay-root,
+.css-31ca4x-MuiPickersFadeTransitionGroup-root {
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.MuiPickersDay-today {
+  border: 2px solid #fff !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
+.css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button,
+.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon {
+  border-radius: 6px !important;
+  color: #fff !important;
+  transition: all 0.1s ease-in-out;
+}
+.css-1nkg345-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
+.css-kg9q0s-MuiButtonBase-root-MuiIconButton-root-MuiPickersArrowSwitcher-button:hover,
+.css-1tkx1wf-MuiSvgIcon-root-MuiPickersCalendarHeader-switchViewIcon:hover {
+  background-color: transparent !important;
+}
+
+.css-1vs7z2v-MuiYearCalendar-root {
+  scrollbar-width: none !important;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-thumb {
+  background: transparent !important;
+}
+.css-1vs7z2v-MuiYearCalendar-root::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.css-innj4t-MuiPickersYear-yearButton {
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-family: "Montserrat", sans-serif !important;
+  transition: all 0.1s ease-in-out;
+}
+.css-innj4t-MuiPickersYear-yearButton:hover {
+  background-color: hsl(215, 15%, 45%) !important;
+}
+
+/*******************************************************************/
+.css-4pax7l-MuiPickersLayout-root {
+  max-width: 320px !important;
+  border: 2px solid hsl(215, 15%, 55%) !important;
+  border-radius: 6px !important;
+  background-color: hsl(215, 15%, 20%) !important;
+}
+
+.css-1hbyad5-MuiTypography-root {
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.css-mvmxd9-MuiTypography-root-MuiPickersToolbarText-root,
+.css-1f43ekz-MuiTypography-root-MuiPickersToolbarText-root-MuiTimePickerToolbar-separator {
+  color: #fff !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.css-1j9v0by-MuiClock-root {
+  margin-top: 64px !important;
+}
+
+.css-tfwo93-MuiClock-squareMask {
+  background-color: hsl(215, 15%, 30%) !important;
+}
+
+.css-zddqwy-MuiClockNumber-root,
+.css-53ccts-MuiClockNumber-root {
+  color: #fff !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.css-2x8kvt-MuiPickersArrowSwitcher-root-MuiTimeClock-arrowSwitcher {
+  display: flex !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding-left: 24px !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+  color: hsl(210, 90%, 50%) !important;
+  font-weight: 600 !important;
+  font-family: "Montserrat", sans-serif !important;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root:hover {
+  background-color: hsl(215, 15%, 30%) !important;
 }/*# sourceMappingURL=app.css.map */

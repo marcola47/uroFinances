@@ -11,9 +11,9 @@ import TransactionList from "@/app/components/Transactions/TransactionList";
 import TransactionModal from "@/app/components/Transactions/TransactionModal";
 
 export default function TransactionsPage(): JSX.Element {
+  const { data: session } = useSession();
   const { transactions, setTransactions } = useTransactionsContext();
   const { transactionModalShown, transactionModalData } = useUIContext();
-  const { data: session } = useSession();
   const { date } = useDateContext();
 
   useEffect(() => { 
@@ -59,6 +59,7 @@ export default function TransactionsPage(): JSX.Element {
 
       {
         transactionModalShown &&
+        transactionModalData &&
         <TransactionModal/>
       }
     </>

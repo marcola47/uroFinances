@@ -2,8 +2,8 @@
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
 import { TTransaction } from "@/types/types";
 
-type TransactionModalData = TTransaction & {
-  type: string;
+type TransactionModalData = Partial<TTransaction> & {
+  modalType: string;
 }
 
 interface UIContextProps {

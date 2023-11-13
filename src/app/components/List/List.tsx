@@ -1,22 +1,17 @@
-import React, { RefObject, useRef, useImperativeHandle } from 'react';
+import { RefObject, useRef, useImperativeHandle } from 'react';
 import { useUserContext } from '@/app/context/User';
 import { v4 as uuid } from 'uuid';
 
-export default function List({ 
-  elements, 
-  ListItem, 
-  className = "", 
-  id = "",
-  style = {},
-  forwardedRef
-}: {
+type ListProps = {
   elements: any[], 
   ListItem: any, 
   className: string, 
   id: string,
   style: any,
   forwardedRef: RefObject<HTMLUListElement | null>;
-}): JSX.Element {
+}
+
+export default function List({ elements, ListItem, className = "", id = "", style = {}, forwardedRef }: ListProps): JSX.Element {
   const { user } = useUserContext();
   const listRef = useRef<HTMLUListElement | null>(null);
   useImperativeHandle(forwardedRef, () => listRef.current);

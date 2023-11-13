@@ -16,8 +16,8 @@ const UserContext = createContext<UserContextProps>({
 });
 
 export const UserContextProvider = ({ children }: { children: any }) => {
-  const [user, setUser] = useState<TUser | null>(null);
   const { data: session } = useSession();
+  const [user, setUser] = useState<TUser | null>(null);
   const pathname = usePathname();
 
   async function getUser() {

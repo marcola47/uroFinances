@@ -2,14 +2,16 @@
 import { TTransaction } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useTransactionsContext } from "@/app/context/Transactions";
+import { useUIContext } from "@/app/context/Ui";
 
 import getTextColor from "@/libs/helpers/getTextColor";
 import { FaDollarSign, FaCheck, FaExclamation } from "react-icons/fa6";
 
 export default function Transaction({ itemData: transaction }: { itemData: TTransaction }): JSX.Element {
-  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-  const { transactions, setTransactions } = useTransactionsContext();
   const { user } = useUserContext();
+  const { transactions, setTransactions } = useTransactionsContext();
+  const { setTransactionModalShown, setTransactionModalData } = useUIContext();
+  const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   
   const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
   
@@ -77,8 +79,16 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
       setTransactions(transactionsCopy);
   }
 
+  function handleShowTransactionModal() {
+    setTransactionModalShown(true);
+    setTransactionModalData({ ...transaction, modalType: 'existing' });
+  }
+
   return (
-    <div className="transaction">
+    <div 
+      className="transaction"
+      onClick={ handleShowTransactionModal }
+    >
       <div className={`transaction__indicator ${transaction.type === 'income' ? "transaction__indicator--income" : "transaction__indicator--expense"}`}>
         {
           transaction.type === "income"
