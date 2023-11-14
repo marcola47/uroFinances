@@ -1,0 +1,53 @@
+@import "../../../css/variables";
+
+.modal--trans {
+  position: relative;
+  width: 640px;
+  height: 800px;
+  padding: 24px;
+  border-radius: $br-b;
+  
+  background-color: $grey-800;
+
+  &__header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    
+    margin-bottom: 32px;
+  }
+
+  &__close {
+    margin-left: auto;
+    font-size: 2rem;
+    cursor: pointer;
+    @include transition;
+
+    &:hover
+    { color: $blue-400; }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__row {
+    display: grid;
+    gap: 16px;
+
+    &--0 
+    { grid-template-columns: 7fr 3fr }
+
+    &--1 
+    { grid-template-columns: 3fr 3fr 4fr; }
+
+    &--2 
+    { grid-template-columns: 5.5fr 4.5fr; }
+  }
+
+  &__switches 
+  { display: flex }
+}

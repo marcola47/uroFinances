@@ -10,7 +10,7 @@ import { FaDollarSign, FaCheck, FaExclamation } from "react-icons/fa6";
 export default function Transaction({ itemData: transaction }: { itemData: TTransaction }): JSX.Element {
   const { user } = useUserContext();
   const { transactions, setTransactions } = useTransactionsContext();
-  const { setTransactionModalShown, setTransactionModalData } = useUIContext();
+  const { setModalTransShown, setModalTransData } = useUIContext();
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   
   const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
@@ -60,7 +60,9 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
     ? transaction.recurring_period.charAt(0).toUpperCase() + transaction.recurring_period.slice(1) 
     : null;
   
-  async function handleConfirmTransaction() {
+  async function handleConfirmTransaction(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    e.stopPropagation();
+    
     const transactionsCopy = structuredClone(transactions);
     transactionsCopy.map(t => { t.id === transaction.id && (t.confirmed = !t.confirmed) })
     
@@ -79,15 +81,15 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
       setTransactions(transactionsCopy);
   }
 
-  function handleShowTransactionModal() {
-    setTransactionModalShown(true);
-    setTransactionModalData({ ...transaction, modalType: 'existing' });
+  function handleShowmodalTrans() {
+    setModalTransShown(true);
+    setModalTransData({ ...transaction, modalType: 'existing' });
   }
 
   return (
     <div 
       className="transaction"
-      onClick={ handleShowTransactionModal }
+      onClick={ handleShowmodalTrans }
     >
       <div className={`transaction__indicator ${transaction.type === 'income' ? "transaction__indicator--income" : "transaction__indicator--expense"}`}>
         {
@@ -153,7 +155,7 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
 
         <div 
           className={`transaction__toggle ${transaction.confirmed ? "transaction__toggle--confirmed" : "transaction__toggle--unconfirmed"}`}
-          onClick={ handleConfirmTransaction }
+          onClick={ (e) => {handleConfirmTransaction(e)} }
         >
           {
             transaction.confirmed 

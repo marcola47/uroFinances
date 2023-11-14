@@ -2,7 +2,7 @@
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
 import { TTransaction } from "@/types/types";
 
-type TransactionModalData = Partial<TTransaction> & {
+type ModalTransData = Partial<TTransaction> & {
   modalType: string;
 }
 
@@ -10,34 +10,34 @@ interface UIContextProps {
   navbarOpen: boolean;
   setNavbarOpen: Dispatch<SetStateAction<boolean>>;
 
-  transactionModalShown: boolean;
-  setTransactionModalShown: Dispatch<SetStateAction<boolean>>;
+  modalTransShown: boolean;
+  setModalTransShown: Dispatch<SetStateAction<boolean>>;
 
-  transactionModalData: TransactionModalData | null;
-  setTransactionModalData: Dispatch<SetStateAction<TransactionModalData | null>>;
+  modalTransData: ModalTransData | null;
+  setModalTransData: Dispatch<SetStateAction<ModalTransData | null>>;
 }
 
 const UIContext = createContext<UIContextProps>({
   navbarOpen: false,
   setNavbarOpen: () => {},
 
-  transactionModalShown: false,
-  setTransactionModalShown: () => {},
+  modalTransShown: false,
+  setModalTransShown: () => {},
 
-  transactionModalData: null,
-  setTransactionModalData: () => {}
+  modalTransData: null,
+  setModalTransData: () => {}
 });
 
 export const UIContextProvider = ({ children }: { children: any }) => {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
-  const [transactionModalShown, setTransactionModalShown] = useState<boolean>(false);
-  const [transactionModalData, setTransactionModalData] = useState<TransactionModalData | null>(null);
+  const [modalTransShown, setModalTransShown] = useState<boolean>(false);
+  const [modalTransData, setModalTransData] = useState<ModalTransData | null>(null);
 
   return (
     <UIContext.Provider value={{ 
       navbarOpen, setNavbarOpen, 
-      transactionModalShown, setTransactionModalShown,
-      transactionModalData, setTransactionModalData,
+      modalTransShown, setModalTransShown,
+      modalTransData, setModalTransData,
     }}> { children }
     </UIContext.Provider>
   )

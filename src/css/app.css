@@ -375,6 +375,60 @@
     opacity: 1;
   }
 }
+.modal--trans {
+  position: relative;
+  width: 640px;
+  height: 800px;
+  padding: 24px;
+  border-radius: 9px;
+  background-color: hsl(215, 15%, 15%);
+}
+.modal--trans__header {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.modal--trans__close {
+  margin-left: auto;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.modal--trans__close:hover {
+  color: hsl(210, 90%, 65%);
+}
+.modal--trans__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal--trans__row {
+  display: grid;
+  gap: 16px;
+}
+.modal--trans__row--0 {
+  grid-template-columns: 7fr 3fr;
+}
+.modal--trans__row--1 {
+  grid-template-columns: 3fr 3fr 4fr;
+}
+.modal--trans__row--2 {
+  grid-template-columns: 5.5fr 4.5fr;
+}
+.modal--trans__switches {
+  display: flex;
+}
+
+@keyframes fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .email-sent {
   display: flex;
   flex-direction: column;
@@ -514,7 +568,7 @@
   color: hsl(155, 90%, 40%);
 }
 .transactions__label--red {
-  color: hsl(0, 90%, 55%);
+  color: hsl(0, 90%, 40%);
 }
 .transactions__amount {
   font-size: 1.5rem;
@@ -524,7 +578,7 @@
   color: #0df293;
 }
 .transactions__amount--red {
-  color: #f65555;
+  color: #f20d0d;
 }
 .transactions__controls {
   display: flex;
@@ -588,8 +642,8 @@
 }
 .transaction__indicator--expense {
   color: hsl(215, 15%, 20%);
-  border-color: hsl(0, 90%, 55%);
-  background-color: hsl(0, 90%, 55%);
+  border-color: hsl(0, 90%, 52%);
+  background-color: hsl(0, 90%, 52%);
 }
 .transaction__indicator__icon {
   font-size: 1.6rem;
@@ -659,86 +713,6 @@
   font-size: 1.6rem;
 }
 
-.transaction-modal {
-  position: relative;
-  width: 640px;
-  height: 800px;
-  padding: 24px;
-  border-radius: 9px;
-  background-color: hsl(215, 15%, 15%);
-}
-.transaction-modal__header {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 32px;
-}
-.transaction-modal__close {
-  margin-left: auto;
-  font-size: 2rem;
-  cursor: pointer;
-  transition: all 0.1s ease-in-out;
-}
-.transaction-modal__close:hover {
-  color: hsl(210, 90%, 65%);
-}
-.transaction-modal__form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.transaction-modal__row {
-  display: grid;
-  gap: 16px;
-}
-.transaction-modal__row--0 {
-  grid-template-columns: 7fr 3fr;
-}
-.transaction-modal__row--1 {
-  grid-template-columns: 1fr 1fr;
-}
-.transaction-modal__input {
-  display: flex;
-  position: relative;
-  border: 2px solid hsl(215, 15%, 55%);
-  border-radius: 6px;
-}
-.transaction-modal__input--time > * {
-  cursor: pointer;
-}
-.transaction-modal__icon {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  padding: 15px;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  color: hsl(215, 15%, 55%);
-  background-color: hsl(215, 15%, 20%);
-}
-.transaction-modal__field {
-  width: 100%;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background-color: hsl(215, 15%, 20%);
-  font-weight: 600;
-}
-.transaction-modal__field::-moz-placeholder {
-  color: hsl(215, 15%, 55%);
-  font-weight: 600;
-}
-.transaction-modal__field::placeholder {
-  color: hsl(215, 15%, 55%);
-  font-weight: 600;
-}
-.transaction-modal__clock {
-  position: absolute;
-  top: 60px;
-  left: -2px;
-}
-
 @keyframes fade_in {
   from {
     opacity: 0;
@@ -806,6 +780,126 @@ button {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
+.input {
+  display: flex;
+  position: relative;
+  border: 2px solid hsl(215, 15%, 55%);
+  border-radius: 6px;
+}
+.input--time > *, .input--account > * {
+  cursor: pointer;
+}
+.input__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 15px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  color: hsl(215, 15%, 55%);
+  background-color: hsl(215, 15%, 20%);
+}
+.input__field {
+  width: 100%;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background-color: hsl(215, 15%, 20%);
+  font-weight: 600;
+}
+.input__field::-moz-placeholder {
+  color: hsl(215, 15%, 55%);
+  font-weight: 600;
+}
+.input__field::placeholder {
+  color: hsl(215, 15%, 55%);
+  font-weight: 600;
+}
+.input__chevron {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 24px;
+  height: 24px;
+  color: hsl(215, 15%, 55%);
+  transition: all 0.1s ease-in-out;
+}
+.input__chevron:hover {
+  color: #fff;
+}
+.input__clock {
+  position: absolute;
+  top: 62px;
+  left: -2px;
+}
+
+.switch {
+  flex-grow: 1;
+  display: grid;
+  place-items: center;
+  opacity: 0.3;
+  height: 60px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  font-size: 1.2rem;
+  font-weight: 600;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.switch--selected {
+  opacity: 1;
+}
+.switch--income {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  color: hsl(155, 90%, 50%);
+  border-color: hsl(155, 90%, 50%);
+  background-color: hsl(155, 15%, 20%);
+}
+.switch--expense {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  color: hsl(0, 90%, 52%);
+  border-color: hsl(0, 90%, 52%);
+  background-color: hsl(0, 15%, 20%);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 60px;
+  padding-inline: 16px;
+  border: 2px solid hsl(50, 100%, 60%);
+  border-radius: 6px;
+  color: hsl(50, 100%, 60%);
+  background-color: hsl(50, 15%, 20%);
+  font-weight: 600;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.toggle--toggled {
+  color: hsl(155, 90%, 50%);
+  border-color: hsl(155, 90%, 50%);
+  background-color: hsl(155, 15%, 20%);
+}
+.toggle__checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid hsl(50, 100%, 60%);
+  border-radius: 3px;
+  transition: all 0.1s ease-in-out;
+}
+.toggle__checkbox--toggled {
+  border-color: hsl(155, 90%, 50%);
+  background-color: hsl(155, 90%, 50%);
+}
+
 .btn {
   padding: 16px;
   border-radius: 3px;
@@ -839,7 +933,7 @@ button {
 }
 .btn--bg-red {
   color: white;
-  background-color: hsl(0, 90%, 55%);
+  background-color: hsl(0, 90%, 52%);
 }
 .btn--bg-red:hover {
   background-color: hsl(0, 90%, 60%);

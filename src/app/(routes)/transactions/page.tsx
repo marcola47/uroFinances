@@ -8,12 +8,12 @@ import { useSession } from "next-auth/react";
 
 import MonthTab from "@/app/components/LayoutClient/MonthTab/MonthTab"
 import TransactionList from "@/app/components/Transactions/TransactionList";
-import TransactionModal from "@/app/components/Transactions/TransactionModal";
+import ModalTransaction from "@/app/components/Modals/ModalTransaction";
 
 export default function TransactionsPage(): JSX.Element {
   const { data: session } = useSession();
   const { transactions, setTransactions } = useTransactionsContext();
-  const { transactionModalShown, transactionModalData } = useUIContext();
+  const { modalTransShown, modalTransData } = useUIContext();
   const { date } = useDateContext();
 
   useEffect(() => { 
@@ -58,9 +58,9 @@ export default function TransactionsPage(): JSX.Element {
       </div>
 
       {
-        transactionModalShown &&
-        transactionModalData &&
-        <TransactionModal/>
+        modalTransShown &&
+        modalTransData &&
+        <ModalTransaction/>
       }
     </>
   )

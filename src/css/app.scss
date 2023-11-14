@@ -66,6 +66,144 @@ button {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
+.input {
+  display: flex;
+  
+  position: relative;
+  border: 2px solid $grey-400;
+  border-radius: $br-m;
+
+  &--time > *, &--account > *
+  { cursor: pointer }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+
+    width: 56px;
+    height: 56px;
+    padding: 15px;
+    border-top-left-radius: $br-m;
+    border-bottom-left-radius: $br-m;
+
+    color: $grey-400;
+    background-color: $grey-750;
+  }
+
+  &__field {
+    width: 100%;
+    border-top-right-radius: $br-m;
+    border-bottom-right-radius: $br-m;
+    
+    background-color: $grey-750;
+    font-weight: 600;
+
+    &::placeholder { 
+      color: $grey-400; 
+      font-weight: 600;
+    }
+  }
+
+  &__chevron {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+
+    color: $grey-400;
+    @include transition;
+
+    &:hover 
+    { color: #fff }
+  }
+
+  &__clock {
+    position: absolute;
+    top: 62px;
+    left: -2px;
+  }
+}
+
+.switch {
+  flex-grow: 1;
+
+  display: grid;
+  place-items: center;
+
+  opacity: 0.3;
+  height: 60px;
+  border: 2px solid #00000000;
+
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  user-select: none;
+  cursor: pointer;
+  @include transition;
+
+  &--selected
+  { opacity: 1; }
+
+  &--income {
+    border-top-left-radius: $br-m;
+    border-bottom-left-radius: $br-m;
+
+    color: $green-400;
+    border-color: $green-400;
+    background-color: $green-bg;
+  }
+
+  &--expense {
+    border-top-right-radius: $br-m;
+    border-bottom-right-radius: $br-m;
+
+    color: $red-400;
+    border-color: $red-400;
+    background-color: $red-bg;
+  }
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  height: 60px;
+  padding-inline: 16px;
+  border: 2px solid $yellow-400;
+  border-radius: $br-m;
+  
+  color: $yellow-400;
+  background-color: $yellow-bg;
+
+  font-weight: 600;
+  user-select: none;
+  cursor: pointer;
+  @include transition;
+
+  &--toggled {
+    color: $green-400;
+    border-color: $green-400;
+    background-color: $green-bg;
+  }
+
+  &__checkbox {
+    width: 24px;
+    height: 24px;
+
+    border: 2px solid $yellow-400;
+    border-radius: $br-s;
+
+    @include transition;
+
+    &--toggled {
+      border-color: $green-400;
+      background-color: $green-400;
+    }
+  }
+}
+
 .btn {
   padding: 16px;
   border-radius: $br-s;
@@ -105,10 +243,10 @@ button {
 
   &--bg-red {
     color: white;
-    background-color: $red-500;
+    background-color: $red-400;
 
     &:hover 
-    { background-color: $red-400 }
+    { background-color: $red-300 }
   }
 }
 
@@ -244,7 +382,7 @@ button {
 
 // Select time label
 .css-1hbyad5-MuiTypography-root {
-  color: #fff !important;
+  color: #fff !important; 
   font-weight: 600 !important;
   font-family: 'Montserrat', sans-serif !important;
 }
