@@ -50,4 +50,17 @@
 
   &__switches 
   { display: flex }
+
+  .account {
+    display: flex;
+    gap: 12px;
+
+    padding: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition;
+
+    &:hover, &--selected
+    { background-color: $grey-650; }
+  }
 }

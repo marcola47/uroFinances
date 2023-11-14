@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import { TUUID, TTransactionType, TTransactionCategory, TRecurringPeriod, TRecurringPaidMonths } from "@/types/types";
+import { TUUID, TUserAccount, TTransactionType, TTransactionCategory, TRecurringPeriod, TRecurringPaidMonths } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
 
@@ -9,12 +9,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, StaticTimePicker } from "@mui/x-date-pickers"
 
+import List from "../List/List";
 import { FaChevronDown, FaXmark, FaAlignLeft, FaDollarSign, FaClock, FaBuildingColumns } from "react-icons/fa6";
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
   const { setModalTransShown, modalTransData, setModalTransData } = useUIContext();
   const [clockShown, setClockShown] = useState<boolean>(false);
+  const [accountListShown, setAccountListShown] = useState<boolean>(false);
   const [modalDesc, setModalDesc] = useState<string>(".");
 
   const [newID, setNewID] = useState<TUUID>(modalTransData!.id ?? null);
@@ -82,6 +84,27 @@ export default function ModalTrans(): JSX.Element {
     console.log(newTransaction);
   }
 
+  function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
+    function handleSetNewAccount() {
+      setNewAccount(account.id);
+      setAccountListShown(false);
+    }
+    
+    return (
+      <div 
+        className={`account ${newAccount === account.id ? "account--selected" : ""}`}
+        onClick={ handleSetNewAccount }
+      > 
+        <div className="account__icon">
+          <FaBuildingColumns/>
+        </div>
+
+        <div className="account__name">
+          { account.name }
+        </div>
+      </div>
+    )
+  }
   
   return (
     <div 
@@ -165,16 +188,27 @@ export default function ModalTrans(): JSX.Element {
               </div>
             </LocalizationProvider>
 
-            <div className="input input--account">
-              <FaBuildingColumns className="input__icon"/>
-              <input 
-                readOnly
-                className="input__field"
-                placeholder="Account"
-                // value={ newAccount }
-                // onChange={ (e) => {setNewName(e.target.value)} }
-              />
-              <FaChevronDown className="input__chevron"/>
+            <div className="input__wrapper">
+              <div className="input input--account">
+                <FaBuildingColumns className="input__icon"/>
+                <input 
+                  readOnly
+                  className="input__field"
+                  placeholder="Account"
+                  value={ user!.accounts.find(a => a.id === newAccount)?.name ?? "" }
+                  onClick={ () => {setAccountListShown(!accountListShown)} }
+                />
+                <FaChevronDown className="input__chevron"/>
+              </div>
+
+              {
+                accountListShown &&
+                <List 
+                  className="input__dropdown"
+                  elements={ user!.accounts }
+                  ListItem={ ModalAccount }
+                />
+              }
             </div>
           </div>
 
@@ -206,6 +240,10 @@ export default function ModalTrans(): JSX.Element {
                 { newConfirmed ? "Confirmed" : "Pending" }
               </div>
             </div>
+          </div>
+
+          <div className="modal--trans__row modal--trans__row-3">
+            
           </div>
         </div>
       </div>

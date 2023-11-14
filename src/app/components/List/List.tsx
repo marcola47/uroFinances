@@ -3,15 +3,15 @@ import { useUserContext } from '@/app/context/User';
 import { v4 as uuid } from 'uuid';
 
 type ListProps = {
+  className?: string, 
+  id?: string,
   elements: any[], 
   ListItem: any, 
-  className: string, 
-  id: string,
-  style: any,
-  forwardedRef: RefObject<HTMLUListElement | null>;
+  style?: any,
+  forwardedRef?: RefObject<HTMLUListElement | null>;
 }
 
-export default function List({ elements, ListItem, className = "", id = "", style = {}, forwardedRef }: ListProps): JSX.Element {
+export default function List({ className = "", id = "", elements, ListItem, style = {}, forwardedRef }: ListProps): JSX.Element {
   const { user } = useUserContext();
   const listRef = useRef<HTMLUListElement | null>(null);
   useImperativeHandle(forwardedRef, () => listRef.current);

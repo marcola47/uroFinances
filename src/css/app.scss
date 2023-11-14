@@ -69,12 +69,16 @@ button {
 .input {
   display: flex;
   
+  z-index: 1;
   position: relative;
   border: 2px solid $grey-400;
   border-radius: $br-m;
 
   &--time > *, &--account > *
   { cursor: pointer }
+
+  &:hover > &__chevron 
+  { color: #fff }
 
   &__icon {
     display: grid;
@@ -113,9 +117,6 @@ button {
 
     color: $grey-400;
     @include transition;
-
-    &:hover 
-    { color: #fff }
   }
 
   &__clock {
@@ -123,6 +124,27 @@ button {
     top: 62px;
     left: -2px;
   }
+
+  &__dropdown {
+    z-index: 0;
+    position: absolute;
+    top: 45px;
+    left: 0px;
+    width: 100%;
+    padding-top: 12px;
+    border: 2px solid $grey-400;
+    border-radius: $br-m;
+
+    background-color: $grey-750;
+
+    & > :last-child { 
+      border-bottom-left-radius: 4px !important;
+      border-bottom-right-radius: 4px !important; 
+    }
+  }
+
+  &__wrapper
+  { position: relative }
 }
 
 .switch {

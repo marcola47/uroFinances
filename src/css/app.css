@@ -420,6 +420,17 @@
 .modal--trans__switches {
   display: flex;
 }
+.modal--trans .account {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.modal--trans .account:hover, .modal--trans .account--selected {
+  background-color: hsl(215, 15%, 30%);
+}
 
 @keyframes fade_in {
   from {
@@ -782,12 +793,16 @@ button {
 
 .input {
   display: flex;
+  z-index: 1;
   position: relative;
   border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
 }
 .input--time > *, .input--account > * {
   cursor: pointer;
+}
+.input:hover > .input__chevron {
+  color: #fff;
 }
 .input__icon {
   display: grid;
@@ -824,13 +839,28 @@ button {
   color: hsl(215, 15%, 55%);
   transition: all 0.1s ease-in-out;
 }
-.input__chevron:hover {
-  color: #fff;
-}
 .input__clock {
   position: absolute;
   top: 62px;
   left: -2px;
+}
+.input__dropdown {
+  z-index: 0;
+  position: absolute;
+  top: 45px;
+  left: 0px;
+  width: 100%;
+  padding-top: 12px;
+  border: 2px solid hsl(215, 15%, 55%);
+  border-radius: 6px;
+  background-color: hsl(215, 15%, 20%);
+}
+.input__dropdown > :last-child {
+  border-bottom-left-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+.input__wrapper {
+  position: relative;
 }
 
 .switch {

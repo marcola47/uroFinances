@@ -16,9 +16,9 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
   
   type TransactionCategoryProps = {
-    root:       { name?: string, style: { backgroundColor?: string, color?: string } },
-    child:      { name?: string, style: { backgroundColor?: string, color?: string } },
-    grandchild: { name?: string, style: { backgroundColor?: string, color?: string } },
+    root:       { id?: string, name?: string, style: { backgroundColor?: string, color?: string } },
+    child:      { id?: string, name?: string, style: { backgroundColor?: string, color?: string } },
+    grandchild: { id?: string, name?: string, style: { backgroundColor?: string, color?: string } },
   }
   
   const transactionCategory: TransactionCategoryProps = {
@@ -33,6 +33,7 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
     if (transaction.category[transKey] !== null) {
       const category = user?.categories.find(category => category.id === transaction.category[transKey]);
       
+      transactionCategory[transKey].id = category?.id;
       transactionCategory[transKey].name = category?.name;
       transactionCategory[transKey].style = {
         backgroundColor: category?.color, 
