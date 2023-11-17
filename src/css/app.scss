@@ -26,6 +26,10 @@ input, button, textarea, a {
   color: inherit; 
 }
 
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 button {
   color: white;
   background-color: black;
@@ -73,9 +77,21 @@ button {
   position: relative;
   border: 2px solid $grey-400;
   border-radius: $br-m;
-
-  &--time > *, &--account > *
+  
+  &--account > *, &--category > * 
   { cursor: pointer }
+
+  &--time {
+    z-index: 10;
+
+    & > * 
+    { cursor: pointer; }
+  }
+
+  &--disabled > * {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
 
   &:hover > &__chevron 
   { color: #fff }
@@ -126,16 +142,23 @@ button {
   }
 
   &__dropdown {
-    z-index: 0;
+    z-index: 2;
     position: absolute;
-    top: 45px;
+    // top: 45px;
+    top: 64px;
     left: 0px;
     width: 100%;
-    padding-top: 12px;
+    // padding-top: 12px;
     border: 2px solid $grey-400;
     border-radius: $br-m;
 
     background-color: $grey-750;
+
+    &--category {
+      overflow-y: auto;
+      max-height: 240px;
+      @include scrollbar_small();
+    }
 
     & > :last-child { 
       border-bottom-left-radius: 4px !important;
@@ -174,6 +197,9 @@ button {
     color: $green-400;
     border-color: $green-400;
     background-color: $green-bg;
+
+    &:hover 
+    { background-color: lighten($green-bg, 5%) }
   }
 
   &--expense {
@@ -183,6 +209,9 @@ button {
     color: $red-400;
     border-color: $red-400;
     background-color: $red-bg;
+
+    &:hover 
+    { background-color: lighten($red-bg, 5%) }
   }
 }
 
@@ -193,28 +222,44 @@ button {
 
   height: 60px;
   padding-inline: 16px;
-  border: 2px solid $yellow-400;
+  border: 2px solid $grey-400;
   border-radius: $br-m;
   
-  color: $yellow-400;
-  background-color: $yellow-bg;
+  color: $grey-400;
+  background-color: $grey-750;
 
   font-weight: 600;
   user-select: none;
   cursor: pointer;
   @include transition;
 
+  &:hover 
+  { background-color: $grey-700 }
+
   &--toggled {
     color: $green-400;
     border-color: $green-400;
     background-color: $green-bg;
+
+    &:hover 
+    { background-color: lighten($green-bg, 5%) }
+  }
+
+  &--untoggled {
+    &--yellow {
+      color: $yellow-400;
+      background-color: $yellow-bg;
+
+      &:hover 
+      { background-color: lighten($yellow-bg, 5%) }
+    }
   }
 
   &__checkbox {
     width: 24px;
     height: 24px;
 
-    border: 2px solid $yellow-400;
+    border: 2px solid $grey-400;
     border-radius: $br-s;
 
     @include transition;
@@ -222,6 +267,13 @@ button {
     &--toggled {
       border-color: $green-400;
       background-color: $green-400;
+    }
+
+    &--untoggled {
+      &--yellow {
+        border-color: $yellow-400;
+        background-color: $yellow-400;
+      }
     }
   }
 }

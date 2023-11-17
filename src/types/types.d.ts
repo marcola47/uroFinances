@@ -51,9 +51,9 @@ type TRecurringPaidMonths = {
 
 // Type for defining a transaction's category
 export type TTransactionCategory = {
-  root: string | null,
-  child: string | null,
-  grandchild: string | null
+  root: string | null | undefined,
+  child: string | null | undefined,
+  grandchild: string | null | undefined
 };
 
 // Type for everything that needs to handle transactions
@@ -74,5 +74,6 @@ export type TTransaction = {
   in_stallments: boolean,
   in_stallments_count: number | null,
   in_stallments_current: number | null,
+  in_stallments_period: TRecurringPeriod | null,
   category: TTransactionCategory
 }; 

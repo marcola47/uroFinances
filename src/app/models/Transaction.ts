@@ -107,18 +107,25 @@ const TransactionSchema = new mongoose.Schema({
     required: true
   },
 
-  stallments_count: {
+  in_stallments_count: {
     type: Number,
     default: undefined,
     required: false,
     min: 1
   },
 
-  stallments_current: {
+  in_stallments_current: {
     type: Number,
     default: undefined,
     required: false,
     min: 1
+  },
+
+  in_stallments_period: {
+    type: String,
+    default: undefined,
+    enum: ["monthly", "quarterly", "semi-annual", "annual"],
+    required: false
   }
 }, { timestamps: false });
 

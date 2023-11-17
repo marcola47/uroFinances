@@ -84,3 +84,26 @@ $br-s: 3px;
 
 @mixin anim_fade_in
 { animation: fade_in 0.15s forwards ease-in-out }
+
+@mixin scrollbar_small() {
+  &::-webkit-scrollbar {
+    width: 8px;
+    @include transition;
+  }
+  
+  &::-webkit-scrollbar-track {
+    border-top-right-radius: $br-s;
+    border-bottom-right-radius: $br-s;
+    background: $grey-800;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    border-top-right-radius: $br-s;
+    border-bottom-right-radius: $br-s;
+    background: $grey-600;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: $grey-550;
+  }
+}

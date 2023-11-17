@@ -26,7 +26,7 @@ export async function POST() {
     const transactions = [];
     for (let i = 0; i < 1000; i++) {
       const type = Math.round(Math.random()) ? "expense" : "income";
-      const recurrence = Math.floor(Math.random() * 10); //0 - none | 1 - recurring | 2 - in stallments
+      const recurrence = Math.floor(Math.random() * 10); // 0->7 - none | 8 - in stallments | 9 - recurring
 
       interface Category { root: string | null, child: string | null, grandchild: string | null };
       const category: Category = { root: null, child: null, grandchild: null };
@@ -96,6 +96,16 @@ export async function POST() {
       else if (recurrence === 8) {
         const startDate = faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2030-01-01T00:00:00.000Z' });
         const stallmentsCount = Math.floor(Math.random() * 24) + 1;
+        const recurringPeriod = faker.helpers.arrayElement(recurringPeriods);
+
+        let recurringPeriodOffset = 0;
+        switch (recurringPeriod) {
+          case "monthly"    : recurringPeriodOffset = 1;  break;
+          case "quarterly"  : recurringPeriodOffset = 3;  break;
+          case "semi-annual": recurringPeriodOffset = 6;  break;
+          case "annual"     : recurringPeriodOffset = 12; break;
+          default: 1;
+        }
         
         const name = faker.commerce.productName();
         let amountPerStallment = (faker.number.float({ min: 100, max: 10000 })) / stallmentsCount; 
@@ -103,7 +113,7 @@ export async function POST() {
 
         for (let i = 0; i < stallmentsCount; i++) {
           const curDate = new Date(startDate);
-          curDate.setMonth(curDate.getMonth() + i);
+          curDate.setMonth(curDate.getMonth() + i * recurringPeriodOffset);
 
           const newTransaction = {
             id: faker.string.uuid(),
@@ -115,8 +125,9 @@ export async function POST() {
             amount: amountPerStallment,
             due_date: curDate,
             in_stallments: true,
-            stallments_count: stallmentsCount,
-            stallments_current: i + 1
+            in_stallments_count: stallmentsCount,
+            in_stallments_current: i + 1,
+            in_stallments_period: recurringPeriod
           }
 
           transactions.push(newTransaction);

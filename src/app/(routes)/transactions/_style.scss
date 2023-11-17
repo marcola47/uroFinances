@@ -221,3 +221,20 @@
     { font-size: 1.6rem }
   }
 }
+
+@media screen and (max-width: 1400px) {
+  .transaction
+  { zoom: 0.85 }
+}
+
+@media screen and (max-width: 1200px) {
+  .transactions__header
+  { align-items: flex-start; }
+  
+  .transaction
+  { zoom: 0.75 }
+}
+
+@media screen and (max-width: 1024px) {
+
+}

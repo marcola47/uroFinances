@@ -378,7 +378,7 @@
 .modal--trans {
   position: relative;
   width: 640px;
-  height: 800px;
+  height: 880px;
   padding: 24px;
   border-radius: 9px;
   background-color: hsl(215, 15%, 15%);
@@ -397,7 +397,7 @@
   transition: all 0.1s ease-in-out;
 }
 .modal--trans__close:hover {
-  color: hsl(210, 90%, 65%);
+  color: hsl(0, 90%, 52%);
 }
 .modal--trans__form {
   display: flex;
@@ -417,10 +417,16 @@
 .modal--trans__row--2 {
   grid-template-columns: 5.5fr 4.5fr;
 }
+.modal--trans__row--4 {
+  grid-template-columns: 3fr 3fr 2fr;
+}
+.modal--trans__row--5 {
+  grid-template-columns: 4fr 4fr 2fr;
+}
 .modal--trans__switches {
   display: flex;
 }
-.modal--trans .account {
+.modal--trans .account, .modal--trans .category, .modal--trans .recurring-period {
   display: flex;
   gap: 12px;
   padding: 16px;
@@ -428,7 +434,7 @@
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
-.modal--trans .account:hover, .modal--trans .account--selected {
+.modal--trans .account:hover, .modal--trans .account--selected, .modal--trans .category:hover, .modal--trans .category--selected, .modal--trans .recurring-period:hover, .modal--trans .recurring-period--selected {
   background-color: hsl(215, 15%, 30%);
 }
 
@@ -724,6 +730,19 @@
   font-size: 1.6rem;
 }
 
+@media screen and (max-width: 1400px) {
+  .transaction {
+    zoom: 0.85;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .transactions__header {
+    align-items: flex-start;
+  }
+  .transaction {
+    zoom: 0.75;
+  }
+}
 @keyframes fade_in {
   from {
     opacity: 0;
@@ -754,6 +773,10 @@ input, button, textarea, a {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 
 button {
@@ -798,8 +821,18 @@ button {
   border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
 }
-.input--time > *, .input--account > * {
+.input--account > *, .input--category > * {
   cursor: pointer;
+}
+.input--time {
+  z-index: 10;
+}
+.input--time > * {
+  cursor: pointer;
+}
+.input--disabled > * {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 .input:hover > .input__chevron {
   color: #fff;
@@ -845,15 +878,36 @@ button {
   left: -2px;
 }
 .input__dropdown {
-  z-index: 0;
+  z-index: 2;
   position: absolute;
-  top: 45px;
+  top: 64px;
   left: 0px;
   width: 100%;
-  padding-top: 12px;
   border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
   background-color: hsl(215, 15%, 20%);
+}
+.input__dropdown--category {
+  overflow-y: auto;
+  max-height: 240px;
+}
+.input__dropdown--category::-webkit-scrollbar {
+  width: 8px;
+  -webkit-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+.input__dropdown--category::-webkit-scrollbar-track {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background: hsl(215, 15%, 15%);
+}
+.input__dropdown--category::-webkit-scrollbar-thumb {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  background: hsl(215, 15%, 35%);
+}
+.input__dropdown--category::-webkit-scrollbar-thumb:hover {
+  background: hsl(215, 15%, 40%);
 }
 .input__dropdown > :last-child {
   border-bottom-left-radius: 4px !important;
@@ -888,12 +942,18 @@ button {
   border-color: hsl(155, 90%, 50%);
   background-color: hsl(155, 15%, 20%);
 }
+.switch--income:hover {
+  background-color: #364941;
+}
 .switch--expense {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   color: hsl(0, 90%, 52%);
   border-color: hsl(0, 90%, 52%);
   background-color: hsl(0, 15%, 20%);
+}
+.switch--expense:hover {
+  background-color: #493636;
 }
 
 .toggle {
@@ -902,10 +962,10 @@ button {
   gap: 8px;
   height: 60px;
   padding-inline: 16px;
-  border: 2px solid hsl(50, 100%, 60%);
+  border: 2px solid hsl(215, 15%, 55%);
   border-radius: 6px;
-  color: hsl(50, 100%, 60%);
-  background-color: hsl(50, 15%, 20%);
+  color: hsl(215, 15%, 55%);
+  background-color: hsl(215, 15%, 20%);
   font-weight: 600;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -913,21 +973,38 @@ button {
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
+.toggle:hover {
+  background-color: hsl(215, 15%, 23%);
+}
 .toggle--toggled {
   color: hsl(155, 90%, 50%);
   border-color: hsl(155, 90%, 50%);
   background-color: hsl(155, 15%, 20%);
 }
+.toggle--toggled:hover {
+  background-color: #364941;
+}
+.toggle--untoggled--yellow {
+  color: hsl(50, 100%, 60%);
+  background-color: hsl(50, 15%, 20%);
+}
+.toggle--untoggled--yellow:hover {
+  background-color: #494636;
+}
 .toggle__checkbox {
   width: 24px;
   height: 24px;
-  border: 2px solid hsl(50, 100%, 60%);
+  border: 2px solid hsl(215, 15%, 55%);
   border-radius: 3px;
   transition: all 0.1s ease-in-out;
 }
 .toggle__checkbox--toggled {
   border-color: hsl(155, 90%, 50%);
   background-color: hsl(155, 90%, 50%);
+}
+.toggle__checkbox--untoggled--yellow {
+  border-color: hsl(50, 100%, 60%);
+  background-color: hsl(50, 100%, 60%);
 }
 
 .btn {
