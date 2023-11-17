@@ -1,5 +1,6 @@
 // refactor
 // disable recurring if in stallments is selected and vice versa
+// fix dropdown list to be below the input
 
 import { useState, useEffect } from "react";
 
