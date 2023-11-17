@@ -1,11 +1,11 @@
 // refactor
 // disable recurring if in stallments is selected and vice versa
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-import { TUUID, TUserAccount, TUserCategory, TTransactionType, TTransactionCategory, TRecurringPeriod, TRecurringPaidMonths } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
+import { TUUID, TUserAccount, TUserCategory, TTransactionType, TTransactionCategory, TRecurringPeriod, TRecurringPaidMonths } from "@/types/types";
 
 import formatCurrency from "@/libs/helpers/formatCurrency";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -45,7 +45,12 @@ export default function ModalTrans(): JSX.Element {
   const [newCategory, setNewCategory] = useState<TTransactionCategory | null>(modalTransData!.category ?? null);
 
   // must be objects to work with my List component
-  const recurringPeriods = [ { name: "monthly" }, { name: "quarterly" }, { name: "semi-annual" }, { name: "annual" } ]
+  const recurrencePeriods = [ 
+    { name: "monthly" }, 
+    { name: "quarterly" }, 
+    { name: "semi-annual" }, 
+    { name: "annual" } 
+  ]
 
   // reset selected category, reset category list, set new modal description
   useEffect(() => {
@@ -53,8 +58,6 @@ export default function ModalTrans(): JSX.Element {
     
     if (newCategory !== modalTransData!.category)
       setNewCategory(null);
-
-    console.log(newCategory);
 
     if (modalTransData!.modalType.includes("new")) {
       switch (newType) {
@@ -90,8 +93,11 @@ export default function ModalTrans(): JSX.Element {
   }
 
   function handleSetTransaction() {
-    if (!newName) return alert("Name is required");
-    if (!newAmount) return alert("Amount is required");
+    if (!newName) 
+      return alert("Name is required");
+
+    if (!newAmount) 
+      return alert("Amount is required");
 
     const newTransaction = {
       id: newID,
@@ -104,14 +110,30 @@ export default function ModalTrans(): JSX.Element {
       due_date: newDueDate,
       confirmed: newConfirmed,
       recurring: newRecurring,
+      recurring_period: newRecurringPeriod,
       recurring_months: newRecurringMonths,
       in_stallments: newInStallments,
-      installments_count: newInStallmentsCount,
+      in_stallments_count: newInStallmentsCount,
       in_stallments_current: newInStallmentsCurrent,
+      in_stallments_period: newInStallmentsPeriod,
       category: newCategory
     }
 
     console.log(newTransaction);
+
+    // send to api, then:
+    // if it's new, set the new id and set the transactions state
+    // if existing, find the transaction in the transactions state and update it
+
+    // installments exceptions:
+    // in stallments -> not in stallments => ask the user if they want to:
+    //   -> delete all installments and keep only the first transaction 
+    //   -> delete all future installments and keep previous ones
+
+    // recurring exceptions:
+    // recurring -> not recurring => ask the user if they want to:
+    //   -> delete all recurrances and keep only the first transaction 
+    //   -> delete all future recurrances and keep previous ones
   }
 
   function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
@@ -492,7 +514,7 @@ export default function ModalTrans(): JSX.Element {
                 newInStallments && inStallmentsPeriodListShown &&
                 <List 
                   className="input__dropdown"
-                  elements={ recurringPeriods }
+                  elements={ recurrencePeriods }
                   ListItem={ ModalInStallmentsPeriod }
                 />
               }
@@ -537,13 +559,19 @@ export default function ModalTrans(): JSX.Element {
                 newRecurring && recurringPeriodListShown &&
                 <List 
                   className="input__dropdown"
-                  elements={ recurringPeriods }
+                  elements={ recurrencePeriods }
                   ListItem={ ModalRecurringPeriod }
                 />
               }
             </div>
           </div>
         </div>
+
+        <button 
+          className="btn btn--bg-blue"
+          onClick={ handleSetTransaction }
+          children={ modalDesc }
+        />
       </div>
     </div>
   )

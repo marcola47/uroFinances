@@ -1,8 +1,11 @@
 @import "../../../css/variables";
 
 .modal--trans {
+  display: flex;
+  flex-direction: column;
+
   position: relative;
-  width: 640px;
+  width: 664px;
   height: 880px;
   padding: 24px;
   border-radius: $br-b;
@@ -25,7 +28,7 @@
     @include transition;
 
     &:hover
-    { color: $red-400; }
+    { color: $red-400 }
   }
 
   &__form {
@@ -73,4 +76,7 @@
     &:hover, &--selected
     { background-color: $grey-650; }
   }
+
+  .btn
+  { margin-top: auto }
 }

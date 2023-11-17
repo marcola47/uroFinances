@@ -156,3 +156,4 @@ TransactionSchema.pre('save', function(next) {
 })
 
 export default mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);
+// idea: implement charges and real amount differentiation
