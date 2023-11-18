@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import Transaction from "@/app/models/Transaction";
+import Recurrence from "@/app/models/Recurrence";
+
 import dbConnection from "@/libs/configs/dbConnection";
 import { getMonthRange } from "@/libs/helpers/dateFunctions";
-import Transaction from "@/app/models/Transaction";
+
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,34 +18,91 @@ export async function GET(req: NextRequest) {
 
     const transactions = await Transaction.find({ 
       user: user, 
-      $or: [
-        { 
-          due_date: { 
-            $gte: startDate, 
-            $lte: endDate 
-          } 
-        },
-        { 
-          recurring: true, 
-          $and: [
-            { 'recurring_months': { $in: [startDate.getMonth() + 1] } },
-            { 'due_date': { $lte: endDate } }
-          ] 
-        }
-      ]
+      due_date: { $gte: startDate, $lte: endDate } 
     })
+    .lean()
+    .select('-_id -__v');
+
+    const recurrences = await Recurrence.find({ user: user })
     .lean()
     .select('-_id -__v');
 
     return NextResponse.json({ 
       status: 200, 
-      err: null, 
-      data: transactions
+      data: { transactions, recurrences }
     })
   }
 
   catch (err) {
     console.log(err);
-    return NextResponse.json({ status: 500, err: err })
+    return NextResponse.json({ 
+      status: 500, 
+      err: err 
+    })
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    await dbConnection();
+    const { transaction, operation } = await req.json();
+
+    if (operation === 'create') {
+      const newTransaction = new Transaction(transaction);
+      await newTransaction.save();
+      
+      return NextResponse.json({ status: 200, data: newTransaction })
+    }
+
+    else if (operation === 'update') {
+      const updatedTransaction = await Transaction.findOneAndUpdate(
+        { id: transaction.id }, 
+        transaction,
+        { new: true, runValidators: true, select: '-_id -__v' }
+      );
+      
+      if (!updatedTransaction)
+        throw new Error("Transaction not found")
+
+      return NextResponse.json({ 
+        status: 200, 
+        data: updatedTransaction 
+      })
+    }
+
+    else 
+      throw new Error("Invalid operation type");
+  }
+
+  catch (err) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500,
+      err: err 
+    })
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    await dbConnection();
+    const { id } = await req.json();
+
+    const deletedTransaction = await Transaction.findOneAndDelete({ id: id });
+
+    if (!deletedTransaction)
+      throw new Error("Transaction not found")
+
+    return NextResponse.json({ status: 200 })
+  }
+
+  catch (err) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500,
+      err: err 
+    })
   }
 }

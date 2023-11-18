@@ -1,9 +1,9 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
-import { TTransaction } from "@/types/types";
+import { TTransaction, TRecurrence } from "@/types/types";
 
-type ModalTransData = Partial<TTransaction> & {
-  modalType: string;
+type ModalTransData = Partial<TTransaction> & TRecurrence & {
+  operation: "update" | "create";
 }
 
 interface UIContextProps {

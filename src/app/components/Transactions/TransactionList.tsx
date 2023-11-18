@@ -9,7 +9,7 @@ import TransactionsControl from "./TransactionsControls";
 
 interface TransactionListProps {
   transactions: TTransaction[];
-  type: string;
+  type: "income" | "expense";
 }
 
 export default function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
@@ -46,8 +46,8 @@ export default function TransactionList({ transactions, type }: TransactionListP
   }, []);
 
   function handleShowModalTrans() {
-    setModalTransShown(true); //@ts-expect-error
-    setModalTransData({ type: type, modalType: "new" });
+    setModalTransShown(true);
+    setModalTransData({ type: type, operation: "create" });
   }
 
   return (

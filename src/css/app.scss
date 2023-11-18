@@ -248,6 +248,7 @@ button {
   &--untoggled {
     &--yellow {
       color: $yellow-400;
+      border-color: $yellow-400;
       background-color: $yellow-bg;
 
       &:hover 
@@ -270,10 +271,8 @@ button {
     }
 
     &--untoggled {
-      &--yellow {
-        border-color: $yellow-400;
-        background-color: $yellow-400;
-      }
+      &--yellow 
+      { border-color: $yellow-400 }
     }
   }
 }

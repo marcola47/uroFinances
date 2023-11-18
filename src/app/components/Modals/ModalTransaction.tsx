@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
-import { TUUID, TUserAccount, TUserCategory, TTransactionType, TTransactionCategory, TRecurringPeriod, TRecurringPaidMonths } from "@/types/types";
+import { useTransactionsContext } from "@/app/context/Transactions";
+import { TUUID, TUserAccount, TUserCategory, TFinancialEventType, TFinancialEventCategory, TFinancialEventPeriod } from "@/types/types";
 
 import formatCurrency from "@/libs/helpers/formatCurrency";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -18,32 +19,36 @@ import { FaChevronDown, FaXmark, FaAlignLeft, FaDollarSign, FaClock, FaBuildingC
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
+  const { transactions, setTransactions } = useTransactionsContext();
   const { setModalTransShown, modalTransData, setModalTransData } = useUIContext();
   
   const [clockShown, setClockShown] = useState<boolean>(false);
   const [accountListShown, setAccountListShown] = useState<boolean>(false);
   const [categoryListShown, setCategoryListShown] = useState<string>("");
   const [recurringPeriodListShown, setRecurringPeriodListShown] = useState<boolean>(false);
-  const [inStallmentsPeriodListShown, setInStallmentsPeriodListShown] = useState<boolean>(false);
+  const [stallmentsPeriodListShown, setStallmentsPeriodListShown] = useState<boolean>(false);
   
   const [modalDesc, setModalDesc] = useState<string>(".");
   const [displayCategories, setDisplayCategories] = useState<TUserCategory[]>([]);
-
-  const [newID, setNewID] = useState<TUUID>(modalTransData!.id ?? null);
+  
+  const [newID, setNewID] = useState<TUUID>(modalTransData!.id ?? "");
   const [newName, setNewName] = useState<string>(modalTransData!.name ?? "");
   const [newAccount, setNewAccount] = useState<TUUID>(modalTransData!.account ?? "");
-  const [newType, setNewType] = useState<TTransactionType>(modalTransData!.type ?? "expense");
-  const [newAmount, setNewAmount] = useState<string | null>(modalTransData!.amount ? modalTransData!.amount.toString() : null);
-  const [newDueDate, setNewDueDate] = useState<Date>(modalTransData!.due_date ? new Date(modalTransData!.due_date) : new Date());
+  const [newType, setNewType] = useState<TFinancialEventType>(modalTransData!.type ?? "expense");
+  const [newAmount, setNewAmount] = useState<string>(modalTransData!.amount ? (modalTransData!.amount * 100).toString() : "0");
+  const [newRegDate, setNewRegDate] = useState<Date>(new Date(modalTransData?.reg_date ?? new Date()));
+  const [newDueDate, setNewDueDate] = useState<Date>(new Date(modalTransData?.due_date ?? new Date()));
+  const [newCategory, setNewCategory] = useState<TFinancialEventCategory>(modalTransData!.category ?? { root: null, child: null, grandchild: null  });
   const [newConfirmed, setNewConfirmed] = useState<boolean>(modalTransData!.confirmed ?? true);
-  const [newRecurring, setNewRecurring] = useState<boolean>(modalTransData!.recurring ?? false);
-  const [newRecurringPeriod, setNewRecurringPeriod] = useState<TRecurringPeriod | null>(modalTransData!.recurring_period ?? null);
-  const [newRecurringMonths, setNewRecurringMonths] = useState<number[] | null>(modalTransData!.recurring_months ?? null);
-  const [newInStallments, setNewInStallments] = useState<boolean>(modalTransData!.in_stallments ?? false);
-  const [newInStallmentsCount, setNewInStallmentsCount] = useState<number>(modalTransData!.in_stallments_count ?? 0);
-  const [newInStallmentsCurrent, setNewInStallmentsCurrent] = useState<number | null>(modalTransData!.in_stallments_current ?? null);
-  const [newInStallmentsPeriod, setNewInStallmentsPeriod] = useState<TRecurringPeriod | null>(modalTransData!.in_stallments_period ?? null);
-  const [newCategory, setNewCategory] = useState<TTransactionCategory | null>(modalTransData!.category ?? null);
+  const [newRecurrence, setNewRecurrence] = useState<TUUID>(modalTransData!.recurrence ?? undefined);
+  const [newRecurrencePeriod, setNewRecurrencePeriod] = useState<TFinancialEventPeriod>(modalTransData!.recurrence_period ?? undefined);
+  const [newStallments, setNewStallments] = useState<TUUID>(modalTransData!.stallments ?? undefined);
+  const [newStallmentsCount, setNewStallmentsCount] = useState<number | undefined>(modalTransData!.stallments_count ?? undefined);
+  const [newStallmentsCurrent, setNewStallmentsCurrent] = useState<number | undefined>(modalTransData!.stallments_current ?? undefined);
+  const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod>(modalTransData!.stallments_period ?? undefined);
+
+  const [isRecurring, setIsRecurring] = useState<boolean>(modalTransData!.recurrence ? true : false);
+  const [isInStallments, setIsInStallments] = useState<boolean>(modalTransData!.stallments ? true : false);
 
   // must be objects to work with my List component
   const recurrencePeriods = [ 
@@ -58,9 +63,9 @@ export default function ModalTrans(): JSX.Element {
     setDisplayCategories(user!.categories.filter(c => c.type === newType));
     
     if (newCategory !== modalTransData!.category)
-      setNewCategory(null);
+      setNewCategory({ root: null, child: null, grandchild: null  });
 
-    if (modalTransData!.modalType.includes("new")) {
+    if (modalTransData!.operation.includes("create")) {
       switch (newType) {
         case "income": setModalDesc("ADD INCOME"); break;
         case "expense": setModalDesc("ADD EXPENSE"); break;
@@ -93,48 +98,125 @@ export default function ModalTrans(): JSX.Element {
     setClockShown(false);
   }
 
-  function handleSetTransaction() {
+  async function handleSetFinancialEvent() {
     if (!newName) 
       return alert("Name is required");
 
     if (!newAmount) 
       return alert("Amount is required");
 
-    const newTransaction = {
-      id: newID,
+    const newFinancialEvent = {
+      id: newID !== "" ? newID : undefined,
       name: newName,
       user: user!.id,
       account: newAccount,
       type: newType,
-      amount: parseInt(newAmount.replace(/[\D]+/g,'')),
-      registration_date: new Date(),
+      category: newCategory,
+      amount: parseInt(newAmount.replace(/[\D]+/g,'')) / 100,
+      reg_date: newRegDate,
       due_date: newDueDate,
-      confirmed: newConfirmed,
-      recurring: newRecurring,
-      recurring_period: newRecurringPeriod,
-      recurring_months: newRecurringMonths,
-      in_stallments: newInStallments,
-      in_stallments_count: newInStallmentsCount,
-      in_stallments_current: newInStallmentsCurrent,
-      in_stallments_period: newInStallmentsPeriod,
-      category: newCategory
+
     }
 
-    console.log(newTransaction);
+    if (isRecurring) {
+      const newRecurrence = { 
+        ...newFinancialEvent, 
+        recurrence_period: newRecurrencePeriod 
+      };
+
+      console.log(newRecurrence)
+    }
+
+    else if (isInStallments) {
+      const newStallment = { 
+        ...newFinancialEvent, 
+        stallments: newStallments,
+        stallments_count: newStallmentsCount, 
+        stallments_period: newStallmentsPeriod 
+      };
+
+      console.log(newStallment)
+    }
+
+    else {
+      const newTransaction = {
+        ...newFinancialEvent,
+        confirmed: newConfirmed,
+        recurrence: newRecurrence,
+        stallments: newStallments
+      };
+
+      console.log(newTransaction)
+    }
+
+    // const res = await fetch('/api/transactions', {
+    //   headers: { type: "application/json" },
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     transaction: newTransaction,
+    //     operation: modalTransData!.operation
+    //   })
+    // })
+
+    // const { status, err, data } = await res.json();
+
+    // if (status >= 400 && status < 200) {
+    //   console.log(err);
+    //   return;
+    // }
+
+    // const transactionsCopy = structuredClone(transactions);
+    // let existingTransaction = false;
+
+    // transactionsCopy.map(t => {
+    //   if (t.id === data.id) {
+    //     existingTransaction = true;
+    //     return data;
+    //   }
+
+    //   else
+    //     return t;
+    // })
+
+    // if (!existingTransaction)
+    //   transactionsCopy.push(data);
+
+    // console.log(data)
+    // setTransactions(transactionsCopy);
 
     // send to api, then:
     // if it's new, set the new id and set the transactions state
     // if existing, find the transaction in the transactions state and update it
 
-    // installments exceptions:
+    // stallments exceptions:
     // in stallments -> not in stallments => ask the user if they want to:
-    //   -> delete all installments and keep only the first transaction 
-    //   -> delete all future installments and keep previous ones
+    //   -> delete all stallments and keep only the first transaction 
+    //   -> delete all future stallments and keep previous ones
 
     // recurring exceptions:
     // recurring -> not recurring => ask the user if they want to:
-    //   -> delete all recurrances and keep only the first transaction 
-    //   -> delete all future recurrances and keep previous ones
+    //   -> delete all recurrences and keep only the first transaction 
+    //   -> delete all future recurrences and keep previous ones
+  }
+
+  async function handleDeleteTransaction() {
+    const res = await fetch('/api/transactions', {
+      headers: { type: "application/json" },
+      method: 'DELETE',
+      body: JSON.stringify({
+        transactionID: modalTransData!.id,
+        user: user!.id
+      })
+    })
+
+    const { status, err } = await res.json();
+
+    if (status >= 400 && status < 200) {
+      console.log(err);
+      return;
+    }
+
+    setTransactions(prevTransactions => prevTransactions.filter(t => t.id !== modalTransData!.id));
   }
 
   function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
@@ -224,37 +306,37 @@ export default function ModalTrans(): JSX.Element {
     );
   }
   
-  function ModalRecurringPeriod({ itemData: recurringPeriod }: { itemData: { name: TRecurringPeriod } }) {
-    function handleSetNewRecurringPeriod() {
-      setNewRecurringPeriod(recurringPeriod?.name);
+  function ModalRecurringPeriod({ itemData: recurrencePeriod }: { itemData: { name: TFinancialEventPeriod } }) {
+    function handleSetNewRecurrencePeriod() {
+      setNewRecurrencePeriod(recurrencePeriod?.name);
       setRecurringPeriodListShown(false);
     }
     
     return (
       <div 
-        className={`recurring-period ${newRecurringPeriod === recurringPeriod?.name ? "recurring-period--selected" : ""}`}
-        onClick={ handleSetNewRecurringPeriod }
+        className={`recurring-period ${newRecurrencePeriod === recurrencePeriod?.name ? "recurring-period--selected" : ""}`}
+        onClick={ handleSetNewRecurrencePeriod }
       > 
         <div className="recurring=period__name">
-          { recurringPeriod.name ? recurringPeriod.name?.charAt(0).toUpperCase() + recurringPeriod.name?.slice(1) : "" }
+          { recurrencePeriod.name ? recurrencePeriod.name?.charAt(0).toUpperCase() + recurrencePeriod.name?.slice(1) : "" }
         </div>
       </div>
     )
   }
 
-  function ModalInStallmentsPeriod({ itemData: inStallmentsPeriod }: { itemData: { name: TRecurringPeriod } }) {
-    function handleSetNewInStallmentsPeriod() {
-      setNewInStallmentsPeriod(inStallmentsPeriod?.name);
-      setInStallmentsPeriodListShown(false);
+  function ModalStallmentsPeriod({ itemData: stallmentsPeriod }: { itemData: { name: TFinancialEventPeriod } }) {
+    function handleSetNewStallmentsPeriod() {
+      setNewStallmentsPeriod(stallmentsPeriod?.name);
+      setStallmentsPeriodListShown(false);
     }
     
     return (
       <div 
-        className={`recurring-period ${newInStallmentsPeriod === inStallmentsPeriod?.name ? "recurring-period--selected" : ""}`}
-        onClick={ handleSetNewInStallmentsPeriod }
+        className={`recurring-period ${newStallmentsPeriod === stallmentsPeriod?.name ? "recurring-period--selected" : ""}`}
+        onClick={ handleSetNewStallmentsPeriod }
       > 
         <div className="recurring=period__name"> 
-          { inStallmentsPeriod.name ? inStallmentsPeriod.name?.charAt(0).toUpperCase() + inStallmentsPeriod.name?.slice(1) : "" }
+          { stallmentsPeriod.name ? stallmentsPeriod.name?.charAt(0).toUpperCase() + stallmentsPeriod.name?.slice(1) : "" }
         </div>
       </div>
     )
@@ -369,7 +451,7 @@ export default function ModalTrans(): JSX.Element {
 
           <div className="modal--trans__row modal--trans__row--2">
             {
-              modalTransData!.modalType.includes("new") &&
+              modalTransData!.operation.includes("create") &&
               <div className="modal--trans__switches">
                 <div 
                   className={`switch switch--income ${newType === 'income' ? 'switch--selected' : ''}`}
@@ -490,15 +572,15 @@ export default function ModalTrans(): JSX.Element {
 
           <div className="modal--trans__row modal--trans__row--4">
             <div 
-              className={`toggle ${newInStallments ? "toggle--toggled" : ""}`}
-              onClick= { () => {setNewInStallments(!newInStallments)} }
+              className={`toggle ${newStallments ? "toggle--toggled" : ""}`}
+              onClick= { () => {setIsInStallments(!isInStallments)} }
             >
-              <div className={`toggle__checkbox ${newInStallments ? "toggle__checkbox--toggled" : ""}`}/>
+              <div className={`toggle__checkbox ${newStallments ? "toggle__checkbox--toggled" : ""}`}/>
               <div className="toggle__label">In stallments</div>
             </div>
 
             <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${newInStallments ? "" : "input--disabled"}`}>
+              <div className={`input input--category input--recurring-period ${newStallments ? "" : "input--disabled"}`}>
                 <FaCalendarDay className="input__icon"/>
                 <FaChevronDown className="input__chevron"/>
 
@@ -506,44 +588,44 @@ export default function ModalTrans(): JSX.Element {
                   readOnly
                   className="input__field"
                   placeholder="Frequency"
-                  value={ newInStallmentsPeriod ? newInStallmentsPeriod.charAt(0).toUpperCase() + newInStallmentsPeriod.slice(1) : "" }
-                  onClick={ newInStallments ? () => {setInStallmentsPeriodListShown(!inStallmentsPeriodListShown)} : () => {} }
+                  value={ newStallmentsPeriod ? newStallmentsPeriod.charAt(0).toUpperCase() + newStallmentsPeriod.slice(1) : "" }
+                  onClick={ newStallments ? () => {setStallmentsPeriodListShown(!stallmentsPeriodListShown)} : () => {} }
                 />
               </div>
 
               {
-                newInStallments && inStallmentsPeriodListShown &&
+                newStallments && stallmentsPeriodListShown &&
                 <List 
                   className="input__dropdown"
                   elements={ recurrencePeriods }
-                  ListItem={ ModalInStallmentsPeriod }
+                  ListItem={ ModalStallmentsPeriod }
                 />
               }
             </div>
 
             
-            <div className={`input input--count ${newInStallments ? "" : "input--disabled"}`}>
+            <div className={`input input--count ${newStallments ? "" : "input--disabled"}`}>
               <FaCirclePlus className="input__icon"/>
               <input
                 type="number" 
                 className="input__field"
                 placeholder="Count"
-                onChange={ e => {setNewInStallmentsCount(Number(e.target.value))} }
+                onChange={ e => {setNewStallmentsCount(Number(e.target.value))} }
               />
             </div>
           </div>
 
           <div className="modal--trans__row modal--trans__row--5">
             <div 
-              className={`toggle ${newRecurring ? "toggle--toggled" : ""}`}
-              onClick= { () => {setNewRecurring(!newRecurring)} }
+              className={`toggle ${newRecurrence ? "toggle--toggled" : ""}`}
+              onClick= { () => {setIsRecurring(!isRecurring)} }
             >
-              <div className={`toggle__checkbox ${newRecurring ? "toggle__checkbox--toggled" : ""}`}/>
+              <div className={`toggle__checkbox ${newRecurrence ? "toggle__checkbox--toggled" : ""}`}/>
               <div className="toggle__label">Recurring</div>
             </div>
 
             <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${newRecurring ? "" : "input--disabled"}`}>
+              <div className={`input input--category input--recurring-period ${newRecurrence ? "" : "input--disabled"}`}>
                 <FaCalendarDay className="input__icon"/>
                 <FaChevronDown className="input__chevron"/>
 
@@ -551,13 +633,13 @@ export default function ModalTrans(): JSX.Element {
                   readOnly
                   className="input__field"
                   placeholder="Frequency"
-                  value={ newRecurringPeriod ? newRecurringPeriod.charAt(0).toUpperCase() + newRecurringPeriod.slice(1) : "" }
-                  onClick={ newRecurring ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
+                  value={ newRecurrencePeriod ? newRecurrencePeriod.charAt(0).toUpperCase() + newRecurrencePeriod.slice(1) : "" }
+                  onClick={ newRecurrence ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
                 />
               </div>
 
               {
-                newRecurring && recurringPeriodListShown &&
+                newRecurrence && recurringPeriodListShown &&
                 <List 
                   className="input__dropdown"
                   elements={ recurrencePeriods }
@@ -568,11 +650,22 @@ export default function ModalTrans(): JSX.Element {
           </div>
         </div>
 
-        <button 
-          className="btn btn--bg-blue"
-          onClick={ handleSetTransaction }
-          children={ modalDesc }
-        />
+        <div className="modal--trans__btns">
+          {
+            modalTransData!.operation.includes("existing") &&
+            <button 
+              className="btn btn--bg-red"
+              onClick={ handleDeleteTransaction }
+              children={`DELETE ${newType.toUpperCase()}`}
+            />
+          }
+
+          <button 
+            className="btn btn--bg-blue"
+            onClick={ handleSetFinancialEvent }
+            children={ modalDesc }
+          />
+        </div>
       </div>
     </div>
   )

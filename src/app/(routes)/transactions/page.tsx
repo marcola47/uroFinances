@@ -18,22 +18,24 @@ export default function TransactionsPage(): JSX.Element {
 
   useEffect(() => { 
     async function getTransactions() {
-      const res = await fetch(`/api/transactions?user=${session?.user?.id}&date=${date}`, {
-        method: "GET",
-        headers: { "type": "application/json" }
-      });
+      if (session?.user?.id && date) {
+        const res = await fetch(`/api/transactions?user=${session.user.id}&date=${date}`, {
+          method: "GET",
+          headers: { "type": "application/json" }
+        });
   
-      const { status, err, data } = await res.json();
-      
-      if (status < 200 || status >= 400) 
-        console.log(err);
-    
-      else 
-        setTransactions(data);
+        const { status, err, data } = await res.json();
+        
+        if (status < 200 || status >= 400) 
+          console.log(err);
+
+        // else 
+        //   setTransactions(data);
+      }
     }
     
     getTransactions();
-  }, [date])
+  }, [session, date])
 
   return (
     <>

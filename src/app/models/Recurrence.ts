@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import idSchema from "./_id";
 
-const TransactionCategorySchema = new mongoose.Schema({
+const RecurrenceCategorySchema = new mongoose.Schema({
   root: {
     type: String,
     required: false,
@@ -19,7 +19,7 @@ const TransactionCategorySchema = new mongoose.Schema({
 
 }, { _id: false })
 
-const TransactionSchema = new mongoose.Schema({
+const RecurrenceSchema = new mongoose.Schema({
   id: idSchema,
 
   name: {
@@ -48,7 +48,7 @@ const TransactionSchema = new mongoose.Schema({
   },
 
   category: {
-    type: TransactionCategorySchema,
+    type: RecurrenceCategorySchema,
     required: false,
   },
 
@@ -70,43 +70,12 @@ const TransactionSchema = new mongoose.Schema({
     required: true,
   },
 
-  confirmed: {
-    type: Boolean,
-    default: true,
-    required: true,
-  },
-
-  recurrence: {
-    type: String,
-    ref: "Recurrence",
-    required: false
-  },
-
-  stallments: {
-    type: String,
-    required: false
-  },
-
-  stallments_count: {
-    type: Number,
-    default: undefined,
-    required: false,
-    min: 1
-  },
-
-  stallments_current: {
-    type: Number,
-    default: undefined,
-    required: false,
-    min: 1
-  },
-
-  stallments_period: {
+  recurrence_period: {
     type: String,
     default: undefined,
     enum: ["monthly", "quarterly", "semi-annual", "annual"],
     required: false
-  }
+  },
 }, { timestamps: false });
 
-export default mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);
+export default mongoose.models.Recurrence || mongoose.model("Recurrence", RecurrenceSchema);

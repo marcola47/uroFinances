@@ -77,6 +77,11 @@
     { background-color: $grey-650; }
   }
 
-  .btn
-  { margin-top: auto }
+  &__btns
+  { 
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+  }
 }

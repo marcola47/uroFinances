@@ -439,7 +439,10 @@
 .modal--trans .account:hover, .modal--trans .account--selected, .modal--trans .category:hover, .modal--trans .category--selected, .modal--trans .recurring-period:hover, .modal--trans .recurring-period--selected {
   background-color: hsl(215, 15%, 30%);
 }
-.modal--trans .btn {
+.modal--trans__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: auto;
 }
 
@@ -991,6 +994,7 @@ button {
 }
 .toggle--untoggled--yellow {
   color: hsl(50, 100%, 60%);
+  border-color: hsl(50, 100%, 60%);
   background-color: hsl(50, 15%, 20%);
 }
 .toggle--untoggled--yellow:hover {
@@ -1009,7 +1013,6 @@ button {
 }
 .toggle__checkbox--untoggled--yellow {
   border-color: hsl(50, 100%, 60%);
-  background-color: hsl(50, 100%, 60%);
 }
 
 .btn {

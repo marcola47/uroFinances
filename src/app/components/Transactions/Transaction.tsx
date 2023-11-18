@@ -84,7 +84,7 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
 
   function handleShowmodalTrans() {
     setModalTransShown(true);
-    setModalTransData({ ...transaction, modalType: 'existing' });
+    setModalTransData({ ...transaction, operation: 'update' });
   }
 
   return (
