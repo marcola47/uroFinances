@@ -52,14 +52,16 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   } as const;
   
   const dueDate = new Date(transaction.due_date);
+  const formattedDate = new Intl.DateTimeFormat('en-GB', dateOptions).format(dueDate);
   
-  const formattedDate = transaction.recurring
-    ? `${dueDate.getDate().toString().padStart(2, '0')}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
-    : new Intl.DateTimeFormat('en-GB', dateOptions).format(dueDate);
-  
-  const formattedRecurrence = transaction.recurring_period 
-    ? transaction.recurring_period.charAt(0).toUpperCase() + transaction.recurring_period.slice(1) 
+  const formattedRecurrence = transaction.stallments_period 
+    ? transaction.stallments_period.charAt(0).toUpperCase() + transaction.stallments_period.slice(1) 
     : null;
+
+  // const formattedDate = transaction.recurring
+  //   ? `${dueDate.getDate().toString().padStart(2, '0')}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
+  //   : new Intl.DateTimeFormat('en-GB', dateOptions).format(dueDate);
+  
   
   async function handleConfirmTransaction(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
@@ -115,7 +117,7 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
           </div>
 
           {
-            transaction.recurring &&
+            transaction.stallments_period &&
             <div className="transaction__recurrance">
               { formattedRecurrence }
             </div>

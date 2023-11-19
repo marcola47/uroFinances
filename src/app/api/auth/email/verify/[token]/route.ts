@@ -29,6 +29,9 @@ export async function GET(req: NextRequest, { params }: { params: { token: strin
 
   catch (err) {
     console.log(err);
-    return NextResponse.json({ status: 500, err: err });
+    return NextResponse.json({ 
+      status: 500, 
+      error: err 
+    });
   }
 }

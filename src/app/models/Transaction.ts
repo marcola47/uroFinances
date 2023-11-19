@@ -110,3 +110,4 @@ const TransactionSchema = new mongoose.Schema({
 }, { timestamps: false });
 
 export default mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);
+// I wish I could've done this with discriminators, but, next just deoesn't like it 

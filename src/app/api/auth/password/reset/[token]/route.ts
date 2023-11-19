@@ -34,6 +34,9 @@ export async function POST(req: NextRequest, { params }: { params: { token: stri
 
   catch (err) {
     console.log(err)
-    return NextResponse.json({ status: 500, err: err });
+    return NextResponse.json({ 
+      status: 500, 
+      error: err 
+    });
   }
 }

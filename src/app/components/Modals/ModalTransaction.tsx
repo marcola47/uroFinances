@@ -35,7 +35,7 @@ export default function ModalTrans(): JSX.Element {
   const [newName, setNewName] = useState<string>(modalTransData!.name ?? "");
   const [newAccount, setNewAccount] = useState<TUUID>(modalTransData!.account ?? "");
   const [newType, setNewType] = useState<TFinancialEventType>(modalTransData!.type ?? "expense");
-  const [newAmount, setNewAmount] = useState<string>(modalTransData!.amount ? (modalTransData!.amount * 100).toString() : "0");
+  const [newAmount, setNewAmount] = useState<string>(modalTransData!.amount ? (modalTransData!.amount).toFixed(2).toString() : "0");
   const [newRegDate, setNewRegDate] = useState<Date>(new Date(modalTransData?.reg_date ?? new Date()));
   const [newDueDate, setNewDueDate] = useState<Date>(new Date(modalTransData?.due_date ?? new Date()));
   const [newCategory, setNewCategory] = useState<TFinancialEventCategory>(modalTransData!.category ?? { root: null, child: null, grandchild: null  });
@@ -60,6 +60,7 @@ export default function ModalTrans(): JSX.Element {
 
   // reset selected category, reset category list, set new modal description
   useEffect(() => {
+    console.log(modalTransData);
     setDisplayCategories(user!.categories.filter(c => c.type === newType));
     
     if (newCategory !== modalTransData!.category)
@@ -112,12 +113,11 @@ export default function ModalTrans(): JSX.Element {
       account: newAccount,
       type: newType,
       category: newCategory,
-      amount: parseInt(newAmount.replace(/[\D]+/g,'')) / 100,
+      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
       reg_date: newRegDate,
       due_date: newDueDate,
-
     }
-
+    
     if (isRecurring) {
       const newRecurrence = { 
         ...newFinancialEvent, 

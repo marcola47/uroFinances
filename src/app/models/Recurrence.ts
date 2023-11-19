@@ -79,3 +79,4 @@ const RecurrenceSchema = new mongoose.Schema({
 }, { timestamps: false });
 
 export default mongoose.models.Recurrence || mongoose.model("Recurrence", RecurrenceSchema);
+// I wish I could've done this with discriminators, but, next just deoesn't like it 

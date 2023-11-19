@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import Transaction from "@/app/models/Transaction";
-import Recurrence from "@/app/models/Recurrence";
-
 import dbConnection from "@/libs/configs/dbConnection";
 import { getMonthRange } from "@/libs/helpers/dateFunctions";
 
@@ -23,13 +21,9 @@ export async function GET(req: NextRequest) {
     .lean()
     .select('-_id -__v');
 
-    const recurrences = await Recurrence.find({ user: user })
-    .lean()
-    .select('-_id -__v');
-
     return NextResponse.json({ 
       status: 200, 
-      data: { transactions, recurrences }
+      data: transactions
     })
   }
 
@@ -37,7 +31,7 @@ export async function GET(req: NextRequest) {
     console.log(err);
     return NextResponse.json({ 
       status: 500, 
-      err: err 
+      error: err 
     })
   }
 }
@@ -79,7 +73,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ 
       status: 500,
-      err: err 
+      error: err 
     })
   }
 }
@@ -102,7 +96,7 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ 
       status: 500,
-      err: err 
+      error: err 
     })
   }
 }
