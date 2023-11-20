@@ -16,6 +16,8 @@ export async function GET(req: NextRequest) {
     .lean()
     .select('-_id -__v');
 
+    console.log(recurrences);
+
     return NextResponse.json({ 
       status: 200, 
       data: recurrences 

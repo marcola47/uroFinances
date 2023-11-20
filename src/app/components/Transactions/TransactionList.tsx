@@ -1,30 +1,38 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { TTransaction } from "@/types/types";
+
+import { TTransaction, TRecurrence } from "@/types/types";
+import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
 
 import List from "../List/List";
+import { HeaderLineTh } from "../LayoutServer/Headers/Headers";
 import Transaction from "./Transaction";
 import TransactionsControl from "./TransactionsControls";
 
 interface TransactionListProps {
   transactions: TTransaction[];
+  recurrences: TRecurrence[];
   type: "income" | "expense";
 }
 
-export default function TransactionList({ transactions, type }: TransactionListProps): JSX.Element {
-  const [height, setHeight] = useState<number>(0);
+export default function TransactionList({ transactions, recurrences, type }: TransactionListProps): JSX.Element {
+  const { user } = useUserContext();
   const { setModalTransShown, setModalTransData } = useUIContext();
+  const [height, setHeight] = useState<number>(0);
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-  const transactionsRef = useRef<HTMLUListElement>(null);
+  const transactionsRef = useRef<HTMLDivElement>(null);
 
   let transactionsTotal = 0;
   transactions.forEach(t => { t.confirmed && (transactionsTotal += t.amount) })
 
+  // useEffect(() => { console.log(recurrences) }, [recurrences])
+
   useEffect(() => {
     function calculateDistances() {
       const element = transactionsRef.current;
+      console.log(element)
       
       if (element) {
         const rect = element.getBoundingClientRect();
@@ -67,15 +75,30 @@ export default function TransactionList({ transactions, type }: TransactionListP
           <TransactionsControl type="sort"/>
         </div>
       </div>
-      
-      <List
+
+      <div 
+        className={`transactions__list ${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""}`}
+        id="transactions__list"
+        style={{ height: height }}
+        ref={ transactionsRef }
+      >
+        <List 
+          elements={ transactions }
+          ListItem={ Transaction }
+          unwrapped={ true }
+        />
+
+        <HeaderLineTh header="Test"/>
+      </div>
+
+      {/* <List
         className="transactions__list"
         id={`list:transactions:${type}`}
         elements={ transactions }
         ListItem={ Transaction }
         style={{ height: height }}
         forwardedRef={ transactionsRef }
-      />
+      /> */}
 
       <button 
         className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}

@@ -1,7 +1,13 @@
 @import "../../../../css/variables";
 
-.page-header {
-  padding-bottom: 16px;
-  border-bottom: 2px solid $grey-750;
-  text-align: center;
+.header {
+  &--page {
+    padding-bottom: 16px;
+    border-bottom: 2px solid $grey-750;
+    text-align: center;
+  }
+
+  &--line-th {
+    
+  }
 }

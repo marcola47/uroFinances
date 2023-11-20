@@ -12,7 +12,7 @@ import ModalTransaction from "@/app/components/Modals/ModalTransaction";
 
 export default function TransactionsPage(): JSX.Element {
   const { data: session } = useSession();
-  const { transactions, setTransactions, setRecurrences } = useTransactionsContext();
+  const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
   const { modalTransShown, modalTransData } = useUIContext();
   const { date } = useDateContext();
 
@@ -24,7 +24,6 @@ export default function TransactionsPage(): JSX.Element {
       });
 
       const { status, err, data } = await res.json();
-      console.log(data)
       
       if (status < 200 || status >= 400) 
         console.log(err);
@@ -42,7 +41,6 @@ export default function TransactionsPage(): JSX.Element {
       });
 
       const { status, err, data } = await res.json();
-      console.log(data);
 
       if (status < 200 || status >= 400) 
         console.log(err);
@@ -66,11 +64,13 @@ export default function TransactionsPage(): JSX.Element {
           <div className="transactions__lists">
             <TransactionList
               transactions={ transactions.filter(t => t.type === "income") } 
+              recurrences={ recurrences.filter(r => r.type === "income") }
               type="income"
             /> 
 
             <TransactionList 
               transactions={ transactions.filter(t => t.type === "expense") }
+              recurrences={ recurrences.filter(r => r.type === "expense") }
               type="expense"
             /> 
           </div>

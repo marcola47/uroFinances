@@ -361,12 +361,11 @@
     opacity: 1;
   }
 }
-.page-header {
+.header--page {
   padding-bottom: 16px;
   border-bottom: 2px solid hsl(215, 15%, 20%);
   text-align: center;
 }
-
 @keyframes fade_in {
   from {
     opacity: 0;
