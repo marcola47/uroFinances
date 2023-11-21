@@ -8,6 +8,26 @@
   }
 
   &--line-th {
-    
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .line {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      
+      width: 100%;
+      height: 4px;
+      border-radius: $br-m;
+
+      background-color: $grey-750;
+    }
+
+    .text {
+      z-index: 1;
+      padding-inline: 8px;
+      background-color: $grey-850;
+    }
   }
 }

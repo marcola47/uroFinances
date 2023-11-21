@@ -4,35 +4,47 @@ import { useState, useEffect, useRef } from "react";
 import { TTransaction, TRecurrence } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
+import { useDateContext } from "@/app/context/Date";
 
 import List from "../List/List";
 import { HeaderLineTh } from "../LayoutServer/Headers/Headers";
+import Recurrence from "./Recurrence"
 import Transaction from "./Transaction";
 import TransactionsControl from "./TransactionsControls";
 
-interface TransactionListProps {
+type TransactionListProps = {
   transactions: TTransaction[];
   recurrences: TRecurrence[];
   type: "income" | "expense";
-}
+};
+
+export type FilterProps = string;
+
+export type SortProps = {
+  by: "name" | "amount" | "due_date" | "confirmation_date" | "category" | "account",
+  order: "asc" | "desc"
+};
 
 export default function TransactionList({ transactions, recurrences, type }: TransactionListProps): JSX.Element {
   const { user } = useUserContext();
+  const { date } = useDateContext();
   const { setModalTransShown, setModalTransData } = useUIContext();
+
+  const [filter, setFilter] = useState<FilterProps>("");
+  const [sort, setSort] = useState<SortProps>({ by: "due_date", order: "desc" });
+  const [processedTransactions, setProcessedTransactions] = useState<TTransaction[]>(transactions);
+  const [processedRecurrences, setProcessedRecurrences] = useState<TRecurrence[]>(recurrences);
   const [height, setHeight] = useState<number>(0);
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   const transactionsRef = useRef<HTMLDivElement>(null);
 
   let transactionsTotal = 0;
-  transactions.forEach(t => { t.confirmed && (transactionsTotal += t.amount) })
-
-  // useEffect(() => { console.log(recurrences) }, [recurrences])
+  transactions.forEach(t => { t.confirmation_date && (transactionsTotal += t.amount) })
 
   useEffect(() => {
     function calculateDistances() {
       const element = transactionsRef.current;
-      console.log(element)
       
       if (element) {
         const rect = element.getBoundingClientRect();
@@ -53,6 +65,60 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
     };
   }, []);
 
+  useEffect(() => {
+    if (transactions.length > 0 && recurrences.length > 0) {
+      const sortedTransactions = transactions.sort((a, b) => {
+        const aValue = sort.by.includes("date") ? new Date(a[sort.by]) : a[sort.by];
+        const bValue = sort.by.includes("date") ? new Date(b[sort.by]) : b[sort.by];
+    
+        if (aValue === null || aValue === undefined) 
+          return sort.order === 'asc' ? -1 : 1;
+
+        if (bValue === null || bValue === undefined) 
+          return sort.order === 'asc' ? 1 : -1;
+    
+        if (typeof aValue === 'string') 
+          return sort.order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+
+        else if (typeof aValue === 'number') 
+          return sort.order === 'asc' ? (aValue < bValue ? -1 : 1) : (bValue < aValue ? -1 : 1);
+        
+        else if (aValue instanceof Date && bValue instanceof Date) {
+          return sort.order === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime(); 
+        }
+        
+        else 
+          return 0;
+      });
+
+      const sortedRecurrences = recurrences.sort((a, b) => {
+        const aValue = sort.by.includes("date") || sort.by === 'confirmation_date' ? new Date(a.due_date) : a[sort.by];
+        const bValue = sort.by.includes("date") || sort.by === 'confirmation_date' ? new Date(b.due_date) : b[sort.by];
+    
+        if (aValue === null || aValue === undefined) 
+          return sort.order === 'asc' ? -1 : 1;
+
+        if (bValue === null || bValue === undefined) 
+          return sort.order === 'asc' ? 1 : -1;
+    
+        if (typeof aValue === 'string') 
+          return sort.order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+
+        else if (typeof aValue === 'number') 
+          return sort.order === 'asc' ? (aValue < bValue ? -1 : 1) : (bValue < aValue ? -1 : 1);
+        
+        else if (aValue instanceof Date && bValue instanceof Date) 
+            return sort.order === 'asc' ? aValue.getDate() - bValue.getDate() : bValue.getDate() - aValue.getDate(); 
+        
+        else 
+          return 0;
+      });
+
+      setProcessedTransactions(sortedTransactions);
+      setProcessedRecurrences(sortedRecurrences);
+    }
+  }, [transactions, recurrences, date, sort, filter])
+
   function handleShowModalTrans() {
     setModalTransShown(true);
     setModalTransData({ type: type, operation: "create" });
@@ -71,8 +137,18 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
 
         <div className="transactions__controls">
           <TransactionsControl type="invoice"/>
-          <TransactionsControl type="filter"/>
-          <TransactionsControl type="sort"/>
+          
+          <TransactionsControl 
+            type="filter"
+            filter={ filter }
+            setFilter={ setFilter }
+          />
+          
+          <TransactionsControl 
+            type="sort"
+            sort={ sort }
+            setSort={ setSort }
+          />
         </div>
       </div>
 
@@ -83,22 +159,19 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
         ref={ transactionsRef }
       >
         <List 
-          elements={ transactions }
+          elements={ processedTransactions }
           ListItem={ Transaction }
           unwrapped={ true }
         />
 
-        <HeaderLineTh header="Test"/>
-      </div>
+        <HeaderLineTh header={`PENDING RECURRING ${type.toUpperCase()}S`}/>
+        <List
+          elements={ processedRecurrences }
+          ListItem={ Recurrence }
+          unwrapped={ true }
+        />
 
-      {/* <List
-        className="transactions__list"
-        id={`list:transactions:${type}`}
-        elements={ transactions }
-        ListItem={ Transaction }
-        style={{ height: height }}
-        forwardedRef={ transactionsRef }
-      /> */}
+      </div>
 
       <button 
         className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}

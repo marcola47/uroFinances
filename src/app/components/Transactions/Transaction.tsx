@@ -57,22 +57,17 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   const formattedRecurrence = transaction.stallments_period 
     ? transaction.stallments_period.charAt(0).toUpperCase() + transaction.stallments_period.slice(1) 
     : null;
-
-  // const formattedDate = transaction.recurring
-  //   ? `${dueDate.getDate().toString().padStart(2, '0')}/${(new Date().getMonth() + 1).toString().padStart(2, '0')}`
-  //   : new Intl.DateTimeFormat('en-GB', dateOptions).format(dueDate);
-  
   
   async function handleConfirmTransaction(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
     
     const transactionsCopy = structuredClone(transactions);
-    transactionsCopy.map(t => { t.id === transaction.id && (t.confirmed = !t.confirmed) })
+    transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = new Date()) })
     
     const res = await fetch(`/api/transactions/confirm/${transaction.id}`, {
       method: "PUT",
       headers: { "type": "application/json" },
-      body: JSON.stringify({ confirmed: !transaction.confirmed })
+      body: JSON.stringify({ confirmation_date: new Date() })
     });
 
     const { status, err } = await res.json();
@@ -157,11 +152,11 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
         </div>
 
         <div 
-          className={`transaction__toggle ${transaction.confirmed ? "transaction__toggle--confirmed" : "transaction__toggle--unconfirmed"}`}
+          className={`transaction__toggle ${transaction.confirmation_date ? "transaction__toggle--paid" : "transaction__toggle--unpaid"}`}
           onClick={ (e) => {handleConfirmTransaction(e)} }
         >
           {
-            transaction.confirmed 
+            transaction.confirmation_date
             ? <FaCheck className="transaction__toggle__icon"/>
             : <FaExclamation className="transaction__toggle__icon"/>
           }

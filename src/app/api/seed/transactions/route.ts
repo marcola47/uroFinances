@@ -11,6 +11,10 @@ import incomeCategories from "./income_categories.json" assert { type: "json" };
 // refazer
 export async function POST() {
   try { 
+    await dbConnection();
+    await Transaction.deleteMany({});
+    await Recurrence.deleteMany({});
+
     const accounts = [
       "ff5ec9d3-a89b-48dc-89d1-1651f047fc6f",
       "4065fc7a-f416-4c5d-8673-ace51a6b6f15",
@@ -88,7 +92,6 @@ export async function POST() {
       }
 
       recurrences.push(newTransaction);
-      console.log(recurrences);
     }
 
     const transactions = [];
@@ -153,6 +156,7 @@ export async function POST() {
             category: category,
             amount: amountPerStallment,
             due_date: curDate,
+            confirmation_date: curDate,
             stallments: stallment,
             stallments_count: stallmentsCount,
             stallments_current: i + 1,
@@ -164,6 +168,8 @@ export async function POST() {
       }
       
       else {
+        const newDueDate = faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2030-01-01T00:00:00.000Z' });
+
         const newTransaction = {
           id: faker.string.uuid(),
           name: faker.commerce.productName(),
@@ -172,7 +178,8 @@ export async function POST() {
           type: type,
           category: category,
           amount: faker.number.float({ min: 1, max: 1000, precision: 0.01 }),
-          due_date: faker.date.between({ from: '2020-01-01T00:00:00.000Z', to: '2030-01-01T00:00:00.000Z' }),
+          due_date: newDueDate,
+          confirmation_date: newDueDate
         }
 
         transactions.push(newTransaction);

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import Transaction from "@/app/models/Transaction";
 import dbConnection from "@/libs/configs/dbConnection";
-import { getMonthRange } from "@/libs/helpers/dateFunctions";
 
 
 export async function GET(req: NextRequest) {
@@ -11,16 +10,8 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const user = searchParams.get('user');
-    const date = searchParams.get('date');
-    const { startDate, endDate } = getMonthRange(new Date(date!));
 
-    const transactions = await Transaction.find({ 
-      user: user, 
-      due_date: { $gte: startDate, $lte: endDate } 
-    })
-    .lean()
-    .select('-_id -__v');
-
+    const transactions = await Transaction.find({ user: user }).lean().select('-_id -__v');
     return NextResponse.json({ 
       status: 200, 
       data: transactions

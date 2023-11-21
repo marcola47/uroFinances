@@ -366,6 +366,26 @@
   border-bottom: 2px solid hsl(215, 15%, 20%);
   text-align: center;
 }
+.header--line-th {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.header--line-th .line {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 4px;
+  border-radius: 6px;
+  background-color: hsl(215, 15%, 20%);
+}
+.header--line-th .text {
+  z-index: 1;
+  padding-inline: 8px;
+  background-color: hsl(215, 15%, 10%);
+}
+
 @keyframes fade_in {
   from {
     opacity: 0;
@@ -715,20 +735,20 @@
   cursor: pointer;
   transition: all 0.1s ease-in-out;
 }
-.transaction__toggle--confirmed {
+.transaction__toggle--paid {
   border-color: hsl(155, 90%, 40%);
   color: hsl(215, 15%, 20%);
   background-color: hsl(155, 90%, 40%);
 }
-.transaction__toggle--confirmed:hover {
+.transaction__toggle--paid:hover {
   border-color: hsl(155, 90%, 50%);
   background-color: hsl(155, 90%, 50%);
 }
-.transaction__toggle--unconfirmed {
+.transaction__toggle--unpaid, .transaction__toggle--unconfirmed {
   border-color: hsl(50, 100%, 50%);
   color: hsl(50, 100%, 50%);
 }
-.transaction__toggle--unconfirmed:hover {
+.transaction__toggle--unpaid:hover, .transaction__toggle--unconfirmed:hover {
   border-color: hsl(50, 100%, 60%);
   color: hsl(215, 15%, 20%);
   background-color: hsl(50, 100%, 60%);

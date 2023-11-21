@@ -70,7 +70,7 @@ export type TRecurrence = TFinancialEvent & {
 };
 
 export type TTransaction = TFinancialEvent & {
-  confirmed: boolean,
+  confirmation_date: Date | null | undefined,
   recurrence: TUUID,
   stallments: TUUID,
   stallments_count: number | null | undefined,

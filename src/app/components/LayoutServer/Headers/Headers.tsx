@@ -10,7 +10,12 @@ export function HeaderPage({ header }: { header: string }): JSX.Element {
 export function HeaderLineTh({ header }: { header: string }): JSX.Element {
   return (
     <h3 className="header--line-th">
-      { header }
+      <div className="line"/>
+      
+      <div 
+        className="text"
+        children={ header }
+      />
     </h3>
   )
 }

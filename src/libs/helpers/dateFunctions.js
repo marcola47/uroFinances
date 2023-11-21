@@ -29,13 +29,13 @@ export function getMonthRange(date) {
   return { startDate, endDate };
 }
 
-export function shouldRecurrenceShow(reg_date, cur_date, period) {
-  const regDate = new Date(reg_date);
+export function shouldRecurrenceShow(due_date, cur_date, period) {
+  const dueDate = new Date(due_date);
   const curDate = new Date(cur_date);
   
   const curMonth = curDate.getMonth();
-  const regMonth = regDate.getMonth();
-  const monthsDiff = (curDate.getFullYear() - regDate.getFullYear()) * 12 + curMonth - regMonth;
+  const dueMonth = dueDate.getMonth();
+  const monthsDiff = (curDate.getFullYear() - dueDate.getFullYear()) * 12 + curMonth - dueMonth;
 
   switch (period) {
     case 'monthly': return true;

@@ -70,9 +70,9 @@ const TransactionSchema = new mongoose.Schema({
     required: true,
   },
 
-  confirmed: {
-    type: Boolean,
-    default: true,
+  confirmation_date: {
+    type: Date,
+    default: Date.now,
     required: true,
   },
 

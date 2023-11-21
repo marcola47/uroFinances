@@ -195,7 +195,7 @@
     cursor: pointer;
     @include transition;
 
-    &--confirmed {
+    &--paid {
       border-color: $green-500;
       color: $grey-750;
       background-color: $green-500;
@@ -206,7 +206,7 @@
       }
     }
 
-    &--unconfirmed {
+    &--unpaid, &--unconfirmed {
       border-color: $yellow-600;
       color: $yellow-600;
 

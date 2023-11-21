@@ -10,14 +10,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get('user');
 
-    const recurrences = await Recurrence.find({ 
-      user: user 
-    })
-    .lean()
-    .select('-_id -__v');
-
-    console.log(recurrences);
-
+    const recurrences = await Recurrence.find({ user: user }).lean().select('-_id -__v');
     return NextResponse.json({ 
       status: 200, 
       data: recurrences 

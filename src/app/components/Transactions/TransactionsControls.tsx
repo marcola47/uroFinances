@@ -1,7 +1,17 @@
 "use client";
+import { FilterProps, SortProps } from "./TransactionList";
 import { FaReceipt, FaFilter, FaSort } from "react-icons/fa6";
 
-export default function TransactionsControl({ type }: { type: string }): JSX.Element {
+type TransactionsControlProps = {
+  type: "invoice" | "filter" | "sort";
+  sort?: { by: string, order: "asc" | "desc" };
+  setSort?: React.Dispatch<React.SetStateAction<SortProps>>;
+  filter?: string;
+  setFilter?: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function TransactionsControl({ type, sort, setSort, filter, setFilter }: TransactionsControlProps): JSX.Element {
+  
   function handleInvoice() {
     console.log("invoice");
     return;
@@ -13,8 +23,10 @@ export default function TransactionsControl({ type }: { type: string }): JSX.Ele
   }
 
   function handleSort() {
-    console.log("sort");
-    return;
+    if (setSort !== undefined && sort !== undefined) 
+      setSort({ by: "due_date", order: "asc" });
+    
+      return;
   }
 
   switch (type) {
