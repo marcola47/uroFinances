@@ -21,7 +21,7 @@ export default function TransactionsPage(): JSX.Element {
   const { date } = useDateContext();
 
   useEffect(() => {
-    if (transactions.length > 0 && recurrences.length > 0) {
+    if (transactions.length > 0) {
       const { startDate, endDate } = getMonthRange(new Date(date))
       const confirmedRecurrences: TUUID[] = [];
       const confirmedTransactions: TTransaction[] = [];
@@ -31,20 +31,27 @@ export default function TransactionsPage(): JSX.Element {
         const isConfirmedDateBetween = t.confirmation_date && (new Date(t.confirmation_date) >= startDate && new Date(t.confirmation_date) <= endDate);
 
         if (t.recurrence) {
-          if (isDueDateBetween && isConfirmedDateBetween) {
-            confirmedTransactions.push(t);
+          if (isDueDateBetween) {
             confirmedRecurrences.push(t.recurrence);
-          }
 
-          else if (isDueDateBetween && !isConfirmedDateBetween)
-            confirmedRecurrences.push(t.recurrence);
+            if (isConfirmedDateBetween)
+              confirmedTransactions.push(t);
+          }
 
           else if (isConfirmedDateBetween)
             confirmedTransactions.push(t);
         }
 
-        else if (isDueDateBetween || isConfirmedDateBetween)
-          confirmedTransactions.push(t); 
+        else {
+          if (isDueDateBetween && isConfirmedDateBetween)
+            confirmedTransactions.push(t);
+
+          else if (!isDueDateBetween && isConfirmedDateBetween)
+            confirmedTransactions.push(t);
+
+          else if (isDueDateBetween && !t.confirmation_date)
+            confirmedTransactions.push(t);
+        }
       })
 
       setThisMonthTransactions(confirmedTransactions);

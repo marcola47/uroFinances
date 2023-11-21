@@ -3,7 +3,7 @@ import { useState, useContext, createContext, Dispatch, SetStateAction } from "r
 import { TTransaction, TRecurrence } from "@/types/types";
 
 type ModalTransData = Partial<TTransaction> & Partial<TRecurrence> & {
-  operation: "update" | "create";
+  operation: "PUT" | "POST";
 }
 
 interface UIContextProps {

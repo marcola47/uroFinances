@@ -49,7 +49,7 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
     ? recurrence.recurrence_period.charAt(0).toUpperCase() + recurrence.recurrence_period.slice(1) 
     : null;
   
-  async function handleConfirmRecurrence(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  async function handleConfirmRecurrence(e: any) {
     e.stopPropagation();
     
     const curDate = new Date(date);
@@ -71,15 +71,13 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
     if (status < 200 || status >= 400) 
       console.log(err);
 
-    else {
-      console.log(data);
+    else 
       setTransactions(prevTransactions => [...prevTransactions, data]);
-    }
   }
 
   function handleShowmodalTrans() {
     setModalTransShown(true);
-    setModalTransData({ ...recurrence, operation: 'update' });
+    setModalTransData({ ...recurrence, operation: 'PUT' });
   }
 
   return (
@@ -106,7 +104,7 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
           </div>
 
           <div className="transaction__due-date">
-            {`${String(new Date(recurrence.due_date).getDate()).padStart(2, '0')}/${String(new Date().getMonth() + 1).padStart(2, '0')}`}
+            {`${String(new Date(recurrence.due_date).getDate()).padStart(2, '0')}/${String(new Date(date).getMonth() + 1).padStart(2, '0')}`}
           </div>
 
           <div className="transaction__recurrance">

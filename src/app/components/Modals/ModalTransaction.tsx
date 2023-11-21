@@ -1,5 +1,4 @@
-// refactor
-// disable recurring if in stallments is selected and vice versa
+// sorry, this is a big one
 // fix dropdown list to be below the input
 
 import { useState, useEffect } from "react";
@@ -19,7 +18,7 @@ import { FaChevronDown, FaXmark, FaAlignLeft, FaDollarSign, FaClock, FaBuildingC
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
-  const { transactions, setTransactions } = useTransactionsContext();
+  const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
   const { setModalTransShown, modalTransData, setModalTransData } = useUIContext();
   
   const [clockShown, setClockShown] = useState<boolean>(false);
@@ -39,13 +38,13 @@ export default function ModalTrans(): JSX.Element {
   const [newRegDate, setNewRegDate] = useState<Date>(new Date(modalTransData?.reg_date ?? new Date()));
   const [newDueDate, setNewDueDate] = useState<Date>(new Date(modalTransData?.due_date ?? new Date()));
   const [newCategory, setNewCategory] = useState<TFinancialEventCategory>(modalTransData!.category ?? { root: null, child: null, grandchild: null  });
-  const [newConfirmed, setNewConfirmed] = useState<boolean>(modalTransData!.confirmed ?? true);
+  const [newConfirmed, setNewConfirmed] = useState<boolean>(modalTransData!.confirmation_date ? true : false);
   const [newRecurrence, setNewRecurrence] = useState<TUUID>(modalTransData!.recurrence ?? undefined);
-  const [newRecurrencePeriod, setNewRecurrencePeriod] = useState<TFinancialEventPeriod>(modalTransData!.recurrence_period ?? undefined);
+  const [newRecurrencePeriod, setNewRecurrencePeriod] = useState<TFinancialEventPeriod | undefined>(modalTransData!.recurrence_period ?? undefined);
   const [newStallments, setNewStallments] = useState<TUUID>(modalTransData!.stallments ?? undefined);
   const [newStallmentsCount, setNewStallmentsCount] = useState<number | undefined>(modalTransData!.stallments_count ?? undefined);
   const [newStallmentsCurrent, setNewStallmentsCurrent] = useState<number | undefined>(modalTransData!.stallments_current ?? undefined);
-  const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod>(modalTransData!.stallments_period ?? undefined);
+  const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod | undefined>(modalTransData!.stallments_period ?? undefined);
 
   const [isRecurring, setIsRecurring] = useState<boolean>(modalTransData!.recurrence ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTransData!.stallments ? true : false);
@@ -66,7 +65,7 @@ export default function ModalTrans(): JSX.Element {
     if (newCategory !== modalTransData!.category)
       setNewCategory({ root: null, child: null, grandchild: null  });
 
-    if (modalTransData!.operation.includes("create")) {
+    if (modalTransData!.operation === "POST") {
       switch (newType) {
         case "income": setModalDesc("ADD INCOME"); break;
         case "expense": setModalDesc("ADD EXPENSE"); break;
@@ -81,6 +80,43 @@ export default function ModalTrans(): JSX.Element {
     }
   }, [newType])
 
+  // adjust confirmed status when user changes due date
+  useEffect(() => {
+    if (new Date(newDueDate) > new Date() && !modalTransData!.confirmation_date)
+      setNewConfirmed(false);
+
+    else
+      setNewConfirmed(true);
+  }, [newDueDate])
+
+  
+  function handleHideModalTrans() {
+    setModalTransShown(false);
+    setModalTransData(null);
+  }
+  
+  function handleSetNewTime(newTime: Date) {
+    setNewDueDate(newTime);
+    setClockShown(false);
+  }
+
+  function handleSetRecurrenceType(type: string) {
+    if (type === "recurring") {
+      setIsRecurring(true);
+      setIsInStallments(false);
+    }
+
+    else if (type === "stallments") {
+      setIsRecurring(false);
+      setIsInStallments(true);
+    }
+
+    else {
+      setIsRecurring(false);
+      setIsInStallments(false);
+    }
+  }
+  
   function toggleCategoryList(list: string) {
     if (categoryListShown === list)
       setCategoryListShown("");
@@ -89,22 +125,15 @@ export default function ModalTrans(): JSX.Element {
       setCategoryListShown(list);
   }
 
-  function handleHideModalTrans() {
-    setModalTransShown(false);
-    setModalTransData(null);
-  }
-
-  function handleSetNewTime(newTime: Date) {
-    setNewDueDate(newTime);
-    setClockShown(false);
-  }
-
   async function handleSetFinancialEvent() {
     if (!newName) 
       return alert("Name is required");
 
     if (!newAmount) 
       return alert("Amount is required");
+
+    if (!newAccount)
+      return alert("Account is required");
 
     const newFinancialEvent = {
       id: newID !== "" ? newID : undefined,
@@ -121,68 +150,86 @@ export default function ModalTrans(): JSX.Element {
     if (isRecurring) {
       const newRecurrence = { 
         ...newFinancialEvent, 
+        confirmation_date: newConfirmed ? new Date() : undefined,
         recurrence_period: newRecurrencePeriod 
       };
 
-      console.log(newRecurrence)
+      const res = await fetch('/api/recurrences', {
+        headers: { type: "application/json" },
+        method: modalTransData!.operation,
+        body: JSON.stringify({ recurrence: newRecurrence })
+      })
+
+      const { status, err, data } = await res.json();
+
+      if (status >= 400 && status < 200) {
+        console.log(err);
+        return;
+      }
+
+      console.log(data);
+
+      if (modalTransData!.operation === "POST") {
+        if (data.transaction)
+          setTransactions(prevTransactions => [...prevTransactions, data.transaction]);
+        
+        setRecurrences(prevRecurrences => [...prevRecurrences, data.recurrence]);
+      }
     }
 
     else if (isInStallments) {
       const newStallment = { 
         ...newFinancialEvent, 
+        confirmation_date: newConfirmed ? new Date() : undefined,
         stallments: newStallments,
         stallments_count: newStallmentsCount, 
+        stallments_current: newStallmentsCurrent,
         stallments_period: newStallmentsPeriod 
       };
 
-      console.log(newStallment)
+      const res = await fetch('/api/transactions', {
+        headers: { type: "application/json" },
+        method: modalTransData!.operation,
+        body: JSON.stringify({ transaction: newStallment })
+      })
+
+      const { status, err, data } = await res.json();
+
+      if (status >= 400 && status < 200) {
+        console.log(err);
+        return;
+      }
+
+      if (modalTransData!.operation === "POST") {
+        setTransactions(prevTransactions => [...prevTransactions, ...data]);
+      }
     }
 
     else {
       const newTransaction = {
         ...newFinancialEvent,
-        confirmed: newConfirmed,
+        confirmation_date: newConfirmed ? new Date() : undefined,
         recurrence: newRecurrence,
         stallments: newStallments
       };
 
-      console.log(newTransaction)
+      const res = await fetch('/api/transactions', {
+        headers: { type: "application/json" },
+        method: modalTransData!.operation,
+        body: JSON.stringify({ transaction: newTransaction })
+      })
+
+      const { status, err, data } = await res.json();
+
+      if (status >= 400 && status < 200) {
+        console.log(err);
+        return;
+      }
+
+      if (modalTransData!.operation === "POST") {
+        setTransactions(prevTransactions => [...prevTransactions, ...data]);
+      }
     }
-
-    // const res = await fetch('/api/transactions', {
-    //   headers: { type: "application/json" },
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     transaction: newTransaction,
-    //     operation: modalTransData!.operation
-    //   })
-    // })
-
-    // const { status, err, data } = await res.json();
-
-    // if (status >= 400 && status < 200) {
-    //   console.log(err);
-    //   return;
-    // }
-
-    // const transactionsCopy = structuredClone(transactions);
-    // let existingTransaction = false;
-
-    // transactionsCopy.map(t => {
-    //   if (t.id === data.id) {
-    //     existingTransaction = true;
-    //     return data;
-    //   }
-
-    //   else
-    //     return t;
-    // })
-
-    // if (!existingTransaction)
-    //   transactionsCopy.push(data);
-
-    // console.log(data)
-    // setTransactions(transactionsCopy);
 
     // send to api, then:
     // if it's new, set the new id and set the transactions state
@@ -197,6 +244,8 @@ export default function ModalTrans(): JSX.Element {
     // recurring -> not recurring => ask the user if they want to:
     //   -> delete all recurrences and keep only the first transaction 
     //   -> delete all future recurrences and keep previous ones
+
+    handleHideModalTrans();
   }
 
   async function handleDeleteTransaction() {
@@ -451,7 +500,7 @@ export default function ModalTrans(): JSX.Element {
 
           <div className="modal--trans__row modal--trans__row--2">
             {
-              modalTransData!.operation.includes("create") &&
+              modalTransData!.operation === "POST" &&
               <div className="modal--trans__switches">
                 <div 
                   className={`switch switch--income ${newType === 'income' ? 'switch--selected' : ''}`}
@@ -560,11 +609,6 @@ export default function ModalTrans(): JSX.Element {
                     ListItem={ ModalCategory }
                     unwrapped={ true }
                   />
-                  <List 
-                    elements={ displayCategories.filter(c => c.parent && c.grandparent && c.parent === newCategory?.child ) }
-                    ListItem={ ModalCategory }
-                    unwrapped={ true }
-                  />
                 </div>
               }
             </div>
@@ -572,15 +616,15 @@ export default function ModalTrans(): JSX.Element {
 
           <div className="modal--trans__row modal--trans__row--4">
             <div 
-              className={`toggle ${newStallments ? "toggle--toggled" : ""}`}
-              onClick= { () => {setIsInStallments(!isInStallments)} }
+              className={`toggle ${isInStallments ? "toggle--toggled" : ""}`}
+              onClick= { () => {handleSetRecurrenceType("stallments")} }
             >
-              <div className={`toggle__checkbox ${newStallments ? "toggle__checkbox--toggled" : ""}`}/>
+              <div className={`toggle__checkbox ${isInStallments ? "toggle__checkbox--toggled" : ""}`}/>
               <div className="toggle__label">In stallments</div>
             </div>
 
             <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${newStallments ? "" : "input--disabled"}`}>
+              <div className={`input input--category input--recurring-period ${isInStallments ? "" : "input--disabled"}`}>
                 <FaCalendarDay className="input__icon"/>
                 <FaChevronDown className="input__chevron"/>
 
@@ -589,12 +633,12 @@ export default function ModalTrans(): JSX.Element {
                   className="input__field"
                   placeholder="Frequency"
                   value={ newStallmentsPeriod ? newStallmentsPeriod.charAt(0).toUpperCase() + newStallmentsPeriod.slice(1) : "" }
-                  onClick={ newStallments ? () => {setStallmentsPeriodListShown(!stallmentsPeriodListShown)} : () => {} }
+                  onClick={ isInStallments ? () => {setStallmentsPeriodListShown(!stallmentsPeriodListShown)} : () => {} }
                 />
               </div>
 
               {
-                newStallments && stallmentsPeriodListShown &&
+                isInStallments && stallmentsPeriodListShown &&
                 <List 
                   className="input__dropdown"
                   elements={ recurrencePeriods }
@@ -604,7 +648,7 @@ export default function ModalTrans(): JSX.Element {
             </div>
 
             
-            <div className={`input input--count ${newStallments ? "" : "input--disabled"}`}>
+            <div className={`input input--count ${isInStallments ? "" : "input--disabled"}`}>
               <FaCirclePlus className="input__icon"/>
               <input
                 type="number" 
@@ -617,15 +661,15 @@ export default function ModalTrans(): JSX.Element {
 
           <div className="modal--trans__row modal--trans__row--5">
             <div 
-              className={`toggle ${newRecurrence ? "toggle--toggled" : ""}`}
-              onClick= { () => {setIsRecurring(!isRecurring)} }
+              className={`toggle ${isRecurring ? "toggle--toggled" : ""}`}
+              onClick= { () => {handleSetRecurrenceType("recurring")} }
             >
-              <div className={`toggle__checkbox ${newRecurrence ? "toggle__checkbox--toggled" : ""}`}/>
+              <div className={`toggle__checkbox ${isRecurring ? "toggle__checkbox--toggled" : ""}`}/>
               <div className="toggle__label">Recurring</div>
             </div>
 
             <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${newRecurrence ? "" : "input--disabled"}`}>
+              <div className={`input input--category input--recurring-period ${isRecurring ? "" : "input--disabled"}`}>
                 <FaCalendarDay className="input__icon"/>
                 <FaChevronDown className="input__chevron"/>
 
@@ -634,12 +678,12 @@ export default function ModalTrans(): JSX.Element {
                   className="input__field"
                   placeholder="Frequency"
                   value={ newRecurrencePeriod ? newRecurrencePeriod.charAt(0).toUpperCase() + newRecurrencePeriod.slice(1) : "" }
-                  onClick={ newRecurrence ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
+                  onClick={ isRecurring ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
                 />
               </div>
 
               {
-                newRecurrence && recurringPeriodListShown &&
+                isRecurring && recurringPeriodListShown &&
                 <List 
                   className="input__dropdown"
                   elements={ recurrencePeriods }
@@ -652,7 +696,7 @@ export default function ModalTrans(): JSX.Element {
 
         <div className="modal--trans__btns">
           {
-            modalTransData!.operation.includes("existing") &&
+            modalTransData!.operation === "PUT" &&
             <button 
               className="btn btn--bg-red"
               onClick={ handleDeleteTransaction }

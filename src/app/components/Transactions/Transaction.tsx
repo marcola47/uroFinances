@@ -60,15 +60,10 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   
   async function handleConfirmTransaction(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    console.log('running')
-    const startTime = performance.now();
+    let transactionsCopy = structuredClone(transactions);
 
-    const transactionsCopy = structuredClone(transactions);
-
-    if (transaction.recurrence) {
-      console.log("recurring")
-      transactionsCopy.filter(t => t.id !== transaction.id);
-    }
+    if (transaction.recurrence)
+      transactionsCopy = transactionsCopy.filter(t => t.id !== transaction.id);
 
     else if (transaction.confirmation_date)
       transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = null) });
@@ -76,7 +71,6 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
     else
       transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = new Date()) });
 
-    
     const res = await fetch(`/api/transactions/confirm/${transaction.id}`, {
       method: "PUT",
       headers: { "type": "application/json" },
@@ -93,15 +87,11 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   
     else 
       setTransactions(transactionsCopy);
-
-    const endTime = performance.now();
-
-    console.log(`handleConfirmTransaction took ${endTime - startTime} milliseconds`);
   }
 
   function handleShowmodalTrans() {
     setModalTransShown(true);
-    setModalTransData({ ...transaction, operation: 'update' });
+    setModalTransData({ ...transaction, operation: 'PUT' });
   }
 
   return (

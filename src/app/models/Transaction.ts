@@ -72,8 +72,7 @@ const TransactionSchema = new mongoose.Schema({
 
   confirmation_date: {
     type: Date,
-    default: Date.now,
-    required: true,
+    required: false,
   },
 
   recurrence: {

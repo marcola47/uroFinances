@@ -126,7 +126,7 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
 
   function handleShowModalTrans() {
     setModalTransShown(true);
-    setModalTransData({ type: type, operation: "create" });
+    setModalTransData({ type: type, operation: "POST" });
   }
 
   return (

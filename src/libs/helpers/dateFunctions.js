@@ -37,6 +37,11 @@ export function shouldRecurrenceShow(due_date, cur_date, period) {
   const dueMonth = dueDate.getMonth();
   const monthsDiff = (curDate.getFullYear() - dueDate.getFullYear()) * 12 + curMonth - dueMonth;
 
+  const { endDate } = getMonthRange(curDate);
+
+  if (endDate < dueDate) 
+    return false;
+
   switch (period) {
     case 'monthly': return true;
     case 'quarterly': return monthsDiff % 3 === 0;
