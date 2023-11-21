@@ -4,9 +4,18 @@ import Transaction from "@/app/models/Transaction";
 export async function PUT(req: NextRequest, { params }: { params: { transaction: string } }) {
   try {
     const { transaction } = params;
-    const { confirmed } = await req.json();
+    const { confirmation_date, recurrence } = await req.json();
+
+    if (recurrence) // you can only unconfirm a recurring transaction
+      await Transaction.findOneAndDelete({ id: transaction });
     
-    await Transaction.findOneAndUpdate({ id: transaction }, { confirmed });
+    else {
+      await Transaction.findOneAndUpdate(
+        { id: transaction }, 
+        { confirmation_date: confirmation_date ? new Date(confirmation_date) : null }
+      );
+    }
+    
     return NextResponse.json({ status: 200, err: null, data: null })
   }
 

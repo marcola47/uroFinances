@@ -66,8 +66,11 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
   }, []);
 
   useEffect(() => {
-    if (transactions.length > 0 && recurrences.length > 0) {
-      const sortedTransactions = transactions.sort((a, b) => {
+    let sortedTransactions: TTransaction[] = [];
+    let sortedRecurrences: TRecurrence[] = [];
+
+    if (transactions.length > 0) {
+      sortedTransactions = transactions.sort((a, b) => {
         const aValue = sort.by.includes("date") ? new Date(a[sort.by]) : a[sort.by];
         const bValue = sort.by.includes("date") ? new Date(b[sort.by]) : b[sort.by];
     
@@ -90,8 +93,10 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
         else 
           return 0;
       });
+    }
 
-      const sortedRecurrences = recurrences.sort((a, b) => {
+    if (recurrences.length > 0) {
+      sortedRecurrences = recurrences.sort((a, b) => {
         const aValue = sort.by.includes("date") || sort.by === 'confirmation_date' ? new Date(a.due_date) : a[sort.by];
         const bValue = sort.by.includes("date") || sort.by === 'confirmation_date' ? new Date(b.due_date) : b[sort.by];
     
@@ -113,10 +118,10 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
         else 
           return 0;
       });
-
-      setProcessedTransactions(sortedTransactions);
-      setProcessedRecurrences(sortedRecurrences);
     }
+
+    setProcessedTransactions(sortedTransactions);
+    setProcessedRecurrences(sortedRecurrences);
   }, [transactions, recurrences, date, sort, filter])
 
   function handleShowModalTrans() {
@@ -164,13 +169,17 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
           unwrapped={ true }
         />
 
-        <HeaderLineTh header={`PENDING RECURRING ${type.toUpperCase()}S`}/>
-        <List
-          elements={ processedRecurrences }
-          ListItem={ Recurrence }
-          unwrapped={ true }
-        />
-
+        {
+          recurrences.length > 0 &&
+          <>
+            <HeaderLineTh header={`PENDING RECURRING ${type.toUpperCase()}S`}/>
+            <List
+              elements={ processedRecurrences }
+              ListItem={ Recurrence }
+              unwrapped={ true }
+            />
+          </>
+        }
       </div>
 
       <button 

@@ -3,14 +3,17 @@ import { TRecurrence } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useUIContext } from "@/app/context/Ui";
+import { useDateContext } from "@/app/context/Date";
 
 import getTextColor from "@/libs/helpers/getTextColor";
 import { FaDollarSign, FaExclamation } from "react-icons/fa6";
 
 export default function Transaction({ itemData: recurrence }: { itemData: TRecurrence }): JSX.Element {
   const { user } = useUserContext();
-  const { transactions, setTransactions } = useTransactionsContext();
+  const { setTransactions } = useTransactionsContext();
   const { setModalTransShown, setModalTransData } = useUIContext();
+  const { date } = useDateContext();
+
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   
   const recurrenceAccountName = user?.accounts.find(a => a.id === recurrence.account)?.name;
@@ -49,15 +52,29 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
   async function handleConfirmRecurrence(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
     
+    const curDate = new Date(date);
+    const dueDate = new Date(recurrence.due_date);
+    dueDate.setFullYear(curDate.getFullYear());
+    dueDate.setMonth(curDate.getMonth());
+
     const res = await fetch(`/api/recurrences/confirm/${recurrence.id}`, {
-      method: "PUT",
-      headers: { "type": "application/json" }
+      method: "POST",
+      headers: { "type": "application/json" },
+      body: JSON.stringify({
+        due_date: dueDate,
+        confirmation_date: new Date()
+      })
     });
 
-    const { status, err } = await res.json();
+    const { status, err, data } = await res.json();
 
     if (status < 200 || status >= 400) 
       console.log(err);
+
+    else {
+      console.log(data);
+      setTransactions(prevTransactions => [...prevTransactions, data]);
+    }
   }
 
   function handleShowmodalTrans() {

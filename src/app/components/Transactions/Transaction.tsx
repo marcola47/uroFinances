@@ -60,23 +60,43 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
   
   async function handleConfirmTransaction(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
-    
+    console.log('running')
+    const startTime = performance.now();
+
     const transactionsCopy = structuredClone(transactions);
-    transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = new Date()) })
+
+    if (transaction.recurrence) {
+      console.log("recurring")
+      transactionsCopy.filter(t => t.id !== transaction.id);
+    }
+
+    else if (transaction.confirmation_date)
+      transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = null) });
+
+    else
+      transactionsCopy.map(t => { t.id === transaction.id && (t.confirmation_date = new Date()) });
+
     
     const res = await fetch(`/api/transactions/confirm/${transaction.id}`, {
       method: "PUT",
       headers: { "type": "application/json" },
-      body: JSON.stringify({ confirmation_date: new Date() })
+      body: JSON.stringify({ 
+        recurrence: transaction.recurrence,
+        confirmation_date: transaction.confirmation_date ? null : new Date()
+      })
     });
-
-    const { status, err } = await res.json();
-
-    if (status < 200 || status >= 400) 
-      console.log(err);
     
+    const { status, err } = await res.json();
+    
+    if (status < 200 || status >= 400) 
+    console.log(err);
+  
     else 
       setTransactions(transactionsCopy);
+
+    const endTime = performance.now();
+
+    console.log(`handleConfirmTransaction took ${endTime - startTime} milliseconds`);
   }
 
   function handleShowmodalTrans() {
@@ -115,6 +135,13 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
             transaction.stallments_period &&
             <div className="transaction__recurrance">
               { formattedRecurrence }
+            </div>
+          }
+
+          {
+            transaction.recurrence &&
+            <div className="transaction__recurrance">
+              Recurring
             </div>
           }
         </div>

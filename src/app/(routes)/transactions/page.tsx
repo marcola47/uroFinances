@@ -5,7 +5,6 @@ import { TTransaction, TRecurrence, TUUID } from "@/types/types";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useDateContext } from "@/app/context/Date";
 import { useUIContext } from "@/app/context/Ui";
-import { useSession } from "next-auth/react";
 
 import { getMonthRange, shouldRecurrenceShow } from "@/libs/helpers/dateFunctions";
 
@@ -17,49 +16,9 @@ export default function TransactionsPage(): JSX.Element {
   const [thisMonthTransactions, setThisMonthTransactions] = useState<TTransaction[]>([]);
   const [pendingRecurrences, setPendingRecurrences] = useState<TRecurrence[]>([]);
 
-  const { data: session } = useSession();
-  const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
+  const { transactions, recurrences } = useTransactionsContext();
   const { modalTransShown, modalTransData } = useUIContext();
   const { date } = useDateContext();
-
-  async function getRecurrences() {
-    if (session?.user?.id) {
-      const res = await fetch(`/api/recurrences?user=${session.user.id}`, {
-        method: "GET",
-        headers: { "type": "application/json" }
-      });
-
-      const { status, err, data } = await res.json();
-      
-      if (status < 200 || status >= 400) 
-        console.log(err);
-
-      else 
-        setRecurrences(data);
-    }
-  }
-
-  async function getTransactions() {
-    if (session?.user?.id && date) {
-      const res = await fetch(`/api/transactions?user=${session.user.id}`, {
-        method: "GET",
-        headers: { "type": "application/json" }
-      });
-
-      const { status, err, data } = await res.json();
-
-      if (status < 200 || status >= 400) 
-        console.log(err);
-
-      else 
-        setTransactions(data);
-    }
-  }
-
-  useEffect(() => { 
-    getTransactions();
-    getRecurrences();
-  }, [session])
 
   useEffect(() => {
     if (transactions.length > 0 && recurrences.length > 0) {
@@ -67,17 +26,21 @@ export default function TransactionsPage(): JSX.Element {
       const confirmedRecurrences: TUUID[] = [];
       const confirmedTransactions: TTransaction[] = [];
 
-      // verify if cur month matches the recurrence period and due date
       transactions.forEach(t => {
         const isDueDateBetween = new Date(t.due_date) >= startDate && new Date(t.due_date) <= endDate;
         const isConfirmedDateBetween = t.confirmation_date && (new Date(t.confirmation_date) >= startDate && new Date(t.confirmation_date) <= endDate);
 
         if (t.recurrence) {
-          if (isDueDateBetween && isConfirmedDateBetween)
+          if (isDueDateBetween && isConfirmedDateBetween) {
+            confirmedTransactions.push(t);
             confirmedRecurrences.push(t.recurrence);
+          }
 
           else if (isDueDateBetween && !isConfirmedDateBetween)
             confirmedRecurrences.push(t.recurrence);
+
+          else if (isConfirmedDateBetween)
+            confirmedTransactions.push(t);
         }
 
         else if (isDueDateBetween || isConfirmedDateBetween)
