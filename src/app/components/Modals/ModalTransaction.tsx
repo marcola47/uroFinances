@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
 import { useTransactionsContext } from "@/app/context/Transactions";
-import { TUUID, TUserAccount, TUserCategory, TFinancialEventType, TFinancialEventCategory, TFinancialEventPeriod } from "@/types/types";
+import { TUUID, TUserAccount, TUserCategory, TTransaction, TRecurrence, TFinancialEventType, TFinancialEventCategory, TFinancialEventPeriod } from "@/types/types";
 
 import formatCurrency from "@/libs/helpers/formatCurrency";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -101,12 +101,12 @@ export default function ModalTrans(): JSX.Element {
   }
 
   function handleSetRecurrenceType(type: string) {
-    if (type === "recurring") {
+    if (type === "recurring" && !isRecurring) {
       setIsRecurring(true);
       setIsInStallments(false);
     }
 
-    else if (type === "stallments") {
+    else if (type === "stallments" && !isInStallments) {
       setIsRecurring(false);
       setIsInStallments(true);
     }
@@ -135,6 +135,9 @@ export default function ModalTrans(): JSX.Element {
     if (!newAccount)
       return alert("Account is required");
 
+    let resTransactions: TTransaction[] = [];
+    let resRecurrence: TRecurrence | null = null;
+
     const newFinancialEvent = {
       id: newID !== "" ? newID : undefined,
       name: newName,
@@ -148,16 +151,13 @@ export default function ModalTrans(): JSX.Element {
     }
     
     if (isRecurring) {
-      const newRecurrence = { 
-        ...newFinancialEvent, 
-        confirmation_date: newConfirmed ? new Date() : undefined,
-        recurrence_period: newRecurrencePeriod 
-      };
+      (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
+      (newFinancialEvent as any).recurrence_period = newRecurrencePeriod;
 
       const res = await fetch('/api/recurrences', {
         headers: { type: "application/json" },
         method: modalTransData!.operation,
-        body: JSON.stringify({ recurrence: newRecurrence })
+        body: JSON.stringify({ recurrence: newFinancialEvent })
       })
 
       const { status, err, data } = await res.json();
@@ -167,56 +167,31 @@ export default function ModalTrans(): JSX.Element {
         return;
       }
 
-      console.log(data);
-
-      if (modalTransData!.operation === "POST") {
-        if (data.transaction)
-          setTransactions(prevTransactions => [...prevTransactions, data.transaction]);
-        
-        setRecurrences(prevRecurrences => [...prevRecurrences, data.recurrence]);
-      }
-    }
-
-    else if (isInStallments) {
-      const newStallment = { 
-        ...newFinancialEvent, 
-        confirmation_date: newConfirmed ? new Date() : undefined,
-        stallments: newStallments,
-        stallments_count: newStallmentsCount, 
-        stallments_current: newStallmentsCurrent,
-        stallments_period: newStallmentsPeriod 
-      };
-
-      const res = await fetch('/api/transactions', {
-        headers: { type: "application/json" },
-        method: modalTransData!.operation,
-        body: JSON.stringify({ transaction: newStallment })
-      })
-
-      const { status, err, data } = await res.json();
-
-      if (status >= 400 && status < 200) {
-        console.log(err);
-        return;
-      }
-
-      if (modalTransData!.operation === "POST") {
-        setTransactions(prevTransactions => [...prevTransactions, ...data]);
-      }
+      if (data.transaction)
+        resTransactions = [...resTransactions, data.transaction];
+      
+      resRecurrence = data.recurrence;
     }
 
     else {
-      const newTransaction = {
-        ...newFinancialEvent,
-        confirmation_date: newConfirmed ? new Date() : undefined,
-        recurrence: newRecurrence,
-        stallments: newStallments
-      };
+      if (isInStallments) {
+        (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
+        (newFinancialEvent as any).stallments = newStallments;
+        (newFinancialEvent as any).stallments_count = newStallmentsCount;
+        (newFinancialEvent as any).stallments_current = newStallmentsCurrent;
+        (newFinancialEvent as any).stallments_period = newStallmentsPeriod;
+      }
+
+      else {
+        (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
+        (newFinancialEvent as any).recurrence = newRecurrence;
+        (newFinancialEvent as any).stallments = newStallments;
+      }
 
       const res = await fetch('/api/transactions', {
         headers: { type: "application/json" },
         method: modalTransData!.operation,
-        body: JSON.stringify({ transaction: newTransaction })
+        body: JSON.stringify({ transaction: newFinancialEvent })
       })
 
       const { status, err, data } = await res.json();
@@ -226,46 +201,50 @@ export default function ModalTrans(): JSX.Element {
         return;
       }
 
-      if (modalTransData!.operation === "POST") {
-        setTransactions(prevTransactions => [...prevTransactions, ...data]);
-      }
+      resTransactions = [...resTransactions, ...data];
     }
 
-    // send to api, then:
-    // if it's new, set the new id and set the transactions state
-    // if existing, find the transaction in the transactions state and update it
+    if (modalTransData!.operation === "POST") {
+      if (resRecurrence) // as TRecurrence needed because ts would complain that you cannot insert TRecurrence | null into TRecurrence[]
+        setRecurrences(prevRecurrences => [...prevRecurrences, resRecurrence as TRecurrence]);
 
-    // stallments exceptions:
-    // in stallments -> not in stallments => ask the user if they want to:
-    //   -> delete all stallments and keep only the first transaction 
-    //   -> delete all future stallments and keep previous ones
+      if (resTransactions.length > 0)
+        setTransactions(prevTransactions => [...prevTransactions, ...resTransactions]);
+    }
 
-    // recurring exceptions:
-    // recurring -> not recurring => ask the user if they want to:
-    //   -> delete all recurrences and keep only the first transaction 
-    //   -> delete all future recurrences and keep previous ones
+    else if (modalTransData!.operation === "PUT") {
+      // recurrence: 
+      // update future recurrences:
+      // -- update current transaction and recurrence data
+      // update current recurrence:
+      // -- update current transaction only
+
+      // stallments:
+      // -- map through transactions and update the one with the given ids
+
+      // single transaction:
+      // -- map through transactions and update the one with the given id
+    }
 
     handleHideModalTrans();
   }
 
   async function handleDeleteTransaction() {
-    const res = await fetch('/api/transactions', {
-      headers: { type: "application/json" },
-      method: 'DELETE',
-      body: JSON.stringify({
-        transactionID: modalTransData!.id,
-        user: user!.id
-      })
-    })
+    // recurrences:
+    // delete current only:
+    // -- delete current transaction, just as with unconfirming
+    // delete this and future:
+    // -- delete current transaction and recurrence data
 
-    const { status, err } = await res.json();
+    // stallments:
+    // delete current only:
+    // -- delete current transaction
+    // delete this and future:
+    // -- delete current transaction and others with the count greater than the current
+    // delete all:
+    // -- delete all transactions with the given stallment id
 
-    if (status >= 400 && status < 200) {
-      console.log(err);
-      return;
-    }
 
-    setTransactions(prevTransactions => prevTransactions.filter(t => t.id !== modalTransData!.id));
   }
 
   function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
@@ -355,6 +334,7 @@ export default function ModalTrans(): JSX.Element {
     );
   }
   
+  // I could combine both these functions, but, I'm not really sure there is a need to
   function ModalRecurringPeriod({ itemData: recurrencePeriod }: { itemData: { name: TFinancialEventPeriod } }) {
     function handleSetNewRecurrencePeriod() {
       setNewRecurrencePeriod(recurrencePeriod?.name);
@@ -373,6 +353,7 @@ export default function ModalTrans(): JSX.Element {
     )
   }
 
+  // I could combine both these functions, but, I'm not really sure there is a need to
   function ModalStallmentsPeriod({ itemData: stallmentsPeriod }: { itemData: { name: TFinancialEventPeriod } }) {
     function handleSetNewStallmentsPeriod() {
       setNewStallmentsPeriod(stallmentsPeriod?.name);

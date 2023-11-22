@@ -21,42 +21,40 @@ export default function TransactionsPage(): JSX.Element {
   const { date } = useDateContext();
 
   useEffect(() => {
-    if (transactions.length > 0) {
-      const { startDate, endDate } = getMonthRange(new Date(date))
-      const confirmedRecurrences: TUUID[] = [];
-      const confirmedTransactions: TTransaction[] = [];
+    const { startDate, endDate } = getMonthRange(new Date(date))
+    const confirmedRecurrences: TUUID[] = [];
+    const confirmedTransactions: TTransaction[] = [];
 
-      transactions.forEach(t => {
-        const isDueDateBetween = new Date(t.due_date) >= startDate && new Date(t.due_date) <= endDate;
-        const isConfirmedDateBetween = t.confirmation_date && (new Date(t.confirmation_date) >= startDate && new Date(t.confirmation_date) <= endDate);
+    transactions.forEach(t => {
+      const isDueDateBetween = new Date(t.due_date) >= startDate && new Date(t.due_date) <= endDate;
+      const isConfirmedDateBetween = t.confirmation_date && (new Date(t.confirmation_date) >= startDate && new Date(t.confirmation_date) <= endDate);
 
-        if (t.recurrence) {
-          if (isDueDateBetween) {
-            confirmedRecurrences.push(t.recurrence);
+      if (t.recurrence) {
+        if (isDueDateBetween) {
+          confirmedRecurrences.push(t.recurrence);
 
-            if (isConfirmedDateBetween)
-              confirmedTransactions.push(t);
-          }
-
-          else if (isConfirmedDateBetween)
+          if (isConfirmedDateBetween)
             confirmedTransactions.push(t);
         }
 
-        else {
-          if (isDueDateBetween && isConfirmedDateBetween)
-            confirmedTransactions.push(t);
+        else if (isConfirmedDateBetween)
+          confirmedTransactions.push(t);
+      }
 
-          else if (!isDueDateBetween && isConfirmedDateBetween)
-            confirmedTransactions.push(t);
+      else {
+        if (isDueDateBetween && isConfirmedDateBetween)
+          confirmedTransactions.push(t);
 
-          else if (isDueDateBetween && !t.confirmation_date)
-            confirmedTransactions.push(t);
-        }
-      })
+        else if (!isDueDateBetween && isConfirmedDateBetween)
+          confirmedTransactions.push(t);
 
-      setThisMonthTransactions(confirmedTransactions);
-      setPendingRecurrences(recurrences.filter(r => !confirmedRecurrences.includes(r.id) && shouldRecurrenceShow(r.due_date, date, r.recurrence_period)));
-    }
+        else if (isDueDateBetween && !t.confirmation_date)
+          confirmedTransactions.push(t);
+      }
+    })
+
+    setThisMonthTransactions(confirmedTransactions);
+    setPendingRecurrences(recurrences.filter(r => !confirmedRecurrences.includes(r.id) && shouldRecurrenceShow(r.due_date, date, r.recurrence_period)));
   }, [transactions, recurrences, date])
 
   return (

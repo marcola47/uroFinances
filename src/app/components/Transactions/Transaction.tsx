@@ -9,12 +9,15 @@ import { FaDollarSign, FaCheck, FaExclamation } from "react-icons/fa6";
 
 export default function Transaction({ itemData: transaction }: { itemData: TTransaction }): JSX.Element {
   const { user } = useUserContext();
-  const { transactions, setTransactions } = useTransactionsContext();
+  const { transactions, setTransactions, recurrences } = useTransactionsContext();
   const { setModalTransShown, setModalTransData } = useUIContext();
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   
   const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
-  
+  const transactionRecurrencePeriod = transaction.recurrence
+  ? recurrences.find(r => r.id === transaction.recurrence)?.recurrence_period
+  : null
+
   type TransactionCategoryProps = {
     root:       { id?: string, name?: string, style: { backgroundColor?: string, color?: string } },
     child:      { id?: string, name?: string, style: { backgroundColor?: string, color?: string } },
@@ -129,9 +132,9 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
           }
 
           {
-            transaction.recurrence &&
+            transactionRecurrencePeriod &&
             <div className="transaction__recurrance">
-              Recurring
+              { transactionRecurrencePeriod?.charAt(0).toUpperCase() + transactionRecurrencePeriod?.slice(1) }
             </div>
           }
         </div>

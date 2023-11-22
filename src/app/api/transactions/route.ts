@@ -36,14 +36,17 @@ export async function POST(req: NextRequest) {
     let newTransactions: TTransaction[] = [];
 
     if (transaction.stallments_count) {
-      let stallmentPeriodOffset = 0;
-      switch (transaction.stallment_period) {
-        case "monthly"    : stallmentPeriodOffset = 1;  break;
-        case "quarterly"  : stallmentPeriodOffset = 3;  break;
-        case "semi-annual": stallmentPeriodOffset = 6;  break;
-        case "annual"     : stallmentPeriodOffset = 12; break;
-        default: stallmentPeriodOffset = 1;
+      let stallmentsPeriodOffset = 0;
+      switch (transaction.stallments_period) {
+        case "monthly"    : stallmentsPeriodOffset = 1;  break;
+        case "quarterly"  : stallmentsPeriodOffset = 3;  break;
+        case "semi-annual": stallmentsPeriodOffset = 6;  break;
+        case "annual"     : stallmentsPeriodOffset = 12; break;
+        default: stallmentsPeriodOffset = 1;
       }
+
+      console.log(transaction.stallments_period)
+      console.log(stallmentsPeriodOffset)
 
       const amountPerStallment = parseFloat((transaction.amount / transaction.stallments_count).toFixed(2));
       let stallmentID: TUUID;
@@ -51,7 +54,7 @@ export async function POST(req: NextRequest) {
       for (let i = 0; i < transaction.stallments_count; i++) {
         const newTransactionID = uuid();
         const curDate = new Date(transaction.due_date);
-        curDate.setMonth(curDate.getMonth() + i * stallmentPeriodOffset);
+        curDate.setMonth(curDate.getMonth() + i * stallmentsPeriodOffset);
 
         if (i === 0) 
           stallmentID = newTransactionID;
@@ -101,7 +104,6 @@ export async function POST(req: NextRequest) {
       newTransactions.push(newTransaction);
     }
 
-    console.log(newTransactions);
     return NextResponse.json({
       status: 200,
       data: newTransactions
