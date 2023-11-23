@@ -27,7 +27,7 @@ export type SortProps = {
 export default function TransactionList({ transactions, recurrences, type }: TransactionListProps): JSX.Element {
   const { user } = useUserContext();
   const { date } = useDateContext();
-  const { setModalTransShown, setModalTransData } = useUIContext();
+  const { setModalTrans } = useUIContext();
 
   const [filter, setFilter] = useState<FilterProps>("");
   const [sort, setSort] = useState<SortProps>({ by: "due_date", order: "desc" });
@@ -123,11 +123,6 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
     setProcessedRecurrences(sortedRecurrences);
   }, [transactions, recurrences, date, sort, filter])
 
-  function handleShowModalTrans() {
-    setModalTransShown(true);
-    setModalTransData({ type: type, operation: "POST" });
-  }
-
   return (
     <div className="transactions__group">
       <div className="transactions__header">
@@ -183,7 +178,7 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
 
       <button 
         className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}
-        onClick={ handleShowModalTrans }
+        onClick={ () => {setModalTrans({ type: type, operation: "POST" })} }
         children={`ADD ${type.toUpperCase()}`}
       />
     </div>

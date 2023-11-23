@@ -10,7 +10,7 @@ import { FaDollarSign, FaExclamation } from "react-icons/fa6";
 export default function Transaction({ itemData: recurrence }: { itemData: TRecurrence }): JSX.Element {
   const { user } = useUserContext();
   const { setTransactions } = useTransactionsContext();
-  const { setModalTransShown, setModalTransData } = useUIContext();
+  const { setModalTrans } = useUIContext();
   const { date } = useDateContext();
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
@@ -73,15 +73,10 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
       setTransactions(prevTransactions => [...prevTransactions, data]);
   }
 
-  function handleShowmodalTrans() {
-    setModalTransShown(true);
-    setModalTransData({ ...recurrence, operation: 'PUT' });
-  }
-
   return (
     <div 
       className="transaction"
-      onClick={ handleShowmodalTrans }
+      onClick={ () => {setModalTrans({ ...recurrence, operation: 'PUT' })} }
     >
       <div className={`transaction__indicator ${recurrence.type === 'income' ? "transaction__indicator--income" : "transaction__indicator--expense"}`}>
         {

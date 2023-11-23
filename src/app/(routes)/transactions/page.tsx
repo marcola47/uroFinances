@@ -16,7 +16,7 @@ export default function TransactionsPage(): JSX.Element {
   const [pendingRecurrences, setPendingRecurrences] = useState<TRecurrence[]>([]);
 
   const { transactions, recurrences } = useTransactionsContext();
-  const { modalTransShown, modalTransData } = useUIContext();
+  const { modalTrans } = useUIContext();
   const { date } = useDateContext();
 
   useEffect(() => {
@@ -81,8 +81,7 @@ export default function TransactionsPage(): JSX.Element {
       </div>
 
       {
-        modalTransShown &&
-        modalTransData &&
+        modalTrans &&
         <ModalTransaction/>
       }
     </>

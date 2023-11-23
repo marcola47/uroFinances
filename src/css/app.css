@@ -394,6 +394,15 @@
     opacity: 1;
   }
 }
+.modal__bg {
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 .modal--trans {
   display: flex;
   flex-direction: column;
@@ -864,14 +873,6 @@ button {
   position: relative;
 }
 
-.modal-bg {
-  display: grid;
-  place-items: center;
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
 .input {
   display: flex;
   z-index: 1;
@@ -1118,6 +1119,15 @@ button {
   cursor: not-allowed;
   opacity: 0.5;
 }
+.btn--border {
+  border: 2px solid hsl(215, 15%, 55%);
+  color: #fff;
+  background-color: transparent;
+}
+.btn--border:hover {
+  color: hsl(215, 15%, 15%);
+  background-color: hsl(215, 15%, 55%);
+}
 .btn--bg-blue {
   color: white;
   background-color: hsl(210, 90%, 50%);
@@ -1131,6 +1141,13 @@ button {
 }
 .btn--bg-green:hover {
   background-color: hsl(155, 90%, 50%);
+}
+.btn--bg-yellow {
+  color: white;
+  background-color: hsl(50, 100%, 55%);
+}
+.btn--bg-yellow:hover {
+  background-color: hsl(50, 100%, 60%);
 }
 .btn--bg-red {
   color: white;

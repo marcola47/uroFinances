@@ -22,13 +22,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <SessionProvider session={ session }>
           <UserContextProvider>
-            <UIContextProvider>
-              <DateContextProvider>
-                <TransactionsContextProvider>
+            <DateContextProvider>
+              <TransactionsContextProvider>
+                <UIContextProvider>
                   { children }
-                </TransactionsContextProvider>
-              </DateContextProvider>
-            </UIContextProvider>
+                </UIContextProvider>
+              </TransactionsContextProvider>
+            </DateContextProvider>
           </UserContextProvider>
         </SessionProvider>
       </body>

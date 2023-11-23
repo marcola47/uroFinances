@@ -1,43 +1,67 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
+import ModalConfirmation from "@/app/components/Modals/ModalConfirmation";
 
-type ModalTransData = Partial<TTransaction> & Partial<TRecurrence> & {
+type ModalTrans = Partial<TTransaction> & Partial<TRecurrence> & {
   operation: "PUT" | "POST";
+}
+
+type ModalConfirmation = {
+  header: string;
+  message: string;
+  type: "danger" | "warning" | "success";
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 interface UIContextProps {
   navbarOpen: boolean;
   setNavbarOpen: Dispatch<SetStateAction<boolean>>;
 
-  modalTransShown: boolean;
-  setModalTransShown: Dispatch<SetStateAction<boolean>>;
+  modalTrans: ModalTrans | null;
+  setModalTrans: Dispatch<SetStateAction<ModalTrans | null>>;
 
-  modalTransData: ModalTransData | null;
-  setModalTransData: Dispatch<SetStateAction<ModalTransData | null>>;
+  modalConfirmation: ModalConfirmation | null;
+  setmodalConfirmation: Dispatch<SetStateAction<ModalConfirmation | null>>;
 }
 
 const UIContext = createContext<UIContextProps>({
   navbarOpen: false,
   setNavbarOpen: () => {},
 
-  modalTransShown: false,
-  setModalTransShown: () => {},
+  modalTrans: null,
+  setModalTrans: () => {},
 
-  modalTransData: null,
-  setModalTransData: () => {}
+  modalConfirmation: null,
+  setmodalConfirmation: () => {}
 });
 
 export const UIContextProvider = ({ children }: { children: any }) => {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
-  const [modalTransShown, setModalTransShown] = useState<boolean>(false);
-  const [modalTransData, setModalTransData] = useState<ModalTransData | null>(null);
+  const [modalTrans, setModalTrans] = useState<ModalTrans | null>(null);
+  const [modalConfirmation, setmodalConfirmation] = useState<ModalConfirmation | null>({
+    header: "",
+    message: "",
+    type: "danger",
+    onConfirm: () => {},
+    onCancel: () => {}
+  
+  });
 
   return (
     <UIContext.Provider value={{ 
       navbarOpen, setNavbarOpen, 
-      modalTransShown, setModalTransShown,
-      modalTransData, setModalTransData,
-    }}> { children }
+      modalTrans, setModalTrans,
+      modalConfirmation, setmodalConfirmation
+    }}> 
+      {
+        modalConfirmation &&
+        <ModalConfirmation/>
+      }
+
+      { children }
     </UIContext.Provider>
   )
 }

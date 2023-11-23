@@ -60,16 +60,6 @@ button {
   position: relative;
 }
 
-.modal-bg {
-  display: grid;
-  place-items: center;
-  
-  position: fixed;
-  inset: 0;
-
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
 .input {
   display: flex;
   
@@ -338,6 +328,17 @@ button {
     opacity: 0.5;
   }
 
+  &--border {
+    border: 2px solid $grey-400;
+    color: #fff;
+    background-color: transparent;
+
+    &:hover {
+      color: $grey-800; 
+      background-color: $grey-400; 
+    }
+  }
+
   &--bg-blue {
     color: white;
     background-color: $blue-600;
@@ -352,6 +353,14 @@ button {
 
     &:hover 
     { background-color: $green-400 }
+  }
+
+  &--bg-yellow {
+    color: white;
+    background-color: $yellow-500;
+
+    &:hover 
+    { background-color: $yellow-400 }
   }
 
   &--bg-red {

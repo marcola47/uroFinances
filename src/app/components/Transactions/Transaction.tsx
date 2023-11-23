@@ -9,7 +9,7 @@ import { FaDollarSign, FaCheck, FaExclamation } from "react-icons/fa6";
 export default function Transaction({ itemData: transaction }: { itemData: TTransaction }): JSX.Element {
   const { user } = useUserContext();
   const { transactions, setTransactions, recurrences } = useTransactionsContext();
-  const { setModalTransShown, setModalTransData } = useUIContext();
+  const { setModalTrans } = useUIContext();
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
   
   const transactionAccountName = user?.accounts.find(a => a.id === transaction.account)?.name;
@@ -91,15 +91,10 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
       setTransactions(transactionsCopy);
   }
 
-  function handleShowmodalTrans() {
-    setModalTransShown(true);
-    setModalTransData({ ...transaction, operation: 'PUT' });
-  }
-
   return (
     <div 
       className="transaction"
-      onClick={ handleShowmodalTrans }
+      onClick={ () => {setModalTrans({ ...transaction, operation: 'PUT' })} }
     >
       <div className={`transaction__indicator ${transaction.type === 'income' ? "transaction__indicator--income" : "transaction__indicator--expense"}`}>
         {
