@@ -120,20 +120,68 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  return NextResponse.json({ status: 200, data: "Hello world" })
+  try {
+    await dbConnection();
+    const { transaction } = await req.json();
+    const newTransactions: TTransaction[] = []; 
+
+    if (transaction.stallments) {
+
+    }
+
+    else {
+      const updatedTransaction = await Transaction.findOneAndUpdate(
+        { id: transaction.id },
+        {
+          name: transaction.name,
+          user: transaction.user,
+          account: transaction.account,
+          type: transaction.type,
+          category: transaction.category,
+          amount: transaction.amount,
+          due_date: transaction.due_date,
+          confirmation_date: transaction.confirmation_date,
+          recurrence: transaction.recurrence,
+          stallments: transaction.stallments,
+        },
+        { new: true }
+      )
+
+      if (!updatedTransaction)
+        throw new Error("Transaction not found")
+
+      newTransactions.push(updatedTransaction);
+    }
+
+    return NextResponse.json({ 
+      status: 200, 
+      data: newTransactions
+    })
+  }
+  
+  catch (err) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500,
+      error: err 
+    })
+  }
 }
 
 export async function DELETE(req: NextRequest) {
   try {
     await dbConnection();
-    const { id } = await req.json();
+    const { transaction } = await req.json();
+    const deletedTransactions: TTransaction[] = [];
+    
+    const deletedTransaction = await Transaction.findOneAndDelete({ id: transaction.id });
+    deletedTransactions.push(deletedTransaction);
 
-    const deletedTransaction = await Transaction.findOneAndDelete({ id: id });
-
-    if (!deletedTransaction)
-      throw new Error("Transaction not found")
-
-    return NextResponse.json({ status: 200 })
+    return NextResponse.json({ 
+      status: 200, 
+      data: deletedTransactions
+    })
   }
 
   catch (err) {

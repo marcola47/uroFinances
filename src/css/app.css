@@ -458,11 +458,24 @@
 .modal--trans .account:hover, .modal--trans .account--selected, .modal--trans .category:hover, .modal--trans .category--selected, .modal--trans .recurring-period:hover, .modal--trans .recurring-period--selected {
   background-color: hsl(215, 15%, 30%);
 }
-.modal--trans__btns {
+.modal--trans__submit {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-top: auto;
+}
+.modal--trans__update-types {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-left: auto;
+}
+.modal--trans__btns {
+  display: flex;
+  gap: 8px;
+}
+.modal--trans__btns > * {
+  flex-grow: 1;
 }
 .modal--trans .input__bg {
   z-index: 9;
@@ -1048,6 +1061,15 @@ button {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.toggle--small {
+  height: 40px;
+  padding-inline: 8px;
+  font-size: 0.8rem;
+}
+.toggle--small .toggle__checkbox {
+  width: 16px;
+  height: 16px;
+}
 .toggle--toggled {
   color: hsl(155, 90%, 50%);
   border-color: hsl(155, 90%, 50%);
@@ -1084,7 +1106,7 @@ button {
   border-radius: 3px;
   color: black;
   background-color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.1s ease-in-out;

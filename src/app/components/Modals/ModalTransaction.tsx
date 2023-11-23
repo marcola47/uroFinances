@@ -26,10 +26,11 @@ import {
   FaCalendarDay, 
   FaCirclePlus 
 } from "react-icons/fa6";
+import { is } from "date-fns/locale";
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
-  const { setTransactions, setRecurrences } = useTransactionsContext();
+  const { transactions, setTransactions, setRecurrences } = useTransactionsContext();
   const { setModalTransShown, modalTransData, setModalTransData } = useUIContext();
   
   const [dueClockShown, setDueClockShown] = useState<boolean>(false);
@@ -61,6 +62,7 @@ export default function ModalTrans(): JSX.Element {
 
   const [isRecurring, setIsRecurring] = useState<boolean>(modalTransData!.recurrence || modalTransData?.recurrence_period ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTransData!.stallments ? true : false);
+  const [updateType, setUpdateType] = useState<"current" | "future" | "all">("current");
 
   // must be objects to work with my List component
   const recurrencePeriods = [ 
@@ -233,7 +235,15 @@ export default function ModalTrans(): JSX.Element {
     }
 
     else if (modalTransData!.operation === "PUT") {
-      console.log(newFinancialEvent)
+      if (resTransactions.length > 0) {
+        const transactionsCopy = transactions.map(transaction => {
+          const matchingResTransaction = resTransactions.find(resTransaction => resTransaction.id === transaction.id);
+          return matchingResTransaction ? { ...transaction, ...matchingResTransaction } : transaction;
+        });
+      
+        setTransactions(transactionsCopy);
+      }
+
       // recurrence: 
       // update future recurrences:
       // -- update current transaction and recurrence data
@@ -257,6 +267,58 @@ export default function ModalTrans(): JSX.Element {
   }
 
   async function handleDeleteTransaction() {
+    let resTransactions: TTransaction[] = [];
+    let resRecurrence: TRecurrence | null = null;
+    
+    const newFinancialEvent = {
+      id: newID,
+      name: newName,
+      user: user!.id,
+      account: newAccount,
+      type: newType,
+      category: newCategory,
+      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
+      reg_date: newRegDate,
+      due_date: newDueDate,
+    }
+    
+
+    if (isRecurring) {
+
+    }
+
+    else if (isInStallments) {
+
+    }
+
+    else {
+      (newFinancialEvent as TTransaction).confirmation_date = newConfirmed ? new Date() : undefined;
+      (newFinancialEvent as TTransaction).recurrence = newRecurrence;
+      (newFinancialEvent as TTransaction).stallments = newStallments;
+
+      const res = await fetch('/api/transactions', {
+        headers: { type: "application/json" },
+        method: "DELETE",
+        body: JSON.stringify({ transaction: newFinancialEvent })
+      })
+
+      const { status, error, data } = await res.json();
+
+      if (status >= 400 && status < 200) {
+        console.log(error);
+        return;
+      }
+
+      resTransactions = [...resTransactions, ...data];
+    }
+
+    if (resTransactions.length > 0) {
+      const transactionsCopy = transactions.filter(transaction => !resTransactions.some(resTransaction => resTransaction.id === transaction.id));
+      setTransactions(transactionsCopy);
+    }
+
+    handleHideModal();
+
     // recurrences:
     // delete current only:
     // -- delete current transaction, just as with unconfirming
@@ -504,10 +566,7 @@ export default function ModalTrans(): JSX.Element {
                 onClick= { () => {setNewConfirmed(!newConfirmed)} }
               >
                 <div className={`toggle__checkbox ${newConfirmed ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled--yellow"}`}/>
-                
-                <div className="toggle__label">
-                  { newConfirmed ? "Confirmed" : "Pending" }
-                </div>
+                <div className="toggle__label"> { newConfirmed ? "Confirmed" : "Pending" }</div>
               </div>
 
               <div className={`input__wrapper ${newConfirmed ? "" : "input--disabled"}`}>
@@ -727,21 +786,52 @@ export default function ModalTrans(): JSX.Element {
           }
         </div>
 
-        <div className="modal--trans__btns">
-          <button 
-            className="btn btn--bg-blue"
-            onClick={ handleSetFinancialEvent }
-            children={ modalDesc }
-          />
-
+        <div className="modal--trans__submit">
           {
-            modalTransData!.operation === "PUT" &&
-            <button 
-              className="btn btn--bg-red"
-              onClick={ handleDeleteTransaction }
-              children={`DELETE ${modalTransData?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
-            />
+            (modalTransData?.stallments_period || modalTransData?.recurrence_period) && modalTransData?.operation === "PUT" &&
+            <div className="modal--trans__update-types">
+              <div 
+                className={`toggle toggle--small ${updateType === "current" ? "toggle--toggled" : "toggle--untoggled"}`}
+                onClick= { () => {setUpdateType("current")} }
+              >
+                <div className={`toggle__checkbox ${updateType === "current" ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled"}`}/>
+                <div className="toggle__label">Update Current</div>
+              </div>
+
+              <div 
+                className={`toggle toggle--small ${updateType === "future" ? "toggle--toggled" : "toggle--untoggled-"}`}
+                onClick= { () => {setUpdateType("future")} }
+              >
+                <div className={`toggle__checkbox ${updateType === "future" ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled"}`}/>
+                <div className="toggle__label">Update Future </div>
+              </div>
+
+              <div 
+                className={`toggle toggle--small ${updateType === "all" ? "toggle--toggled" : "toggle--untoggled"}`}
+                onClick= { () => {setUpdateType("all")} }
+              >
+                <div className={`toggle__checkbox ${updateType === "all" ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled"}`}/>
+                <div className="toggle__label">Update All</div>
+              </div>
+            </div>
           }
+
+          <div className="modal--trans__btns">
+            {
+              modalTransData!.operation === "PUT" &&
+              <button 
+                className="btn btn--bg-red"
+                onClick={ handleDeleteTransaction }
+                children={`DELETE ${modalTransData?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
+              />
+            }
+
+            <button 
+              className="btn btn--bg-blue"
+              onClick={ handleSetFinancialEvent }
+              children={ modalDesc }
+            />
+          </div>
         </div>
 
         {
