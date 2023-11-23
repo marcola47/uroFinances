@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from 'uuid';
 
-import { TUUID, TTransaction } from "@/types/types";
 import Transaction from "@/app/models/Transaction";
 import dbConnection from "@/libs/configs/dbConnection";
 

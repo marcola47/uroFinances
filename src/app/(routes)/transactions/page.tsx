@@ -1,7 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
 
-import { TTransaction, TRecurrence, TUUID } from "@/types/types";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useDateContext } from "@/app/context/Date";
 import { useUIContext } from "@/app/context/Ui";

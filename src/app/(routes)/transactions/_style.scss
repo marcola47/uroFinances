@@ -36,6 +36,9 @@
     padding-bottom: 8px;
     margin-bottom: 16px;
     border-bottom: 2px solid $grey-750;
+
+    & > * 
+    { user-select: none; }
   }
 
   &__label {

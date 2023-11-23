@@ -1,5 +1,4 @@
 "use client";
-import { TTransaction } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useUIContext } from "@/app/context/Ui";

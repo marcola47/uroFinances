@@ -1,6 +1,5 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
-import { TTransaction, TRecurrence } from "@/types/types";
 
 type ModalTransData = Partial<TTransaction> & Partial<TRecurrence> & {
   operation: "PUT" | "POST";

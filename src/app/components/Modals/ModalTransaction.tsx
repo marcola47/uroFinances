@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
 import { useTransactionsContext } from "@/app/context/Transactions";
-import { TUUID, TUserAccount, TUserCategory, TTransaction, TRecurrence, TFinancialEventType, TFinancialEventCategory, TFinancialEventPeriod } from "@/types/types";
 
 import formatCurrency from "@/libs/helpers/formatCurrency";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -14,14 +13,27 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker, StaticTimePicker } from "@mui/x-date-pickers"
 
 import List from "../List/List";
-import { FaChevronDown, FaXmark, FaAlignLeft, FaDollarSign, FaClock, FaBuildingColumns, FaTag, FaCalendarDay, FaCirclePlus } from "react-icons/fa6";
+import { 
+  FaChevronDown, 
+  FaXmark, 
+  FaAlignLeft, 
+  FaDollarSign, 
+  FaClock, 
+  FaBuildingColumns,
+  FaPlus, 
+  FaMinus,
+  FaTag, 
+  FaCalendarDay, 
+  FaCirclePlus 
+} from "react-icons/fa6";
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
-  const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
+  const { setTransactions, setRecurrences } = useTransactionsContext();
   const { setModalTransShown, modalTransData, setModalTransData } = useUIContext();
   
-  const [clockShown, setClockShown] = useState<boolean>(false);
+  const [dueClockShown, setDueClockShown] = useState<boolean>(false);
+  const [confirmationClockShown, setConfirmationClockShown] = useState<boolean>(false);
   const [accountListShown, setAccountListShown] = useState<boolean>(false);
   const [categoryListShown, setCategoryListShown] = useState<string>("");
   const [recurringPeriodListShown, setRecurringPeriodListShown] = useState<boolean>(false);
@@ -30,13 +42,14 @@ export default function ModalTrans(): JSX.Element {
   const [modalDesc, setModalDesc] = useState<string>(".");
   const [displayCategories, setDisplayCategories] = useState<TUserCategory[]>([]);
   
-  const [newID, setNewID] = useState<TUUID>(modalTransData!.id ?? "");
+  const [newID, setNewID] = useState<TUUID>(modalTransData!.id ?? undefined);
   const [newName, setNewName] = useState<string>(modalTransData!.name ?? "");
   const [newAccount, setNewAccount] = useState<TUUID>(modalTransData!.account ?? "");
   const [newType, setNewType] = useState<TFinancialEventType>(modalTransData!.type ?? "expense");
   const [newAmount, setNewAmount] = useState<string>(modalTransData!.amount ? (modalTransData!.amount).toFixed(2).toString() : "0");
   const [newRegDate, setNewRegDate] = useState<Date>(new Date(modalTransData?.reg_date ?? new Date()));
   const [newDueDate, setNewDueDate] = useState<Date>(new Date(modalTransData?.due_date ?? new Date()));
+  const [newConfirmationDate, setNewConfirmationDate] = useState<Date>(new Date(modalTransData?.confirmation_date ?? new Date()));
   const [newCategory, setNewCategory] = useState<TFinancialEventCategory>(modalTransData!.category ?? { root: null, child: null, grandchild: null  });
   const [newConfirmed, setNewConfirmed] = useState<boolean>(modalTransData!.confirmation_date ? true : false);
   const [newRecurrence, setNewRecurrence] = useState<TUUID>(modalTransData!.recurrence ?? undefined);
@@ -46,7 +59,7 @@ export default function ModalTrans(): JSX.Element {
   const [newStallmentsCurrent, setNewStallmentsCurrent] = useState<number | undefined>(modalTransData!.stallments_current ?? undefined);
   const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod | undefined>(modalTransData!.stallments_period ?? undefined);
 
-  const [isRecurring, setIsRecurring] = useState<boolean>(modalTransData!.recurrence ? true : false);
+  const [isRecurring, setIsRecurring] = useState<boolean>(modalTransData!.recurrence || modalTransData?.recurrence_period ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTransData!.stallments ? true : false);
 
   // must be objects to work with my List component
@@ -59,7 +72,7 @@ export default function ModalTrans(): JSX.Element {
 
   // reset selected category, reset category list, set new modal description
   useEffect(() => {
-    console.log(modalTransData);
+    console.log(modalTransData)
     setDisplayCategories(user!.categories.filter(c => c.type === newType));
     
     if (newCategory !== modalTransData!.category)
@@ -74,8 +87,8 @@ export default function ModalTrans(): JSX.Element {
 
     else {
       switch (newType) {
-        case "income": setModalDesc("EDIT INCOME"); break;
-        case "expense": setModalDesc("EDIT EXPENSE"); break;
+        case "income": setModalDesc(`EDIT ${modalTransData?.recurrence_period ? "RECURRING" : ""} INCOME`); break;
+        case "expense": setModalDesc(`EDIT ${modalTransData?.recurrence_period ? "RECURRING" : ""} EXPENSE`); break;
       }
     }
   }, [newType])
@@ -90,14 +103,24 @@ export default function ModalTrans(): JSX.Element {
   }, [newDueDate])
 
   
-  function handleHideModalTrans() {
+  function handleHideModal() {
     setModalTransShown(false);
     setModalTransData(null);
   }
   
-  function handleSetNewTime(newTime: Date) {
-    setNewDueDate(newTime);
-    setClockShown(false);
+  function handleSetNewTime(newTime: Date, type: string) {
+    if (type === "due") {
+      setNewDueDate(newTime);
+      setDueClockShown(false);
+    }
+
+    else if (type === "confirmation") {
+      setNewConfirmationDate(newTime);
+      setConfirmationClockShown(false);
+    }
+
+    else 
+      throw new Error("Invalid date type")
   }
 
   function handleSetRecurrenceType(type: string) {
@@ -126,20 +149,21 @@ export default function ModalTrans(): JSX.Element {
   }
 
   async function handleSetFinancialEvent() {
-    if (!newName) 
-      return alert("Name is required");
-
-    if (!newAmount) 
+    if (!newAmount || newAmount === "0" || newAmount === "0,00") 
       return alert("Amount is required");
 
     if (!newAccount)
       return alert("Account is required");
 
+    if (!newName) 
+      return alert("Name is required");
+
+
     let resTransactions: TTransaction[] = [];
     let resRecurrence: TRecurrence | null = null;
 
     const newFinancialEvent = {
-      id: newID !== "" ? newID : undefined,
+      id: newID,
       name: newName,
       user: user!.id,
       account: newAccount,
@@ -150,14 +174,16 @@ export default function ModalTrans(): JSX.Element {
       due_date: newDueDate,
     }
     
-    if (isRecurring) {
-      (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
-      (newFinancialEvent as any).recurrence_period = newRecurrencePeriod;
+    if (isRecurring && newRecurrencePeriod) {
+      (newFinancialEvent as TRecurrence).recurrence_period = newRecurrencePeriod;
 
       const res = await fetch('/api/recurrences', {
         headers: { type: "application/json" },
         method: modalTransData!.operation,
-        body: JSON.stringify({ recurrence: newFinancialEvent })
+        body: JSON.stringify({ 
+          recurrence: newFinancialEvent,
+          confirmationDate: newConfirmed ? newConfirmationDate : undefined
+        })
       })
 
       const { status, err, data } = await res.json();
@@ -166,26 +192,20 @@ export default function ModalTrans(): JSX.Element {
         console.log(err);
         return;
       }
-
-      if (data.transaction)
-        resTransactions = [...resTransactions, data.transaction];
       
       resRecurrence = data.recurrence;
+      data.transaction && resTransactions.push(data.transaction);
     }
 
     else {
-      if (isInStallments) {
-        (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
-        (newFinancialEvent as any).stallments = newStallments;
-        (newFinancialEvent as any).stallments_count = newStallmentsCount;
-        (newFinancialEvent as any).stallments_current = newStallmentsCurrent;
-        (newFinancialEvent as any).stallments_period = newStallmentsPeriod;
-      }
+      (newFinancialEvent as TTransaction).confirmation_date = newConfirmed ? new Date() : undefined;
+      (newFinancialEvent as TTransaction).recurrence = newRecurrence;
+      (newFinancialEvent as TTransaction).stallments = newStallments;
 
-      else {
-        (newFinancialEvent as any).confirmation_date = newConfirmed ? new Date() : undefined;
-        (newFinancialEvent as any).recurrence = newRecurrence;
-        (newFinancialEvent as any).stallments = newStallments;
+      if (isInStallments) {
+        (newFinancialEvent as TTransaction).stallments_count = newStallmentsCount;
+        (newFinancialEvent as TTransaction).stallments_current = newStallmentsCurrent;
+        (newFinancialEvent as TTransaction).stallments_period = newStallmentsPeriod;
       }
 
       const res = await fetch('/api/transactions', {
@@ -213,6 +233,7 @@ export default function ModalTrans(): JSX.Element {
     }
 
     else if (modalTransData!.operation === "PUT") {
+      console.log(newFinancialEvent)
       // recurrence: 
       // update future recurrences:
       // -- update current transaction and recurrence data
@@ -220,13 +241,19 @@ export default function ModalTrans(): JSX.Element {
       // -- update current transaction only
 
       // stallments:
-      // -- map through transactions and update the one with the given ids
+      // increase count:
+      // -- change the name of all stallments with the new count and create new transactions for the new stallments
+      // decrease count:
+      // -- change the name of all stallments with the new count and delete all stallments with the count greater than the new count
 
       // single transaction:
-      // -- map through transactions and update the one with the given id
+      // make it recurring:
+      // -- create new recurrence with the transaction data and update the transaction with the recurrence id
+      // make it stallments:
+      // -- create new stallments with the transaction data and update the transaction with the stallments id
     }
 
-    handleHideModalTrans();
+    handleHideModal();
   }
 
   async function handleDeleteTransaction() {
@@ -375,16 +402,17 @@ export default function ModalTrans(): JSX.Element {
   return (
     <div 
       className="modal-bg"
-      onClick={ handleHideModalTrans }
+      onClick={ handleHideModal }
     >
       <div 
         className="modal--trans"
         onClick={ e => e.stopPropagation() }
       >
+        <LocalizationProvider dateAdapter={ AdapterDateFns }>
         <div className="modal--trans__header">
           <FaXmark 
             className="modal--trans__close" 
-            onClick={ handleHideModalTrans }
+            onClick={ handleHideModal }
           />
 
           <h1 className="modal--trans__title">
@@ -418,41 +446,30 @@ export default function ModalTrans(): JSX.Element {
           </div>
 
           <div className="modal--trans__row modal--trans__row--1">
-            <LocalizationProvider dateAdapter={ AdapterDateFns }>
+            <div className="input__wrapper">
+              <div className="input__label">
+                Due Date
+              </div>
+
               <DatePicker 
                 value={ newDueDate }
                 onChange={ (newDate) => {setNewDueDate(newDate!)} }
               />
+            </div>
 
-              <div 
-                className="input input--time"
-                onClick={ () => {setClockShown(!clockShown)} }
-              >
-                <FaClock className="input__icon"/>
-                <input
-                  type="string" 
-                  className="input__field"
-                  readOnly
-                  value={`${String(newDueDate.getHours()).padStart(2, '0')}:${String(newDueDate.getMinutes()).padStart(2, '0')}`}
-                  onChange={ e => {setNewAmount(e.target.value)} }
-                />
-
-                {
-                  clockShown &&
-                  <div 
-                    className="input__clock"
-                    onClick={ e => {e.stopPropagation()}}
-                  >
-                    <StaticTimePicker 
-                      ampm={ false }
-                      defaultValue={ newDueDate }
-                      onAccept={ (newTime) => {handleSetNewTime(newTime!)} }
-                      onClose={ () => {setClockShown(false)} }
-                    />
-                  </div>
-                }
-              </div>
-            </LocalizationProvider>
+            <div 
+              className="input input--time"
+              onClick={ () => {setDueClockShown(!dueClockShown)} }
+            >
+              <FaClock className="input__icon"/>
+              <input
+                type="string" 
+                className="input__field"
+                readOnly
+                value={`${String(newDueDate.getHours()).padStart(2, '0')}:${String(newDueDate.getMinutes()).padStart(2, '0')}`}
+                onChange={ e => {setNewAmount(e.target.value)} }
+              />
+            </div>
 
             <div className="input__wrapper">
               <div className="input input--account">
@@ -479,35 +496,64 @@ export default function ModalTrans(): JSX.Element {
             </div>
           </div>
 
-          <div className="modal--trans__row modal--trans__row--2">
-            {
-              modalTransData!.operation === "POST" &&
-              <div className="modal--trans__switches">
-                <div 
-                  className={`switch switch--income ${newType === 'income' ? 'switch--selected' : ''}`}
-                  onClick={ () => {setNewType('income')} }
-                  children="Income"
-                />
+          {
+            !modalTransData?.recurrence_period &&
+            <div className="modal--trans__row modal--trans__row--2">
+              <div 
+                className={`toggle ${newConfirmed ? "toggle--toggled" : "toggle--untoggled--yellow"}`}
+                onClick= { () => {setNewConfirmed(!newConfirmed)} }
+              >
+                <div className={`toggle__checkbox ${newConfirmed ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled--yellow"}`}/>
+                
+                <div className="toggle__label">
+                  { newConfirmed ? "Confirmed" : "Pending" }
+                </div>
+              </div>
 
-                <div 
-                  className={`switch switch--expense ${newType === 'expense' ? 'switch--selected' : ''}`}
-                  onClick={ () => {setNewType('expense')} }
-                  children="Expense"
+              <div className={`input__wrapper ${newConfirmed ? "" : "input--disabled"}`}>
+                <div className="input__label">
+                  Confirmation Date
+                </div>
+
+                <DatePicker 
+                  value={ newConfirmationDate }
+                  onChange={ (newDate) => {setNewConfirmationDate(newDate!)} }
+                  disabled={ !newConfirmed }
                 />
               </div>
-            }
 
-            <div 
-              className={`toggle ${newConfirmed ? "toggle--toggled" : "toggle--untoggled--yellow"}`}
-              onClick= { () => {setNewConfirmed(!newConfirmed)} }
-            >
-              <div className={`toggle__checkbox ${newConfirmed ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled--yellow"}`}/>
-              
-              <div className="toggle__label">
-                { newConfirmed ? "Confirmed" : "Pending" }
+              <div 
+                className={`input input--time ${newConfirmed ? "": "input--disabled"}`}
+                onClick={ newConfirmed ? () => {setConfirmationClockShown(!confirmationClockShown)} : () => {} }
+              >
+                <FaClock className="input__icon"/>
+                <input
+                  type="string" 
+                  className="input__field"
+                  readOnly
+                  value={`${String(newConfirmationDate.getHours()).padStart(2, '0')}:${String(newConfirmationDate.getMinutes()).padStart(2, '0')}`}
+                  onChange={ e => {setNewAmount(e.target.value)} }
+                />
               </div>
+
+              {
+                modalTransData!.operation === "POST" &&
+                <div className="modal--trans__switches">
+                  <div 
+                    className={`switch switch--income ${newType === 'income' ? 'switch--selected' : ''}`}
+                    onClick={ () => {setNewType('income')} }
+                    children={ <FaPlus/> }
+                  />
+
+                  <div 
+                    className={`switch switch--expense ${newType === 'expense' ? 'switch--selected' : ''}`}
+                    onClick={ () => {setNewType('expense')} }
+                    children={ <FaMinus/> }
+                  />
+                </div>
+              }
             </div>
-          </div>
+          }
 
           <div className="modal--trans__row modal--trans__row--3">
             <div className="input__wrapper">
@@ -595,102 +641,149 @@ export default function ModalTrans(): JSX.Element {
             </div>
           </div>
 
-          <div className="modal--trans__row modal--trans__row--4">
-            <div 
-              className={`toggle ${isInStallments ? "toggle--toggled" : ""}`}
-              onClick= { () => {handleSetRecurrenceType("stallments")} }
-            >
-              <div className={`toggle__checkbox ${isInStallments ? "toggle__checkbox--toggled" : ""}`}/>
-              <div className="toggle__label">In stallments</div>
-            </div>
-
-            <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${isInStallments ? "" : "input--disabled"}`}>
-                <FaCalendarDay className="input__icon"/>
-                <FaChevronDown className="input__chevron"/>
-
-                <input
-                  readOnly
-                  className="input__field"
-                  placeholder="Frequency"
-                  value={ newStallmentsPeriod ? newStallmentsPeriod.charAt(0).toUpperCase() + newStallmentsPeriod.slice(1) : "" }
-                  onClick={ isInStallments ? () => {setStallmentsPeriodListShown(!stallmentsPeriodListShown)} : () => {} }
-                />
+          {
+            !modalTransData?.recurrence && !modalTransData?.recurrence_period &&
+            <div className="modal--trans__row modal--trans__row--4">
+              <div 
+                className={`toggle ${isInStallments ? "toggle--toggled" : ""} ${modalTransData?.stallments_period ? "toggle--disabled" : ""}`}
+                onClick= { modalTransData?.stallments_period ? () => {} : () => {handleSetRecurrenceType("stallments")} }
+              >
+                <div className={`toggle__checkbox ${isInStallments ? "toggle__checkbox--toggled" : ""}`}/>
+                <div className="toggle__label">In stallments</div>
               </div>
 
-              {
-                isInStallments && stallmentsPeriodListShown &&
-                <List 
-                  className="input__dropdown"
-                  elements={ recurrencePeriods }
-                  ListItem={ ModalStallmentsPeriod }
-                />
-              }
-            </div>
+              <div className={`input__wrapper ${modalTransData?.stallments_period ? "input--disabled" : ""}`}>
+                <div className={`input input--category input--recurring-period ${isInStallments ? "" : "input--disabled"}`}>
+                  <FaCalendarDay className="input__icon"/>
+                  <FaChevronDown className="input__chevron"/>
 
-            
-            <div className={`input input--count ${isInStallments ? "" : "input--disabled"}`}>
-              <FaCirclePlus className="input__icon"/>
-              <input
-                type="number" 
-                className="input__field"
-                placeholder="Count"
-                onChange={ e => {setNewStallmentsCount(Number(e.target.value))} }
-              />
-            </div>
-          </div>
+                  <input
+                    readOnly
+                    className="input__field"
+                    placeholder="Frequency"
+                    value={ newStallmentsPeriod ? newStallmentsPeriod.charAt(0).toUpperCase() + newStallmentsPeriod.slice(1) : "" }
+                    onClick={ isInStallments ? () => {setStallmentsPeriodListShown(!stallmentsPeriodListShown)} : () => {} }
+                  />
+                </div>
 
-          <div className="modal--trans__row modal--trans__row--5">
-            <div 
-              className={`toggle ${isRecurring ? "toggle--toggled" : ""}`}
-              onClick= { () => {handleSetRecurrenceType("recurring")} }
-            >
-              <div className={`toggle__checkbox ${isRecurring ? "toggle__checkbox--toggled" : ""}`}/>
-              <div className="toggle__label">Recurring</div>
-            </div>
-
-            <div className="input__wrapper">
-              <div className={`input input--category input--recurring-period ${isRecurring ? "" : "input--disabled"}`}>
-                <FaCalendarDay className="input__icon"/>
-                <FaChevronDown className="input__chevron"/>
-
-                <input
-                  readOnly
-                  className="input__field"
-                  placeholder="Frequency"
-                  value={ newRecurrencePeriod ? newRecurrencePeriod.charAt(0).toUpperCase() + newRecurrencePeriod.slice(1) : "" }
-                  onClick={ isRecurring ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
-                />
+                {
+                  isInStallments && stallmentsPeriodListShown && !modalTransData?.stallments_period &&
+                  <List 
+                    className="input__dropdown"
+                    elements={ recurrencePeriods }
+                    ListItem={ ModalStallmentsPeriod }
+                  />
+                }
               </div>
 
-              {
-                isRecurring && recurringPeriodListShown &&
-                <List 
-                  className="input__dropdown"
-                  elements={ recurrencePeriods }
-                  ListItem={ ModalRecurringPeriod }
+              <div className={`input input--count ${isInStallments ? "" : "input--disabled"}`}>
+                <FaCirclePlus className="input__icon"/>
+                <input
+                  type="number" 
+                  className="input__field"
+                  placeholder="Count"
+                  value={ newStallmentsCount ?? "" }
+                  onChange={ e => {setNewStallmentsCount(Number(e.target.value))} }
                 />
-              }
+              </div>
             </div>
-          </div>
+          }
+
+          {
+            !modalTransData?.stallments_period && !modalTransData?.recurrence && !modalTransData?.recurrence_period && 
+            <div className="modal--trans__row modal--trans__row--5">
+              <div 
+                className={`toggle ${isRecurring ? "toggle--toggled" : ""}`}
+                onClick= { () => {handleSetRecurrenceType("recurring")} }
+              >
+                <div className={`toggle__checkbox ${isRecurring ? "toggle__checkbox--toggled" : ""}`}/>
+                <div className="toggle__label">Recurring</div>
+              </div>
+
+              <div className="input__wrapper">
+                <div className={`input input--category input--recurring-period ${isRecurring ? "" : "input--disabled"}`}>
+                  <FaCalendarDay className="input__icon"/>
+                  <FaChevronDown className="input__chevron"/>
+
+                  <input
+                    readOnly
+                    className="input__field"
+                    placeholder="Frequency"
+                    value={ newRecurrencePeriod ? newRecurrencePeriod.charAt(0).toUpperCase() + newRecurrencePeriod.slice(1) : "" }
+                    onClick={ isRecurring ? () => {setRecurringPeriodListShown(!recurringPeriodListShown)} : () => {} }
+                  />
+                </div>
+
+                {
+                  isRecurring && recurringPeriodListShown &&
+                  <List 
+                    className="input__dropdown"
+                    elements={ recurrencePeriods }
+                    ListItem={ ModalRecurringPeriod }
+                  />
+                }
+              </div>
+            </div>
+          }
         </div>
 
         <div className="modal--trans__btns">
-          {
-            modalTransData!.operation === "PUT" &&
-            <button 
-              className="btn btn--bg-red"
-              onClick={ handleDeleteTransaction }
-              children={`DELETE ${newType.toUpperCase()}`}
-            />
-          }
-
           <button 
             className="btn btn--bg-blue"
             onClick={ handleSetFinancialEvent }
             children={ modalDesc }
           />
+
+          {
+            modalTransData!.operation === "PUT" &&
+            <button 
+              className="btn btn--bg-red"
+              onClick={ handleDeleteTransaction }
+              children={`DELETE ${modalTransData?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
+            />
+          }
         </div>
+
+        {
+          dueClockShown &&
+          <div 
+            className="input__bg"
+            onClick={ () => {setDueClockShown(false)} }
+          >
+            <div 
+              className="input__clock"
+              onClick={ e => {e.stopPropagation()}}
+            >
+              <StaticTimePicker 
+                ampm={ false }
+                defaultValue={ newDueDate }
+                onAccept={ (newTime) => {handleSetNewTime(newTime!, "due")} }
+                onClose={ () => {setDueClockShown(false)} }
+              />
+            </div>
+          </div>
+        }
+        
+        {
+          confirmationClockShown &&
+          <div 
+            className="input__bg"
+            onClick={ () => {setConfirmationClockShown(false)} }
+          >
+            <div 
+              className="input__clock"
+              onClick={ e => {e.stopPropagation()}}
+            >
+              <StaticTimePicker 
+                ampm={ false }
+                defaultValue={ newConfirmationDate }
+                onAccept={ (newTime) => {handleSetNewTime(newTime!, "confirmation")} }
+                onClose={ () => {setConfirmationClockShown(false)} }
+              />
+            </div>
+          </div>
+        }
+        </LocalizationProvider>
       </div>
     </div>
   )

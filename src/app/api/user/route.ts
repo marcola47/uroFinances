@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnection from "@/libs/configs/dbConnection";
 
-import { TUser } from "@/types/types";
 import User from "@/app/models/User";
 
 export async function GET(req: NextRequest) {

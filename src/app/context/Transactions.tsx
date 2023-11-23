@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useContext, createContext, Dispatch, SetStateAction } from "react";
-import { TTransaction, TRecurrence } from "@/types/types";
 import { useSession } from "next-auth/react";
 
 interface TransactionsContextProps {

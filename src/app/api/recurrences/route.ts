@@ -30,8 +30,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     await dbConnection();
-    const { recurrence } = await req.json();
-    let newTransaction;
+    const { recurrence, confirmationDate } = await req.json();
 
     const newRecurrence = await Recurrence.create({
       name: recurrence.name,
@@ -45,8 +44,8 @@ export async function POST(req: NextRequest) {
       recurrence_period: recurrence.recurrence_period
     })
 
-    if (recurrence.confirmation_date) {
-      newTransaction = await Transaction.create({
+    const newTransaction = confirmationDate 
+    ? await Transaction.create({
         name: recurrence.name,
         user: recurrence.user,
         account: recurrence.account,
@@ -55,14 +54,17 @@ export async function POST(req: NextRequest) {
         amount: recurrence.amount,
         reg_date: recurrence.reg_date,
         due_date: recurrence.due_date,
-        confirmation_date: new Date(recurrence.confirmation_date),
+        confirmation_date: new Date(confirmationDate),
         recurrence: newRecurrence.id,
       })
-    }
+    : undefined
 
     return NextResponse.json({ 
       status: 200, 
-      data: { recurrence: newRecurrence, transaction: newTransaction } 
+      data: { 
+        recurrence: newRecurrence, 
+        transaction: newTransaction 
+      } 
     })
   }
 

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-import { TUser } from "@/types/types";
 import { useUIContext } from "@/app/context/Ui";
 import { useUserContext } from "@/app/context/User";
 

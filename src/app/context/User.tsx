@@ -3,7 +3,6 @@ import { useState, useContext, useEffect, createContext, Dispatch, SetStateActio
 import { useSession } from "next-auth/react";
 import { redirect, usePathname } from 'next/navigation';
 
-import { TUser } from "@/types/types";
 
 interface UserContextProps {
   user: TUser | null;

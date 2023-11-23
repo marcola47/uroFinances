@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 
-import { TTransaction, TRecurrence } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
 import { useDateContext } from "@/app/context/Date";
@@ -71,25 +70,25 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
 
     if (transactions.length > 0) {
       sortedTransactions = transactions.sort((a, b) => {
-        const aValue = sort.by.includes("date") ? new Date(a[sort.by]) : a[sort.by];
-        const bValue = sort.by.includes("date") ? new Date(b[sort.by]) : b[sort.by];
-    
+        const aValue = sort.by.includes("date") ? new Date(a[sort.by] as string) : a[sort.by];
+        const bValue = sort.by.includes("date") ? new Date(b[sort.by] as string) : b[sort.by];
+
         if (aValue === null || aValue === undefined) 
           return sort.order === 'asc' ? -1 : 1;
 
         if (bValue === null || bValue === undefined) 
           return sort.order === 'asc' ? 1 : -1;
-    
-        if (typeof aValue === 'string') 
+
+        if (typeof aValue === 'string' && typeof bValue === 'string') 
           return sort.order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
 
-        else if (typeof aValue === 'number') 
+        else if (typeof aValue === 'number' && typeof bValue === 'number') 
           return sort.order === 'asc' ? (aValue < bValue ? -1 : 1) : (bValue < aValue ? -1 : 1);
-        
+
         else if (aValue instanceof Date && bValue instanceof Date) {
           return sort.order === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime(); 
         }
-        
+
         else 
           return 0;
       });
@@ -106,10 +105,10 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
         if (bValue === null || bValue === undefined) 
           return sort.order === 'asc' ? 1 : -1;
     
-        if (typeof aValue === 'string') 
+        if (typeof aValue === 'string' && typeof bValue === 'string') 
           return sort.order === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
 
-        else if (typeof aValue === 'number') 
+        else if (typeof aValue === 'number' && typeof bValue === 'number') 
           return sort.order === 'asc' ? (aValue < bValue ? -1 : 1) : (bValue < aValue ? -1 : 1);
         
         else if (aValue instanceof Date && bValue instanceof Date) 

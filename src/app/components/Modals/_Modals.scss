@@ -45,10 +45,10 @@
     { grid-template-columns: 7fr 3fr }
 
     &--1 
-    { grid-template-columns: 3fr 3fr 4fr }
+    { grid-template-columns: 3fr 1.75fr 4fr }
 
     &--2 
-    { grid-template-columns: 5.5fr 4.5fr }
+    { grid-template-columns: 1fr 1.1fr 0.7fr 0.75fr }
 
     // &--3 
     // { grid-template-columns: 1fr 1fr 1fr }
@@ -83,5 +83,20 @@
     flex-direction: column;
     gap: 8px;
     margin-top: auto;
+  }
+
+  .input__bg {
+    z-index: 9;
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .input__clock {
+    z-index: 10;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }

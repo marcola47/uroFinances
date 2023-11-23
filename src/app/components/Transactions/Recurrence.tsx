@@ -1,5 +1,4 @@
 "use client";
-import { TRecurrence } from "@/types/types";
 import { useUserContext } from "@/app/context/User";
 import { useTransactionsContext } from "@/app/context/Transactions";
 import { useUIContext } from "@/app/context/Ui";
@@ -15,7 +14,6 @@ export default function Transaction({ itemData: recurrence }: { itemData: TRecur
   const { date } = useDateContext();
 
   const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
-  
   const recurrenceAccountName = user?.accounts.find(a => a.id === recurrence.account)?.name;
   
   type RecurrenceCategoryProps = {

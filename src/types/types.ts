@@ -2,19 +2,18 @@
 //----- Utility Types -----\\
 
 // Type for defining a uuid reference (i'll do it right later)
-export type TUUID = string | null | undefined;
-/***********************************************************/
+type TUUID = string | null | undefined;
 
 /***********************************************************/
 //----- User Types -----\\
-export type TUserAccount = {
+type TUserAccount = {
   id: string,
   name: string,
   type: "checking" | "savings" | "wallet" | null,
   icon: string
 };
 
-export type TUserCategory = {
+type TUserCategory = {
   id: string,
   name: string,
   icon: string,
@@ -24,7 +23,7 @@ export type TUserCategory = {
   grandparent: string | null | undefined
 };
 
-export type TUser = {
+type TUser = {
   id: string,
   name: string,
   email: string,
@@ -39,42 +38,40 @@ export type TUser = {
     hide_scrollbars: boolean
   }
 };
-/***********************************************************/
 
 /***********************************************************/
 //----- Financial Event Types -----\\
-export type TFinancialEventType = "income" | "expense";
+type TFinancialEventType = "income" | "expense";
 
-export type TFinancialEventPeriod = "monthly" | "quarterly" | "semi-annual" | "annual";
+type TFinancialEventPeriod = "monthly" | "quarterly" | "semi-annual" | "annual";
 
-export type TFinancialEventCategory = {
+type TFinancialEventCategory = {
   root: string | null | undefined,
   child: string | null | undefined,
   grandchild: string | null | undefined
 };
 
-export type TFinancialEvent = {
+type TFinancialEvent = {
   id: string,
   name: string,
   user: TUUID,
   account: TUUID,
-  type: TTransactionType,
-  category: TTransactionCategory
+  type: TFinancialEventType,
+  category: TFinancialEventCategory
   amount: number,
   reg_date: Date,
   due_date: Date,
-}
-
-export type TRecurrence = TFinancialEvent & {
-  recurrence_period: TRecurringPeriod
 };
 
-export type TTransaction = TFinancialEvent & {
+type TRecurrence = TFinancialEvent & {
+  recurrence_period: TFinancialEventPeriod
+};
+
+type TTransaction = TFinancialEvent & {
   confirmation_date: Date | null | undefined,
   recurrence: TUUID,
   stallments: TUUID,
   stallments_count: number | null | undefined,
   stallments_current: number | null | undefined,
-  stallments_period: TRecurringPeriod | null | undefined,
-}; 
-/***********************************************************/
+  stallments_period: TFinancialEventPeriod | null | undefined,
+};
