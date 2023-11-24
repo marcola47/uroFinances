@@ -403,6 +403,27 @@
   background-color: rgba(0, 0, 0, 0.75);
 }
 
+.modal--warning, .modal--confirmation {
+  z-index: 9999;
+  width: 420px;
+  padding: 24px;
+  border-radius: 6px;
+  background-color: hsl(215, 15%, 15%);
+  text-align: center;
+}
+.modal--warning__header, .modal--confirmation__header {
+  font-size: 1.3rem;
+}
+.modal--warning__message, .modal--confirmation__message {
+  margin-bottom: 24px;
+  color: hsl(215, 15%, 65%);
+}
+.modal--warning__btns, .modal--confirmation__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .modal--trans {
   display: flex;
   flex-direction: column;
@@ -888,6 +909,7 @@ button {
 }
 .input--disabled {
   opacity: 0.3;
+  cursor: not-allowed !important;
 }
 .input--disabled > * {
   cursor: not-allowed !important;
@@ -1120,13 +1142,13 @@ button {
   opacity: 0.5;
 }
 .btn--border {
-  border: 2px solid hsl(215, 15%, 55%);
+  border: 2px solid hsl(215, 15%, 75%);
   color: #fff;
   background-color: transparent;
 }
 .btn--border:hover {
   color: hsl(215, 15%, 15%);
-  background-color: hsl(215, 15%, 55%);
+  background-color: hsl(215, 15%, 75%);
 }
 .btn--bg-blue {
   color: white;
@@ -1144,10 +1166,10 @@ button {
 }
 .btn--bg-yellow {
   color: white;
-  background-color: hsl(50, 100%, 55%);
+  background-color: hsl(50, 100%, 45%);
 }
 .btn--bg-yellow:hover {
-  background-color: hsl(50, 100%, 60%);
+  background-color: hsl(50, 100%, 55%);
 }
 .btn--bg-red {
   color: white;

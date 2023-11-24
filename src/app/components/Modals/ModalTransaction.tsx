@@ -30,7 +30,7 @@ import {
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
   const { transactions, setTransactions, setRecurrences } = useTransactionsContext();
-  const { modalTrans, setModalTrans } = useUIContext();
+  const { modalTrans, setModalTrans, setModalWarning, setModalConfirmation } = useUIContext();
   
   const [dueClockShown, setDueClockShown] = useState<boolean>(false);
   const [confirmationClockShown, setConfirmationClockShown] = useState<boolean>(false);
@@ -59,6 +59,7 @@ export default function ModalTrans(): JSX.Element {
   const [newStallmentsCurrent, setNewStallmentsCurrent] = useState<number | undefined>(modalTrans!.stallments_current ?? undefined);
   const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod | undefined>(modalTrans!.stallments_period ?? undefined);
 
+  const [stallmentsCountWarning, setStallmentsCountWarning] = useState<boolean>(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(modalTrans!.recurrence || modalTrans?.recurrence_period ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTrans!.stallments ? true : false);
   const [updateType, setUpdateType] = useState<"current" | "future" | "all">("current");
@@ -116,6 +117,14 @@ export default function ModalTrans(): JSX.Element {
     else 
       throw new Error("Invalid date type")
   }
+
+  // Warns the user about how changing the stallments count affects the transactions
+  useEffect(() => {
+    if (newStallmentsCount! > modalTrans!.stallments_count! && !stallmentsCountWarning) {
+      setStallmentsCountWarning(true);
+      setModalWarning({ header: "Increasing the stallments count will create new transactions." })
+    }
+  }, [newStallmentsCount])
 
   function handleSetRecurrenceType(type: string) {
     if (type === "recurring" && !isRecurring) {
@@ -258,7 +267,7 @@ export default function ModalTrans(): JSX.Element {
     setModalTrans(null);
   }
 
-  async function handleDeleteTransaction() {
+  async function handleDeleteFinancialEvent() {
     let resTransactions: TTransaction[] = [];
     let resRecurrence: TRecurrence | null = null;
     
@@ -324,8 +333,16 @@ export default function ModalTrans(): JSX.Element {
     // -- delete current transaction and others with the count greater than the current
     // delete all:
     // -- delete all transactions with the given stallment id
+  }
 
-
+  function showConfirmation() {
+    setModalConfirmation({
+      header: `Are you sure you want to delete this ${modalTrans?.recurrence_period ? "recurrence" : "transaction"}?`,
+      message: "This action is non-reversable.",
+      type: "danger",
+      onConfirm: () => { handleDeleteFinancialEvent() },
+      onCancel: () => { setModalConfirmation(null) }
+    })
   }
 
   function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
@@ -741,17 +758,17 @@ export default function ModalTrans(): JSX.Element {
           }
 
           {
-            !modalTrans?.stallments_period && !modalTrans?.recurrence && !modalTrans?.recurrence_period && 
+            !modalTrans?.stallments_period && !modalTrans?.recurrence &&
             <div className="modal--trans__row modal--trans__row--5">
               <div 
-                className={`toggle ${isRecurring ? "toggle--toggled" : ""}`}
-                onClick= { () => {handleSetRecurrenceType("recurring")} }
+                className={`toggle ${isRecurring ? "toggle--toggled" : ""} ${modalTrans?.recurrence_period ? "toggle--disabled" : ""}`}
+                onClick= { modalTrans?.recurrence_period ? () => {} : () => {handleSetRecurrenceType("recurring")} }
               >
                 <div className={`toggle__checkbox ${isRecurring ? "toggle__checkbox--toggled" : ""}`}/>
                 <div className="toggle__label">Recurring</div>
               </div>
 
-              <div className="input__wrapper">
+              <div className={`input__wrapper ${modalTrans?.recurrence_period ? "input--disabled" : ""}`}>
                 <div className={`input input--category input--recurring-period ${isRecurring ? "" : "input--disabled"}`}>
                   <FaCalendarDay className="input__icon"/>
                   <FaChevronDown className="input__chevron"/>
@@ -766,7 +783,7 @@ export default function ModalTrans(): JSX.Element {
                 </div>
 
                 {
-                  isRecurring && recurringPeriodListShown &&
+                  isRecurring && recurringPeriodListShown && !modalTrans?.recurrence_period &&
                   <List 
                     className="input__dropdown"
                     elements={ recurrencePeriods }
@@ -813,7 +830,7 @@ export default function ModalTrans(): JSX.Element {
               modalTrans!.operation === "PUT" &&
               <button 
                 className="btn btn--bg-red"
-                onClick={ handleDeleteTransaction }
+                onClick={ showConfirmation }
                 children={`DELETE ${modalTrans?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
               />
             }

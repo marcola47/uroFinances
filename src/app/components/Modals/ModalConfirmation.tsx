@@ -1,30 +1,36 @@
 import { useUIContext } from "@/app/context/Ui"
 
 export default function ModalConfirmation(): JSX.Element {
-  const { modalConfirmation, setmodalConfirmation } = useUIContext();
+  const { modalConfirmation, setModalConfirmation } = useUIContext();
   
   let confirmBtnClassName = "btn btn--full ";
   switch (modalConfirmation?.type) {
-    case "danger":  confirmBtnClassName += "btn--bg-red";    break;
+    case "danger": confirmBtnClassName += "btn--bg-red"; break;
     case "warning": confirmBtnClassName += "btn--bg-yellow"; break;
-    case "success": confirmBtnClassName += "btn--bg-green";  break;
+    case "success": confirmBtnClassName += "btn--bg-green"; break;
   }
 
   function handleCancel() {
-    setmodalConfirmation(null);
+    setModalConfirmation(null);
     modalConfirmation?.onCancel();
   }
 
   function handleConfirm() {
-    setmodalConfirmation(null);
+    setModalConfirmation(null);
     modalConfirmation?.onConfirm();
   }
 
   return (
-    <div className="modal__bg">
-      <div className="modal--confirmation">
+    <div 
+      className="modal__bg"
+      onClick={ () => setModalConfirmation(null) }
+    >
+      <div 
+        className="modal--confirmation"
+        onClick={ e => e.stopPropagation() }
+      >
         <div className="modal--confirmation__content">
-          <h2 className="modal--confirmation__title">
+          <h2 className="modal--confirmation__header">
             { modalConfirmation?.header }
           </h2>
           
@@ -36,14 +42,14 @@ export default function ModalConfirmation(): JSX.Element {
             <button 
               className="btn btn--full btn--border"
               onClick={ handleCancel }
-            >Cancel
-            </button>
+              children={ modalConfirmation?.cancelText || "NO" }
+            />
             
             <button 
               className={ confirmBtnClassName }
               onClick={ handleConfirm }
-            >Confirm
-            </button>
+              children={ modalConfirmation?.confirmText || "YES" }
+            />
           </div>
         </div>
       </div>

@@ -76,6 +76,7 @@ button {
 
   &--disabled {
     opacity: 0.3;
+    cursor: not-allowed !important;
 
     & > * 
     { cursor: not-allowed !important }
@@ -329,13 +330,13 @@ button {
   }
 
   &--border {
-    border: 2px solid $grey-400;
+    border: 2px solid $grey-200;
     color: #fff;
     background-color: transparent;
 
     &:hover {
       color: $grey-800; 
-      background-color: $grey-400; 
+      background-color: $grey-200; 
     }
   }
 
@@ -357,10 +358,10 @@ button {
 
   &--bg-yellow {
     color: white;
-    background-color: $yellow-500;
+    background-color: $yellow-700;
 
     &:hover 
-    { background-color: $yellow-400 }
+    { background-color: $yellow-500 }
   }
 
   &--bg-red {
