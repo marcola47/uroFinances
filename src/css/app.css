@@ -1020,6 +1020,25 @@ button {
 .input__wrapper {
   position: relative;
 }
+.input__incrementors {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  right: 4px;
+  height: 100%;
+}
+.input__incrementor {
+  display: grid;
+  place-items: center;
+  padding: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+}
+.input__incrementor:hover {
+  background-color: hsl(215, 15%, 30%);
+}
 
 .switch {
   flex-grow: 1;

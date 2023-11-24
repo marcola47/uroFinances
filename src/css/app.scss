@@ -170,7 +170,7 @@ button {
     background-color: $grey-750;
 
     &--category {
-      overflow-y: auto;
+      overflow-y: auto; 
       max-height: 240px;
       @include scrollbar_small();
     }
@@ -183,6 +183,30 @@ button {
 
   &__wrapper
   { position: relative }
+
+  &__incrementors {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    position: absolute;
+    right: 4px;
+    height: 100%;
+  }
+
+  &__incrementor {
+    display: grid;
+    place-items: center;
+    
+    padding: 2px;
+    border-radius: $br-s;
+
+    cursor: pointer;
+    @include transition;
+
+    &:hover 
+    { background-color: $grey-650 }
+  }
 }
 
 .switch {

@@ -15,6 +15,7 @@ import { DatePicker, StaticTimePicker } from "@mui/x-date-pickers"
 import List from "../List/List";
 import { 
   FaChevronDown, 
+  FaChevronUp,
   FaXmark, 
   FaAlignLeft, 
   FaDollarSign, 
@@ -41,6 +42,8 @@ export default function ModalTrans(): JSX.Element {
   
   const [modalDesc, setModalDesc] = useState<string>(".");
   const [displayCategories, setDisplayCategories] = useState<TUserCategory[]>([]);
+  const [stallmentsCountWarning, setStallmentsCountWarning] = useState<boolean>(false);
+  const [updateType, setUpdateType] = useState<"current" | "future" | "all">("current");
   
   const [newID, setNewID] = useState<TUUID>(modalTrans!.id ?? undefined);
   const [newName, setNewName] = useState<string>(modalTrans!.name ?? "");
@@ -51,18 +54,16 @@ export default function ModalTrans(): JSX.Element {
   const [newDueDate, setNewDueDate] = useState<Date>(new Date(modalTrans?.due_date ?? new Date()));
   const [newConfirmationDate, setNewConfirmationDate] = useState<Date>(new Date(modalTrans?.confirmation_date ?? new Date()));
   const [newCategory, setNewCategory] = useState<TFinancialEventCategory>(modalTrans!.category ?? { root: null, child: null, grandchild: null  });
-  const [newConfirmed, setNewConfirmed] = useState<boolean>(modalTrans!.confirmation_date ? true : false);
   const [newRecurrence, setNewRecurrence] = useState<TUUID>(modalTrans!.recurrence ?? undefined);
   const [newRecurrencePeriod, setNewRecurrencePeriod] = useState<TFinancialEventPeriod | undefined>(modalTrans!.recurrence_period ?? undefined);
   const [newStallments, setNewStallments] = useState<TUUID>(modalTrans!.stallments ?? undefined);
-  const [newStallmentsCount, setNewStallmentsCount] = useState<number | undefined>(modalTrans!.stallments_count ?? undefined);
+  const [newStallmentsCount, setNewStallmentsCount] = useState<number>(modalTrans!.stallments_count ?? 1);
   const [newStallmentsCurrent, setNewStallmentsCurrent] = useState<number | undefined>(modalTrans!.stallments_current ?? undefined);
   const [newStallmentsPeriod, setNewStallmentsPeriod] = useState<TFinancialEventPeriod | undefined>(modalTrans!.stallments_period ?? undefined);
-
-  const [stallmentsCountWarning, setStallmentsCountWarning] = useState<boolean>(false);
+  
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(modalTrans!.confirmation_date ? true : false);
   const [isRecurring, setIsRecurring] = useState<boolean>(modalTrans!.recurrence || modalTrans?.recurrence_period ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTrans!.stallments ? true : false);
-  const [updateType, setUpdateType] = useState<"current" | "future" | "all">("current");
 
   // must be objects to work with my List component
   const recurrencePeriods = [ 
@@ -74,6 +75,7 @@ export default function ModalTrans(): JSX.Element {
 
   // reset selected category, reset category list, set new modal description
   useEffect(() => {
+    console.log(modalTrans)
     setDisplayCategories(user!.categories.filter(c => c.type === newType));
     
     if (newCategory !== modalTrans!.category)
@@ -94,13 +96,17 @@ export default function ModalTrans(): JSX.Element {
     }
   }, [newType])
 
-  // adjust confirmed status when user changes due date
+  // adjust confirmed status when user changes due date in a new transactions
   useEffect(() => {
-    if (new Date(newDueDate) > new Date() && !modalTrans!.confirmation_date)
-      setNewConfirmed(false);
+    const isNew = modalTrans?.operation === "POST" && newDueDate > new Date();
+    const isExisting = modalTrans?.operation === "PUT" && !modalTrans.confirmation_date;
 
-    else
-      setNewConfirmed(true);
+    if (isNew || isExisting) 
+      setIsConfirmed(false);
+
+    else 
+      setIsConfirmed(true);
+    
   }, [newDueDate])
   
   function handleSetNewTime(newTime: Date, type: string) {
@@ -143,6 +149,21 @@ export default function ModalTrans(): JSX.Element {
     }
   }
   
+  function handleSetStallmentsCount(type: string) {
+    if (type === "increment")
+      setNewStallmentsCount(newStallmentsCount + 1);
+
+    else if (type === "decrement") {
+      if (newStallmentsCount > 1)
+        setNewStallmentsCount(newStallmentsCount - 1);
+    
+      else { // fix 
+        setNewStallmentsCount(1);
+        // setIsInStallments(false);
+      }
+    }
+  }
+
   function toggleCategoryList(list: string) {
     if (categoryListShown === list)
       setCategoryListShown("");
@@ -185,7 +206,7 @@ export default function ModalTrans(): JSX.Element {
         method: modalTrans!.operation,
         body: JSON.stringify({ 
           recurrence: newFinancialEvent,
-          confirmationDate: newConfirmed ? newConfirmationDate : undefined
+          confirmationDate: isConfirmed ? newConfirmationDate : undefined
         })
       })
 
@@ -200,8 +221,8 @@ export default function ModalTrans(): JSX.Element {
       data.transaction && resTransactions.push(data.transaction);
     }
 
-    else {
-      (newFinancialEvent as TTransaction).confirmation_date = newConfirmed ? new Date() : undefined;
+    else {      
+      (newFinancialEvent as TTransaction).confirmation_date = isConfirmed ? new Date(newConfirmationDate) : undefined;
       (newFinancialEvent as TTransaction).recurrence = newRecurrence;
       (newFinancialEvent as TTransaction).stallments = newStallments;
 
@@ -211,6 +232,7 @@ export default function ModalTrans(): JSX.Element {
         (newFinancialEvent as TTransaction).stallments_period = newStallmentsPeriod;
       }
 
+      console.log(newFinancialEvent)
       const res = await fetch('/api/transactions', {
         headers: { type: "application/json" },
         method: modalTrans!.operation,
@@ -293,7 +315,7 @@ export default function ModalTrans(): JSX.Element {
     }
 
     else {
-      (newFinancialEvent as TTransaction).confirmation_date = newConfirmed ? new Date() : undefined;
+      (newFinancialEvent as TTransaction).confirmation_date = isConfirmed ? new Date() : undefined;
       (newFinancialEvent as TTransaction).recurrence = newRecurrence;
       (newFinancialEvent as TTransaction).stallments = newStallments;
 
@@ -571,14 +593,14 @@ export default function ModalTrans(): JSX.Element {
             !modalTrans?.recurrence_period &&
             <div className="modal--trans__row modal--trans__row--2">
               <div 
-                className={`toggle ${newConfirmed ? "toggle--toggled" : "toggle--untoggled--yellow"}`}
-                onClick= { () => {setNewConfirmed(!newConfirmed)} }
+                className={`toggle ${isConfirmed ? "toggle--toggled" : "toggle--untoggled--yellow"}`}
+                onClick= { () => {setIsConfirmed(!isConfirmed)} }
               >
-                <div className={`toggle__checkbox ${newConfirmed ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled--yellow"}`}/>
-                <div className="toggle__label"> { newConfirmed ? "Confirmed" : "Pending" }</div>
+                <div className={`toggle__checkbox ${isConfirmed ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled--yellow"}`}/>
+                <div className="toggle__label"> { isConfirmed ? "Confirmed" : "Pending" }</div>
               </div>
 
-              <div className={`input__wrapper ${newConfirmed ? "" : "input--disabled"}`}>
+              <div className={`input__wrapper ${isConfirmed ? "" : "input--disabled"}`}>
                 <div className="input__label">
                   Confirmation Date
                 </div>
@@ -586,13 +608,13 @@ export default function ModalTrans(): JSX.Element {
                 <DatePicker 
                   value={ newConfirmationDate }
                   onChange={ (newDate) => {setNewConfirmationDate(newDate!)} }
-                  disabled={ !newConfirmed }
+                  disabled={ !isConfirmed }
                 />
               </div>
 
               <div 
-                className={`input input--time ${newConfirmed ? "": "input--disabled"}`}
-                onClick={ newConfirmed ? () => {setConfirmationClockShown(!confirmationClockShown)} : () => {} }
+                className={`input input--time ${isConfirmed ? "": "input--disabled"}`}
+                onClick={ isConfirmed ? () => {setConfirmationClockShown(!confirmationClockShown)} : () => {} }
               >
                 <FaClock className="input__icon"/>
                 <input
@@ -750,9 +772,22 @@ export default function ModalTrans(): JSX.Element {
                   type="number" 
                   className="input__field"
                   placeholder="Count"
+                  readOnly
                   value={ newStallmentsCount ?? "" }
-                  onChange={ e => {setNewStallmentsCount(Number(e.target.value))} }
                 />
+                <div className="input__incrementors">                  
+                  <div 
+                    className="input__incrementor"
+                    onClick={ () => {handleSetStallmentsCount("increment")} }
+                    children={ <FaChevronUp/> }
+                  />
+
+                  <div 
+                    className={`input__incrementor ${newStallmentsCount === 1 ? "input__incrementor--disabled" : ""}`}
+                    onClick={ () => {handleSetStallmentsCount("decrement")} }
+                    children={ <FaChevronDown/> }
+                  />
+                </div>
               </div>
             </div>
           }

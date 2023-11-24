@@ -134,6 +134,7 @@ export async function POST() {
         }
         
         const name = faker.commerce.productName();
+        const account = faker.helpers.arrayElement(accounts);
         let stallment = "";
         let amountPerStallment = (faker.number.float({ min: 100, max: 10000 })) / stallmentsCount; 
         amountPerStallment = parseFloat(amountPerStallment.toFixed(2));
@@ -151,7 +152,7 @@ export async function POST() {
             id: newTransactionID,
             name: `${name} ${i+1}/${stallmentsCount}`,
             user: "2f713bd2-2a04-46d7-930b-bba65597fd46",
-            account: faker.helpers.arrayElement(accounts),
+            account: account,
             type: type,
             category: category,
             amount: amountPerStallment,

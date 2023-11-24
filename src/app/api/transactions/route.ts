@@ -130,6 +130,8 @@ export async function PUT(req: NextRequest) {
     }
 
     else {
+      console.log(transaction)
+
       const updatedTransaction = await Transaction.findOneAndUpdate(
         { id: transaction.id },
         {
@@ -140,7 +142,7 @@ export async function PUT(req: NextRequest) {
           category: transaction.category,
           amount: transaction.amount,
           due_date: transaction.due_date,
-          confirmation_date: transaction.confirmation_date,
+          confirmation_date: transaction.confirmation_date ? new Date(transaction.confirmation_date) : null,
           recurrence: transaction.recurrence,
           stallments: transaction.stallments,
         },
@@ -150,6 +152,7 @@ export async function PUT(req: NextRequest) {
       if (!updatedTransaction)
         throw new Error("Transaction not found")
 
+      console.log(updatedTransaction)
       newTransactions.push(updatedTransaction);
     }
 
