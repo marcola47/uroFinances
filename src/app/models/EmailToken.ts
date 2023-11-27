@@ -24,4 +24,5 @@ const EmailTokenSchema = new mongoose.Schema({
   },
 });
 
+EmailTokenSchema.index({ token: 1 }, { unique: true });
 export default mongoose.models.EmailToken || mongoose.model('EmailToken', EmailTokenSchema);

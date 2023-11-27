@@ -52,8 +52,8 @@ export function ResetPassword({
     <button 
       className="btn btn--bg-blue"
       onClick={ handleResetPassword }
-      children={ type === "create" ? "CREATE NEW PASSWORD" : "RESET PASSWORD"}
-    />
+    > { type === "create" ? "CREATE NEW PASSWORD" : "RESET PASSWORD"}
+    </button>
   )
 }
 
@@ -66,7 +66,7 @@ export function UpdatePassword(): JSX.Element {
     <button 
       className="btn--update-pwd"
       onClick={ handleUpdatePassword }
-      children="UPDATE PASSWORD"
-    />
+    > UPDATE PASSWORD
+    </button>
   )
 }

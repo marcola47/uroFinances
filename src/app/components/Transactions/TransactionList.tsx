@@ -179,8 +179,8 @@ export default function TransactionList({ transactions, recurrences, type }: Tra
       <button 
         className={`btn btn--full ${type === 'income' ? "btn--bg-green" : "btn--bg-red"}`}
         onClick={ () => {setModalTrans({ type: type, operation: "POST" })} }
-        children={`ADD ${type.toUpperCase()}`}
-      />
+      > {`ADD ${type.toUpperCase()}`}
+      </button>
     </div>
   )
 }

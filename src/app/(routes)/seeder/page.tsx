@@ -18,6 +18,15 @@ export default function SeederPage() {
 
     console.log(await res.json());
   }
+
+  async function seedTransactionsBenchmark() {
+    const res = await fetch(`/api/seed/transactions/benchmark`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+
+    console.log(await res.json());
+  }
   
   return (
     <div className="seeder">
@@ -30,6 +39,11 @@ export default function SeederPage() {
         onClick={ seedTransactions }
         className="seeder__btn"
       > SEED TRANSACTIONS</div>
+
+      <div 
+        onClick={ seedTransactionsBenchmark }
+        className="seeder__btn"
+      > SEED TRANSACTIONS BENCHMARK</div>
     </div>
   )
 }

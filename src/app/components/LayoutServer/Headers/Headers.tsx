@@ -12,10 +12,9 @@ export function HeaderLineTh({ header }: { header: string }): JSX.Element {
     <h3 className="header--line-th">
       <div className="line"/>
       
-      <div 
-        className="text"
-        children={ header }
-      />
+      <div className="text">
+        { header }
+      </div>
     </h3>
   )
 }

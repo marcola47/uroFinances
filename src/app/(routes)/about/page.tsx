@@ -1,6 +1,6 @@
 import Navbar from "@/app/components/LayoutClient/Navbar/Navbar";
 
-export default function AboutPage() {
+export default function AboutPage(): JSX.Element {
   return (
     <div className="app">
       <Navbar/>

@@ -39,10 +39,9 @@ export function FormLogin(props: Props): JSX.Element {
             className="form__button__logo"
           />
 
-          <span
-            className="form__button__text"
-            children="LOGIN WITH GITHUB"
-          />
+          <span className="form__button__text">
+            LOGIN WITH GITHUB
+          </span>
         </div>
 
         <div 
@@ -55,10 +54,10 @@ export function FormLogin(props: Props): JSX.Element {
             className="form__button__logo"
           />
 
-          <span
-            className="form__button__text"
-            children="LOGIN WITH GOOGLE"
-          />
+          <span className="form__button__text">
+            LOGIN WITH GOOGLE
+          </span>
+
         </div>
       </div>
 
@@ -97,14 +96,14 @@ export function FormLogin(props: Props): JSX.Element {
       <div 
         className="form__cta"
         onClick={ () => {router.push("/register")} }
-        children="Don't have an account? Click here to register!"
-      />
+      > Don&apos;t have an account? Click here to register!
+      </div>
 
       <button 
         className="form__submit"
         onClick={ handleCredentialsLogin }
-        children="LOGIN"
-      />
+      > LOGIN
+      </button>
     </div>
   )
 }
@@ -178,10 +177,10 @@ export function FormRegister(): JSX.Element {
             className="form__button__logo"
           />
 
-          <span
-            className="form__button__text"
-            children="CONTINUE WITH GITHUB"
-          />
+          <span className="form__button__text">
+            CONTINUE WITH GITHUB
+          </span>
+
         </div>
 
         <div 
@@ -194,10 +193,9 @@ export function FormRegister(): JSX.Element {
             className="form__button__logo"
           />
 
-          <span
-            className="form__button__text"
-            children="CONTINUE WITH GOOGLE"
-          />
+          <span className="form__button__text">
+            CONTINUE WITH GOOGLE
+          </span>
         </div>
       </div>
 
@@ -262,14 +260,14 @@ export function FormRegister(): JSX.Element {
       <div 
         className="form__cta"
         onClick={ () => {router.push("/login");} }
-        children="Already have an account? Click here to login"
-      />
+      > Already have an account? Click here to login!
+      </div>
 
       <button 
         className="form__submit"
         onClick={ handleRegister }
-        children="REGISTER"
-      />
+      > REGISTER
+      </button>
     </div>
   )
 }

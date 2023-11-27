@@ -95,8 +95,8 @@ export default function Navbar(): JSX.Element {
           className="navbar__user__burger"
           onClick={ () => setNavbarOpen(!navbarOpen) }
           style={{ transform: navbarOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-          children={ <FaArrowRight/> }
-        />
+        > <FaArrowRight/>
+        </div>
       </div>
     )
   }

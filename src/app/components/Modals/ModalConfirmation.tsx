@@ -42,14 +42,14 @@ export default function ModalConfirmation(): JSX.Element {
             <button 
               className="btn btn--full btn--border"
               onClick={ handleCancel }
-              children={ modalConfirmation?.cancelText || "NO" }
-            />
+            > { modalConfirmation?.cancelText || "NO" }
+            </button>
             
             <button 
               className={ confirmBtnClassName }
               onClick={ handleConfirm }
-              children={ modalConfirmation?.confirmText || "YES" }
-            />
+            > { modalConfirmation?.confirmText || "YES" }
+            </button>
           </div>
         </div>
       </div>

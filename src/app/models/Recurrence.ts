@@ -78,5 +78,7 @@ const RecurrenceSchema = new mongoose.Schema({
   },
 }, { timestamps: false });
 
+RecurrenceSchema.index({ id: 1 }, { unique: true });
+RecurrenceSchema.index({ user: 1 });
 export default mongoose.models.Recurrence || mongoose.model('Recurrence', RecurrenceSchema);
 // I wish I could've done this with discriminators, but, next just deoesn't like it 

@@ -7,7 +7,6 @@ import dbConnection from "@/libs/configs/dbConnection";
 export async function GET(req: NextRequest) {
   try {
     await dbConnection();
-
     const { searchParams } = new URL(req.url);
     const user = searchParams.get('user');
 

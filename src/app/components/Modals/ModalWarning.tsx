@@ -24,8 +24,8 @@ export default function ModalWarning(): JSX.Element {
           <button 
             className="btn btn--full btn--bg-yellow"
             onClick={ () => setModalWarning(null) }
-            children="I UNDERSTAND"
-          />
+          > I UNDERSTAND
+          </button>
         </div>
       </div>
     </div>

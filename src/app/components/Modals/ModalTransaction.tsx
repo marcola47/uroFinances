@@ -186,6 +186,7 @@ export default function ModalTrans(): JSX.Element {
     let resTransactions: TTransaction[] = [];
     let resRecurrence: TRecurrence | null = null;
 
+    // no need for typing this one, since it'll become a TTransaction or TRecurrence
     const newFinancialEvent = {
       id: newID,
       name: newName,
@@ -632,14 +633,14 @@ export default function ModalTrans(): JSX.Element {
                   <div 
                     className={`switch switch--income ${newType === 'income' ? 'switch--selected' : ''}`}
                     onClick={ () => {setNewType('income')} }
-                    children={ <FaPlus/> }
-                  />
+                  > <FaPlus/>
+                  </div>
 
                   <div 
                     className={`switch switch--expense ${newType === 'expense' ? 'switch--selected' : ''}`}
                     onClick={ () => {setNewType('expense')} }
-                    children={ <FaMinus/> }
-                  />
+                  > <FaMinus/>
+                  </div>
                 </div>
               }
             </div>
@@ -779,14 +780,14 @@ export default function ModalTrans(): JSX.Element {
                   <div 
                     className="input__incrementor"
                     onClick={ () => {handleSetStallmentsCount("increment")} }
-                    children={ <FaChevronUp/> }
-                  />
+                  > <FaChevronUp/>
+                  </div>
 
                   <div 
                     className={`input__incrementor ${newStallmentsCount === 1 ? "input__incrementor--disabled" : ""}`}
                     onClick={ () => {handleSetStallmentsCount("decrement")} }
-                    children={ <FaChevronDown/> }
-                  />
+                  > <FaChevronDown/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -866,15 +867,15 @@ export default function ModalTrans(): JSX.Element {
               <button 
                 className="btn btn--bg-red"
                 onClick={ showConfirmation }
-                children={`DELETE ${modalTrans?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
-              />
+              > {`DELETE ${modalTrans?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
+              </button>
             }
 
             <button 
               className="btn btn--bg-blue"
               onClick={ handleSetFinancialEvent }
-              children={ modalDesc }
-            />
+            > { modalDesc }
+            </button>
           </div>
         </div>
 

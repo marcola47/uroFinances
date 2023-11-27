@@ -14,8 +14,8 @@ export default function MonthTab(): JSX.Element {
       <div 
         className="month-tab__btn month-tab__btn--prev"
         onClick={ () => setDate(new Date(date.getFullYear(), date.getMonth() - 1)) }
-        children={ <FaChevronLeft/> }
-      />
+      > <FaChevronLeft/>
+      </div>
     
       <div className="month-tab__month">
         <span>{ getMonthName(date.getMonth()) } </span>
@@ -25,8 +25,8 @@ export default function MonthTab(): JSX.Element {
       <div 
         className="month-tab__btn month-tab__btn--next"
         onClick={ () => setDate(new Date(date.getFullYear(), date.getMonth() + 1)) }
-        children={ <FaChevronRight/> }
-      />
+      > <FaChevronRight/>
+      </div>
     </div>
   )
 }

@@ -108,8 +108,8 @@ export default function CreatePasswordPage(): JSX.Element {
         <button 
           className="form__submit"
           onClick={ handlePasswordReset }
-          children="RESET PASSWORD"
-        />
+        > RESET PASSWORD
+        </button>
       </div>
     </div>
   )

@@ -187,8 +187,8 @@ export async function POST() {
       }
     }
 
-    recurrences.forEach(async recurrence => await Recurrence.create(recurrence));
-    transactions.forEach(async transaction => await Transaction.create(transaction));
+    await Recurrence.insertMany(recurrences);
+    await Transaction.insertMany(transactions);
     return NextResponse.json({ status: 200 });
   }
 

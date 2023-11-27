@@ -39,8 +39,8 @@ export default function List({ className = "", id = "", elements, ListItem, styl
       className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} ${className}`} 
       id={ id } 
       style={ style }
-      ref={ listRef } 
-      children={ elements.map(element => { return <ListItem itemData={ element } key={ element.id ?? uuid() }/> }) }
-    />
+      ref={ listRef }
+    > { elements.map(element => { return <ListItem itemData={ element } key={ element.id ?? uuid() }/> }) }
+    </ul>
   )
 }

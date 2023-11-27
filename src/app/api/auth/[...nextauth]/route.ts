@@ -3,7 +3,7 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import login from "../login/route";
+import login from "@/libs/helpers/login";
 import User from "@/app/models/User";
 import dbConnection from "@/libs/configs/dbConnection";
 

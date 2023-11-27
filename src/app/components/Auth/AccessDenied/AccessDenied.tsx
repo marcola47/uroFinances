@@ -12,8 +12,8 @@ export default function AccessDenied(): JSX.Element {
       <button
         className="btn btn--bg-blue"
         onClick={ () => router.push('/') }
-        children="GO TO HOME PAGE"
-      />
+      > GO TO HOME PAGE
+      </button>
     </div>
   )
 }

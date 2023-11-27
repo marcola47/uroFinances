@@ -108,5 +108,6 @@ const TransactionSchema = new mongoose.Schema({
   }
 }, { timestamps: false });
 
+TransactionSchema.index({ id: 1 }, { unique: true });
+TransactionSchema.index({ user: 1 });
 export default mongoose.models.Transaction || mongoose.model("Transaction", TransactionSchema);
-// I wish I could've done this with discriminators, but, next just deoesn't like it 

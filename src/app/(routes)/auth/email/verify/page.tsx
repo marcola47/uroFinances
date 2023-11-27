@@ -85,13 +85,12 @@ export default function VerifyEmailPage(): JSX.Element {
         ? <button 
             className="btn btn--bg-blue"
             onClick={ () => {handleSendEmail("resend")} }
-            children="SEND EMAIL AGAIN"
-          />
+          > SEND EMAIL AGAIN
+          </button>
         
-        : <button 
-            className="btn btn--disabled btn--bg-blue"
-            children="EMAIL SENT"
-          />
+        : <button className="btn btn--disabled btn--bg-blue">
+            EMAIL SENT
+          </button>
       }
     </div>
   )

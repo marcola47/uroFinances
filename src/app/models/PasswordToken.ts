@@ -24,4 +24,6 @@ const PasswordTokenSchema = new mongoose.Schema({
   },
 });
 
+
+PasswordTokenSchema.index({ token: 1 }, { unique: true });
 export default mongoose.models.PasswordToken || mongoose.model('PasswordToken', PasswordTokenSchema);
