@@ -76,3 +76,30 @@ export async function POST(req: NextRequest) {
     })
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    await dbConnection();
+    const { recurrence, updateType, confirmationDate } = await req.json(); 
+    let dbTransactions: TTransaction[] = [];
+
+    if (updateType === "all")
+      dbTransactions = await Transaction.find({ recurrence: recurrence.id });
+
+    else if (updateType === "future") {
+      dbTransactions = await Transaction.find({ 
+        recurrence: recurrence.id, 
+        due_date: { $gte: new Date() } 
+      });
+    }
+  }
+
+  catch(err) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500, 
+      error: err 
+    })
+  }
+}

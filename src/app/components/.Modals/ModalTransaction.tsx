@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 import { useUserContext } from "@/app/context/User";
 import { useUIContext } from "@/app/context/Ui";
+import { useDateContext } from "@/app/context/Date";
 import { useTransactionsContext } from "@/app/context/Transactions";
 
 import formatCurrency from "@/libs/helpers/formatCurrency";
@@ -32,6 +33,7 @@ export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
   const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
   const { modalTrans, setModalTrans, setModalWarning, setModalConfirmation } = useUIContext();
+  const { date } = useDateContext();
   
   const [dueClockShown, setDueClockShown] = useState<boolean>(false);
   const [confirmationClockShown, setConfirmationClockShown] = useState<boolean>(false);
@@ -179,6 +181,175 @@ export default function ModalTrans(): JSX.Element {
       setCategoryListShown(list);
   }
 
+  // handles single transactions and updates of type "current"
+  async function handleSetTransaction() {
+    const newTransaction = {
+      id: newID,
+      name: newName,
+      user: user!.id,
+      account: newAccount,
+      type: newType,
+      category: newCategory,
+      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
+      reg_date: newRegDate,
+      due_date: newDueDate,
+      confirmation_date: isConfirmed ? newConfirmationDate : undefined,
+    }
+
+    const res = await fetch('/api/transactions', {
+      headers: { type: "application/json" },
+      method: modalTrans!.operation,
+      body: JSON.stringify({ transaction: newTransaction })
+    })
+
+    const { error, data } = await res.json();
+        
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (modalTrans!.operation === "POST") {
+      const transactionsCopy = [...transactions, data];
+      setTransactions(transactionsCopy);
+    }
+
+    else if (modalTrans!.operation === "PUT") {
+      const transactionsCopy = transactions.map(t => {
+        if (t.id === data.id)
+          return data;
+
+        else 
+          return t;
+      })
+
+      setTransactions(transactionsCopy);
+    }
+  }
+
+  // handles stallments updates of type "future" and "all"
+  async function handleSetStallments() {
+    if (!newStallmentsPeriod) 
+      return alert("Stallments period is required");
+
+    if (!newStallmentsCount || newStallmentsCount === 0) 
+      return alert("Stallments count is required");
+
+    const newTransaction = {
+      id: newID,
+      name: newName,
+      user: user!.id,
+      account: newAccount,
+      type: newType,
+      category: newCategory,
+      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
+      reg_date: newRegDate,
+      due_date: newDueDate,
+      confirmation_date: isConfirmed ? newConfirmationDate : undefined,
+      stallments: newStallments,
+      stallments_count: newStallmentsCount,
+      stallments_current: newStallmentsCurrent,
+      stallments_period: newStallmentsPeriod,
+    }
+
+    if (modalTrans!.operation === "POST") {
+      const res = await fetch('/api/stallments', {
+        headers: { type: "application/json" },
+        method: "POST",
+        body: JSON.stringify({ transaction: newTransaction })
+      })
+
+      const { error, data } = await res.json();
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      const transactionsCopy = [...transactions, ...data];
+      setTransactions(transactionsCopy);
+    }
+
+    else if (modalTrans!.operation === "PUT") {
+      const res = await fetch('/api/stallments', {
+        headers: { type: "application/json" },
+        method: "PUT",
+        body: JSON.stringify({ 
+          transaction: newTransaction,
+          updateType: updateType,
+        })
+      })
+
+      const { error, data } = await res.json();
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      if (data.transactions.length > 0) {
+        let transactionsCopy = transactions.map(transaction => {
+          const matchingResTransaction = data.transactions.find((t: TTransaction) => t.id === transaction.id);
+          return matchingResTransaction || transaction;
+        });
+
+        if (data.stallmentsForDeletion.length > 0)
+          transactionsCopy = transactionsCopy.filter(t => !data.forDeletion.includes(t.id))
+
+        if (data.stallmentsForInsertion.length > 0) 
+          transactionsCopy = [...transactionsCopy, ...data.forInsertion];
+
+        setTransactions(transactionsCopy);
+      }
+    }
+  }
+
+  // handles recurrence updates of type "future" and "all"
+  async function handleSetRecurrence() {
+    if (!newRecurrencePeriod)
+      return alert("Recurrence period is required");
+    
+    const newRecurrence = {
+      id: newID,
+      name: newName,
+      user: user!.id,
+      account: newAccount,
+      type: newType,
+      category: newCategory,
+      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
+      reg_date: newRegDate,
+      due_date: newDueDate,
+      recurrence_period: newRecurrencePeriod
+    }
+
+    const res = await fetch('/api/recurrences', {
+      headers: { type: "application/json" },
+      method: modalTrans!.operation,
+      body: JSON.stringify({ 
+        recurrence: newRecurrence,
+        confirmationDate: isConfirmed ? newConfirmationDate : undefined,
+        currentDate: date,
+        updateType: updateType
+      })
+    })
+
+    const { error, data } = await res.json();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (modalTrans?.operation === "POST") {
+      setRecurrences(prevRecurrences => [...prevRecurrences, data.recurrence]);
+      setTransactions(prevTransactions => [...prevTransactions, data.transaction]);
+    }
+
+    else if (modalTrans?.operation === "PUT") {
+
+    }
+  }
+
   async function handleSetFinancialEvent() {
     if (!newAmount || newAmount === "0" || newAmount === "0,00") 
       return alert("Amount is required");
@@ -189,119 +360,27 @@ export default function ModalTrans(): JSX.Element {
     if (!newName) 
       return alert("Name is required");
 
+    if (modalTrans?.operation === "POST") {
+      if (isRecurring) 
+        await handleSetRecurrence();
 
-    let resTransactions: TTransaction[] = [];
-    let resRecurrence: TRecurrence | null = null;
-    let resStallmentsForInsertion: TTransaction[] = [];
-    let resStallmentsForDeletion: TUUID[] = [];
+      else if (isInStallments) 
+        await handleSetStallments();
 
-    // no need for typing this one, since it'll become a TTransaction or TRecurrence
-    const newFinancialEvent = {
-      id: newID,
-      name: newName,
-      user: user!.id,
-      account: newAccount,
-      type: newType,
-      category: newCategory,
-      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
-      reg_date: newRegDate,
-      due_date: newDueDate,
-    }
-    
-    if (isRecurring && newRecurrencePeriod) {
-      (newFinancialEvent as TRecurrence).recurrence_period = newRecurrencePeriod;
-
-      const res = await fetch('/api/recurrences', {
-        headers: { type: "application/json" },
-        method: modalTrans!.operation,
-        body: JSON.stringify({ 
-          recurrence: newFinancialEvent,
-          confirmationDate: isConfirmed ? newConfirmationDate : undefined,
-          user: user?.id,
-          updateType: updateType
-        })
-      })
-
-      const { status, err, data } = await res.json();
-
-      if (status >= 400 && status < 200) {
-        console.log(err);
-        return;
-      }
-      
-      resRecurrence = data.recurrence;
-      data.transaction && resTransactions.push(data.transaction);
+      else 
+        await handleSetTransaction();
     }
 
-    else {      
-      (newFinancialEvent as TTransaction).confirmation_date = isConfirmed ? new Date(newConfirmationDate) : undefined;
-      (newFinancialEvent as TTransaction).recurrence = newRecurrence;
-      (newFinancialEvent as TTransaction).stallments = newStallments;
+    else if (modalTrans?.operation === "PUT") {
+      if (updateType === "current")
+        await handleSetTransaction();
 
-      if (isInStallments) {
-        (newFinancialEvent as TTransaction).stallments_count = newStallmentsCount;
-        (newFinancialEvent as TTransaction).stallments_current = newStallmentsCurrent;
-        (newFinancialEvent as TTransaction).stallments_period = newStallmentsPeriod;
-      }
+      else {
+        if (isRecurring) 
+          await handleSetRecurrence();
 
-      console.log(newFinancialEvent)
-      const res = await fetch('/api/transactions', {
-        headers: { type: "application/json" },
-        method: modalTrans!.operation,
-        body: JSON.stringify({ 
-          transaction: newFinancialEvent,
-          user: user?.id,
-          updateType: updateType
-        })
-      })
-
-      const { status, err, data } = await res.json();
-
-      if (status >= 400 && status < 200) {
-        console.log(err);
-        return;
-      }
-
-      resTransactions = [...resTransactions, ...data.transactions];
-      resStallmentsForInsertion = data.forInsertion;
-      resStallmentsForDeletion = data.forDeletion;
-    }
-
-    if (modalTrans!.operation === "POST") {
-      if (resRecurrence) 
-        setRecurrences(prevRecurrences => [...prevRecurrences, resRecurrence as TRecurrence]);
-
-      if (resTransactions.length > 0)
-        setTransactions(prevTransactions => [...prevTransactions, ...resTransactions]);
-    }
-
-    else if (modalTrans!.operation === "PUT") {
-      
-      if (resTransactions.length > 0) {
-        let transactionsCopy = transactions.map(transaction => {
-          const matchingResTransaction = resTransactions.find(resTransaction => resTransaction.id === transaction.id);
-          return matchingResTransaction ? { ...transaction, ...matchingResTransaction } : transaction;
-        });
-
-        if (resStallmentsForDeletion.length > 0)
-          transactionsCopy = transactionsCopy.filter(t => !resStallmentsForDeletion.includes(t.id))
-
-        if (resStallmentsForInsertion.length > 0)
-          transactionsCopy = [...transactionsCopy, ...resStallmentsForInsertion];
-      
-        setTransactions(transactionsCopy);
-      }
-
-      if (resRecurrence) {
-        const recurrencesCopy = recurrences.map(r => {
-          if (r.id === resRecurrence!.id)
-            return resRecurrence!;
-
-          else 
-            return r;
-        })
-
-        setRecurrences(recurrencesCopy);
+        else if (isInStallments) 
+          await handleSetStallments();
       }
     }
 
