@@ -106,7 +106,11 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
 
       <div className="transaction__content">
         <div className="transaction__name">
-          { transaction.name }
+          { 
+            transaction.stallments 
+            ? `${transaction.name} ${transaction.stallments_current}/${transaction.stallments_count}`
+            : transaction.name
+          }
         </div>
         
         <div className="transaction__info">
@@ -133,31 +137,34 @@ export default function Transaction({ itemData: transaction }: { itemData: TTran
           }
         </div>
 
-        <div className="transaction__categories">
-          <div 
-            className="transaction__category"
-            style={ transactionCategory.root.style }
-          > { transactionCategory.root.name }
+        {
+          transaction.category.root &&
+          <div className="transaction__categories">
+            <div 
+              className="transaction__category"
+              style={ transactionCategory.root.style }
+            > { transactionCategory.root.name }
+            </div>
+      
+            {
+              transaction.category.child &&
+              <div 
+                className="transaction__category"
+                style={ transactionCategory.child.style }
+              > { transactionCategory.child.name }
+              </div>
+            }
+  
+            {
+              transaction.category.grandchild &&
+              <div 
+                className="transaction__category"
+                style={ transactionCategory.grandchild.style }
+              > { transactionCategory.grandchild.name }
+              </div>
+            }
           </div>
-    
-          {
-            transaction.category.child &&
-            <div 
-              className="transaction__category"
-              style={ transactionCategory.child.style }
-            > { transactionCategory.child.name }
-            </div>
-          }
-
-          {
-            transaction.category.grandchild &&
-            <div 
-              className="transaction__category"
-              style={ transactionCategory.grandchild.style }
-            > { transactionCategory.grandchild.name }
-            </div>
-          }
-        </div>
+        }
       </div>
 
       <div className="transaction__status">

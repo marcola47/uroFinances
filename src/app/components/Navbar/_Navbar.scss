@@ -1,4 +1,4 @@
-@import '../../../../css/variables';
+@import '../../../css/variables';
 
 .navbar {
   display: flex;
@@ -17,6 +17,10 @@
 
   &--closed {
     width: 64px;
+    align-items: flex-start;
+
+    & > * 
+    { width: 64px }
 
     .navbar__user {
       align-items: center;

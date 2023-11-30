@@ -6,7 +6,7 @@ import { useUIContext } from "@/app/context/Ui";
 import { useDateContext } from "@/app/context/Date";
 
 import List from "../List/List";
-import { HeaderLineTh } from "../LayoutServer/Headers/Headers";
+import { HeaderLineTh } from "../Headers/Headers";
 import Recurrence from "./Recurrence"
 import Transaction from "./Transaction";
 import TransactionsControl from "./TransactionsControls";

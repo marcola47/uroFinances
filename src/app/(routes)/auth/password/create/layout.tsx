@@ -1,4 +1,4 @@
-import Navbar from "@/app/components/LayoutClient/Navbar/Navbar";
+import Navbar from "@/app/components/Navbar/Navbar";
 
 export default function CreatePasswordLayout({ 
   children 

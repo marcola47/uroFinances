@@ -153,13 +153,13 @@
   &__info {
     display: flex;
     gap: 8px;
-    margin-bottom: 12px;
     color: $grey-250;
   }
 
   &__categories {
     display: flex;
     gap: 8px;
+    margin-top: 12px;
   }
 
   &__category {

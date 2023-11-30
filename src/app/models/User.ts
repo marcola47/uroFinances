@@ -134,6 +134,18 @@ const userSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
       required: true
+    },
+
+    dark_mode: {
+      type: Boolean,
+      default: true,
+      required: true
+    },
+    
+    show_category_icons: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   }
 });

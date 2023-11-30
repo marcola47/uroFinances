@@ -1,7 +1,7 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
-import ModalConfirmation from "@/app/components/Modals/ModalConfirmation";
-import ModalWarning from "@/app/components/Modals/ModalWarning";
+import ModalConfirmation from "@/app/components/.Modals/ModalConfirmation";
+import ModalWarning from "@/app/components/.Modals/ModalWarning";
 
 type ModalTrans = Partial<TTransaction> & Partial<TRecurrence> & {
   operation: "PUT" | "POST";

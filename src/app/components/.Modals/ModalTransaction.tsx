@@ -1,4 +1,4 @@
-// sorry, this is a big one
+// REFACTOR THIS ASAP
 // fix dropdown list to be below the input
 
 import { useState, useEffect } from "react";
@@ -30,7 +30,7 @@ import {
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
-  const { transactions, setTransactions, setRecurrences } = useTransactionsContext();
+  const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
   const { modalTrans, setModalTrans, setModalWarning, setModalConfirmation } = useUIContext();
   
   const [dueClockShown, setDueClockShown] = useState<boolean>(false);
@@ -75,11 +75,10 @@ export default function ModalTrans(): JSX.Element {
 
   // reset selected category, reset category list, set new modal description
   useEffect(() => {
-    console.log(modalTrans)
     setDisplayCategories(user!.categories.filter(c => c.type === newType));
     
     if (newCategory !== modalTrans!.category)
-      setNewCategory({ root: null, child: null, grandchild: null  });
+      setNewCategory({ root: null, child: null, grandchild: null });
 
     if (modalTrans!.operation === "POST") {
       switch (newType) {
@@ -108,6 +107,14 @@ export default function ModalTrans(): JSX.Element {
       setIsConfirmed(true);
     
   }, [newDueDate])
+
+  // If transaction is part of a recurrence, set the period the recurrence period
+  useEffect(() => {
+    if (newRecurrence) {
+      const recurrence = recurrences.find(recurrence => recurrence.id === newRecurrence);
+      setNewRecurrencePeriod(recurrence?.recurrence_period);
+    }
+  }, [newRecurrence])
   
   function handleSetNewTime(newTime: Date, type: string) {
     if (type === "due") {
@@ -185,6 +192,8 @@ export default function ModalTrans(): JSX.Element {
 
     let resTransactions: TTransaction[] = [];
     let resRecurrence: TRecurrence | null = null;
+    let resStallmentsForInsertion: TTransaction[] = [];
+    let resStallmentsForDeletion: TUUID[] = [];
 
     // no need for typing this one, since it'll become a TTransaction or TRecurrence
     const newFinancialEvent = {
@@ -207,7 +216,9 @@ export default function ModalTrans(): JSX.Element {
         method: modalTrans!.operation,
         body: JSON.stringify({ 
           recurrence: newFinancialEvent,
-          confirmationDate: isConfirmed ? newConfirmationDate : undefined
+          confirmationDate: isConfirmed ? newConfirmationDate : undefined,
+          user: user?.id,
+          updateType: updateType
         })
       })
 
@@ -237,7 +248,11 @@ export default function ModalTrans(): JSX.Element {
       const res = await fetch('/api/transactions', {
         headers: { type: "application/json" },
         method: modalTrans!.operation,
-        body: JSON.stringify({ transaction: newFinancialEvent })
+        body: JSON.stringify({ 
+          transaction: newFinancialEvent,
+          user: user?.id,
+          updateType: updateType
+        })
       })
 
       const { status, err, data } = await res.json();
@@ -247,11 +262,13 @@ export default function ModalTrans(): JSX.Element {
         return;
       }
 
-      resTransactions = [...resTransactions, ...data];
+      resTransactions = [...resTransactions, ...data.transactions];
+      resStallmentsForInsertion = data.forInsertion;
+      resStallmentsForDeletion = data.forDeletion;
     }
 
     if (modalTrans!.operation === "POST") {
-      if (resRecurrence) // as TRecurrence needed because ts would complain that you cannot insert TRecurrence | null into TRecurrence[]
+      if (resRecurrence) 
         setRecurrences(prevRecurrences => [...prevRecurrences, resRecurrence as TRecurrence]);
 
       if (resTransactions.length > 0)
@@ -259,32 +276,33 @@ export default function ModalTrans(): JSX.Element {
     }
 
     else if (modalTrans!.operation === "PUT") {
+      
       if (resTransactions.length > 0) {
-        const transactionsCopy = transactions.map(transaction => {
+        let transactionsCopy = transactions.map(transaction => {
           const matchingResTransaction = resTransactions.find(resTransaction => resTransaction.id === transaction.id);
           return matchingResTransaction ? { ...transaction, ...matchingResTransaction } : transaction;
         });
+
+        if (resStallmentsForDeletion.length > 0)
+          transactionsCopy = transactionsCopy.filter(t => !resStallmentsForDeletion.includes(t.id))
+
+        if (resStallmentsForInsertion.length > 0)
+          transactionsCopy = [...transactionsCopy, ...resStallmentsForInsertion];
       
         setTransactions(transactionsCopy);
       }
 
-      // recurrence: 
-      // update future recurrences:
-      // -- update current transaction and recurrence data
-      // update current recurrence:
-      // -- update current transaction only
+      if (resRecurrence) {
+        const recurrencesCopy = recurrences.map(r => {
+          if (r.id === resRecurrence!.id)
+            return resRecurrence!;
 
-      // stallments:
-      // increase count:
-      // -- change the name of all stallments with the new count and create new transactions for the new stallments
-      // decrease count:
-      // -- change the name of all stallments with the new count and delete all stallments with the count greater than the new count
+          else 
+            return r;
+        })
 
-      // single transaction:
-      // make it recurring:
-      // -- create new recurrence with the transaction data and update the transaction with the recurrence id
-      // make it stallments:
-      // -- create new stallments with the transaction data and update the transaction with the stallments id
+        setRecurrences(recurrencesCopy);
+      }
     }
 
     setModalTrans(null);
@@ -736,8 +754,8 @@ export default function ModalTrans(): JSX.Element {
             !modalTrans?.recurrence && !modalTrans?.recurrence_period &&
             <div className="modal--trans__row modal--trans__row--4">
               <div 
-                className={`toggle ${isInStallments ? "toggle--toggled" : ""} ${modalTrans?.stallments_period ? "toggle--disabled" : ""}`}
-                onClick= { modalTrans?.stallments_period ? () => {} : () => {handleSetRecurrenceType("stallments")} }
+                className={`toggle ${isInStallments ? "toggle--toggled" : ""} ${modalTrans?.operation === "PUT" ? "toggle--disabled" : ""}`}
+                onClick= { modalTrans?.operation === "PUT" ? () => {} : () => {handleSetRecurrenceType("stallments")} }
               >
                 <div className={`toggle__checkbox ${isInStallments ? "toggle__checkbox--toggled" : ""}`}/>
                 <div className="toggle__label">In stallments</div>
@@ -794,17 +812,17 @@ export default function ModalTrans(): JSX.Element {
           }
 
           {
-            !modalTrans?.stallments_period && !modalTrans?.recurrence &&
+            !modalTrans?.stallments_period && 
             <div className="modal--trans__row modal--trans__row--5">
               <div 
-                className={`toggle ${isRecurring ? "toggle--toggled" : ""} ${modalTrans?.recurrence_period ? "toggle--disabled" : ""}`}
-                onClick= { modalTrans?.recurrence_period ? () => {} : () => {handleSetRecurrenceType("recurring")} }
+                className={`toggle ${isRecurring ? "toggle--toggled" : ""} ${modalTrans?.operation === "PUT" ? "toggle--disabled" : ""}`}
+                onClick= { modalTrans?.operation === "PUT" ? () => {} : () => {handleSetRecurrenceType("recurring")} }
               >
                 <div className={`toggle__checkbox ${isRecurring ? "toggle__checkbox--toggled" : ""}`}/>
                 <div className="toggle__label">Recurring</div>
               </div>
 
-              <div className={`input__wrapper ${modalTrans?.recurrence_period ? "input--disabled" : ""}`}>
+              <div className="input__wrapper">
                 <div className={`input input--category input--recurring-period ${isRecurring ? "" : "input--disabled"}`}>
                   <FaCalendarDay className="input__icon"/>
                   <FaChevronDown className="input__chevron"/>
@@ -819,7 +837,7 @@ export default function ModalTrans(): JSX.Element {
                 </div>
 
                 {
-                  isRecurring && recurringPeriodListShown && !modalTrans?.recurrence_period &&
+                  isRecurring && recurringPeriodListShown &&
                   <List 
                     className="input__dropdown"
                     elements={ recurrencePeriods }
@@ -833,7 +851,7 @@ export default function ModalTrans(): JSX.Element {
 
         <div className="modal--trans__submit">
           {
-            (modalTrans?.stallments_period || modalTrans?.recurrence_period) && modalTrans?.operation === "PUT" &&
+            (isInStallments|| isRecurring) && modalTrans?.operation === "PUT" &&
             <div className="modal--trans__update-types">
               <div 
                 className={`toggle toggle--small ${updateType === "current" ? "toggle--toggled" : "toggle--untoggled"}`}

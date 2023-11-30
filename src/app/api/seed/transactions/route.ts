@@ -150,7 +150,7 @@ export async function POST() {
 
           const newTransaction = {
             id: newTransactionID,
-            name: `${name} ${i+1}/${stallmentsCount}`,
+            name: name,
             user: "2f713bd2-2a04-46d7-930b-bba65597fd46",
             account: account,
             type: type,

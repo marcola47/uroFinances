@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
@@ -22,12 +22,40 @@ import {
 export default function Navbar(): JSX.Element {
   const { user } = useUserContext(); 
   const { navbarOpen, setNavbarOpen } = useUIContext();
+  const navbarRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (navbarOpen) {
+      function handleClickOutside(event: MouseEvent) {
+        const isDescendant = (parent: Node, child: Node | null): boolean => {
+          if (!parent || !child) 
+            return false;
+
+          if (parent === child) 
+            return true;
+
+          return isDescendant(parent, child.parentNode as Node | null);
+        };
+  
+        if (navbarRef.current && !isDescendant(navbarRef.current, event.target as Node)) 
+          setNavbarOpen(false);
+      }
+  
+      window.addEventListener("mousedown", handleClickOutside);
+      return () => { window.removeEventListener("mousedown", handleClickOutside) };
+    }
+  }, [navbarOpen]);
+  
+
   function NavbarLink({ 
-    href, name, icon 
+    href, 
+    name, 
+    icon 
   }: { 
-    href: string, name: string, icon: JSX.Element 
+    href: string, 
+    name: string, 
+    icon: JSX.Element 
   }): JSX.Element {    
     return (
       <Link
@@ -44,7 +72,7 @@ export default function Navbar(): JSX.Element {
       </Link>
     )
   }
-  
+
   function NavbarUser({ user }: { user: TUser | null }): JSX.Element {
     const [userImgSrc, setUserImgSrc] = useState(user?.image || '/user.svg')
  
@@ -104,6 +132,7 @@ export default function Navbar(): JSX.Element {
   return (
     <div 
       className={`navbar ${navbarOpen ? '' : 'navbar--closed'}`}
+      ref={ navbarRef }
       onMouseEnter={ () => { if (user?.settings?.open_navbar_on_hover) setNavbarOpen(true) } }
       onMouseLeave={ () => { if (user?.settings?.open_navbar_on_hover) setNavbarOpen(false) } }
     >

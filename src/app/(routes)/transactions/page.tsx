@@ -5,11 +5,11 @@ import { useTransactionsContext } from "@/app/context/Transactions";
 import { useDateContext } from "@/app/context/Date";
 import { useUIContext } from "@/app/context/Ui";
 
-import { getMonthRange, shouldRecurrenceShow } from "@/libs/helpers/dateFunctions";
+import { getMonthRange, shouldRecurrenceShow, applyTimeZoneOffset } from "@/libs/helpers/dateFunctions";
 
-import MonthTab from "@/app/components/LayoutClient/MonthTab/MonthTab"
-import TransactionList from "@/app/components/Transactions/TransactionList";
-import ModalTransaction from "@/app/components/Modals/ModalTransaction";
+import MonthTab from "@/app/components//MonthTab/MonthTab"
+import TransactionList from "@/app/components/.Transactions/TransactionList";
+import ModalTransaction from "@/app/components/.Modals/ModalTransaction";
 
 export default function TransactionsPage(): JSX.Element {
   const [thisMonthTransactions, setThisMonthTransactions] = useState<TTransaction[]>([]);
@@ -20,13 +20,16 @@ export default function TransactionsPage(): JSX.Element {
   const { date } = useDateContext();
 
   useEffect(() => {
-    const { startDate, endDate } = getMonthRange(new Date(date))
     const confirmedRecurrences: TUUID[] = [];
     const confirmedTransactions: TTransaction[] = [];
+    const { startDate, endDate } = getMonthRange(new Date(date));
 
     transactions.forEach(t => {
-      const isDueDateBetween = new Date(t.due_date) >= startDate && new Date(t.due_date) <= endDate;
-      const isConfirmedDateBetween = t.confirmation_date && (new Date(t.confirmation_date) >= startDate && new Date(t.confirmation_date) <= endDate);
+      const localizedDueDate = applyTimeZoneOffset(new Date(t.due_date));
+      const localizedConfirmationDate = applyTimeZoneOffset(new Date(t.confirmation_date!));
+
+      const isDueDateBetween = localizedDueDate >= startDate && localizedDueDate <= endDate;
+      const isConfirmedDateBetween = t.confirmation_date && (localizedConfirmationDate >= startDate && localizedConfirmationDate <= endDate);
 
       if (t.recurrence) {
         if (isDueDateBetween) {

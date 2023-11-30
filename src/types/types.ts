@@ -35,7 +35,9 @@ type TUser = {
   categories: TUserCategory[],
   settings: {
     open_navbar_on_hover: boolean,
-    hide_scrollbars: boolean
+    hide_scrollbars: boolean,
+    dark_mode: boolean,
+    show_category_icons: boolean
   }
 };
 

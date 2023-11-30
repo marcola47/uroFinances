@@ -50,3 +50,22 @@ export function shouldRecurrenceShow(due_date, cur_date, period) {
     default: return false;
   }
 }
+
+export function getTimeZoneOffset() {
+  const currentDate = new Date();
+  const offsetInMinutes = currentDate.getTimezoneOffset();
+  const offsetInHours = -offsetInMinutes / 60;
+  return offsetInHours;
+}
+
+export function applyTimeZoneOffset(originalDate) {
+    const timezoneOffset = getTimeZoneOffset();
+
+    const offsetInMinutes = timezoneOffset * 60;
+    const originalTimestamp = originalDate.getTime();
+    
+    const adjustedTimestamp = originalTimestamp + offsetInMinutes * 60 * 1000;
+    const adjustedDate = new Date(adjustedTimestamp);
+  
+    return adjustedDate;
+}
