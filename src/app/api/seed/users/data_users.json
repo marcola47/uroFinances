@@ -386,7 +386,9 @@
     ],
     "settings": {
       "open_navbar_on_hover": false,
-      "hide_scrollbars": true
+      "hide_scrollbars": true,
+      "dark_mode": true,
+      "show_category_icons": false
     }
   }
 ]

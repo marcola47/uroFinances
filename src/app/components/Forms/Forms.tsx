@@ -156,7 +156,6 @@ export function FormRegister(): JSX.Element {
       body: JSON.stringify({ name, email, password }),
     });
 
-    console.log(await res.json());
     await signIn("credentials", {
       email: emailRef.current?.value,
       password: passwordRef.current?.value,

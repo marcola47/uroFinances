@@ -28,7 +28,6 @@ import {
   FaCalendarDay, 
   FaCirclePlus 
 } from "react-icons/fa6";
-import { set } from "mongoose";
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();

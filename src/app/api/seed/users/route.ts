@@ -1,20 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
 import User from '@/app/models/User';
 import users from './data_users.json' assert { type: "json" };
+import dbConnection from '@/libs/configs/dbConnection';
 
 export async function POST(req: NextRequest) {
-  const url = new URL(req.url);
-  const type = url.searchParams.get('type');
-
-  type SeedCollectionParams = {
-    Model: mongoose.Model<any>;
-    data: any[];
-  }
-
-  async function seedUsers() {
+  try {  
+    await dbConnection();
     await User.deleteMany({})
     
     for (const user of users) {
@@ -26,28 +19,22 @@ export async function POST(req: NextRequest) {
         email: user.email,
         password: hash,
         provider: user.provider,
+        providerID: user.id,
         image: user.image,
         emailVerified: user.emailVerified,
         categories: user.categories,
         accounts: user.accounts,
         settings: {
           open_navbar_on_hover: user.settings.open_navbar_on_hover,
-          hide_scrollbars: user.settings.hide_scrollbars
+          hide_scrollbars: user.settings.hide_scrollbars,
+          dark_mode: user.settings.dark_mode,
+          show_category_icons: user.settings.show_category_icons
         }
       });
   
       await User.create(newUser);
     }
-  }
-  
-  try {  
-    await mongoose.connect(process.env.MONGO_URI ?? "");
-    
-    switch (type) {
-      case 'users': await seedUsers(); break;
-    }
 
-    await mongoose.connection.close();
     return NextResponse.json({ status: 200 });
   }
   
