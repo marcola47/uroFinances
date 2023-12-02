@@ -61,13 +61,13 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  catch (err) {
+  catch (err: any) {
     console.log(err);
 
-    return NextResponse.json({
-      status: 500,
-      error: err
-    })
+    return NextResponse.json({ 
+      status: 500, 
+      error: err.message || err
+    });
   }
 }
 
@@ -144,7 +144,12 @@ export async function PUT(req: NextRequest) {
     }
 
     updatedTransactions = dbTransactions.map(t => {      
-      if (updateType === "all" || (updateType === "future" && t.stallments_current >= transaction.stallments_current)) {
+      const shouldUpdate = 
+        updateType === "all" || 
+        (updateType === "future" && t.stallments_current >= transaction.stallments_current) ||
+        (updateType === "current" && t.stallments_current === transaction.stallments_current)
+      
+      if (shouldUpdate) {
         if (nameChanged)
           t.name = transaction.name;
 
@@ -199,16 +204,61 @@ export async function PUT(req: NextRequest) {
     })
   }
 
-  catch (err) {
+  catch (err: any) {
     console.log(err);
 
-    return NextResponse.json({
-      status: 500,
-      error: err
-    })
+    return NextResponse.json({ 
+      status: 500, 
+      error: err.message || err
+    });
   }
 }
 
 export async function DELETE(req: NextRequest) {
+  try {
+    const { stallments, currentCount, deleteType } = await req.json();
+    let deletedTransactions: TTransaction[] = [];
   
+    if (deleteType === "All transactions") {
+      deletedTransactions = await Transaction.find({ stallments: stallments }).lean().select("-_id id");
+
+      if (deletedTransactions.length === 0)
+        throw new Error("No transactions found");
+
+      await Transaction.deleteMany({ stallments: stallments });
+    }
+  
+    else if (deleteType === "Future transactions") {
+      deletedTransactions = await Transaction.find({ 
+        stallments: stallments, 
+        stallments_current: { $gte: currentCount } 
+      })
+      .lean()
+      .select("-_id id");
+
+      if (deletedTransactions.length === 0)
+        throw new Error("No transactions found");
+  
+      console.log(deletedTransactions)
+      
+      await Transaction.deleteMany({
+        stallments: stallments,
+        stallments_current: { $gte: currentCount }
+      });
+    }
+
+    return NextResponse.json({
+      status: 200,
+      data: deletedTransactions.map(t => t.id)
+    })
+  }
+
+  catch (err: any) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500, 
+      error: err.message || err
+    });
+  }
 }

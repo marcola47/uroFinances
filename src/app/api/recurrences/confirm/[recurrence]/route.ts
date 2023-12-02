@@ -29,11 +29,12 @@ export async function POST(req: NextRequest, { params }: { params: { recurrence:
     })
   }
 
-  catch (err) {
-    console.log(err)
+  catch (err: any) {
+    console.log(err);
+
     return NextResponse.json({ 
       status: 500, 
-      error: err 
-    })
+      error: err.message || err
+    });
   }
 }

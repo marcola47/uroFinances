@@ -16,7 +16,7 @@
   background-color: rgba(0, 0, 0, 0.75);
 }
 
-.modal--warning, .modal--confirmation {
+.modal--warning, .modal--multi, .modal--confirmation {
   z-index: 9999;
   width: 420px;
   padding: 24px;
@@ -24,14 +24,20 @@
   background-color: hsl(215, 15%, 15%);
   text-align: center;
 }
-.modal--warning__header, .modal--confirmation__header {
+.modal--warning__header, .modal--multi__header, .modal--confirmation__header {
   font-size: 1.3rem;
 }
-.modal--warning__message, .modal--confirmation__message {
+.modal--warning__message, .modal--multi__message, .modal--confirmation__message {
   margin-bottom: 24px;
   color: hsl(215, 15%, 65%);
 }
-.modal--warning__btns, .modal--confirmation__btns {
+.modal--warning__btns, .modal--multi__btns, .modal--confirmation__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal--multi__options {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1150,8 +1156,6 @@ button {
 .btn {
   padding: 16px;
   border-radius: 3px;
-  color: black;
-  background-color: white;
   font-size: 1rem;
   font-weight: 600;
   -webkit-user-select: none;
@@ -1159,6 +1163,9 @@ button {
           user-select: none;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+}
+.btn:hover {
+  background-color: hsl(215, 15%, 20%);
 }
 .btn--full {
   width: 100%;
@@ -1175,6 +1182,18 @@ button {
 .btn--border:hover {
   color: hsl(215, 15%, 15%);
   background-color: hsl(215, 15%, 75%);
+}
+.btn--blue {
+  color: hsl(210, 90%, 50%);
+}
+.btn--green {
+  color: hsl(155, 90%, 40%);
+}
+.btn--yellow {
+  color: hsl(50, 100%, 45%);
+}
+.btn--red {
+  color: hsl(0, 90%, 52%);
 }
 .btn--bg-blue {
   color: white;

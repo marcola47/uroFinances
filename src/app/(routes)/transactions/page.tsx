@@ -24,6 +24,7 @@ export default function TransactionsPage(): JSX.Element {
     const confirmedTransactions: TTransaction[] = [];
     const { startDate, endDate } = getMonthRange(new Date(date));
 
+    // FIX: recurrences with a due date of like november 30th will show up in february as 30/02    
     transactions.forEach(t => {
       const localizedDueDate = applyTimeZoneOffset(new Date(t.due_date));
       const localizedConfirmationDate = applyTimeZoneOffset(new Date(t.confirmation_date!));

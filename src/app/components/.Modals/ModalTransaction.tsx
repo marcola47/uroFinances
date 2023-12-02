@@ -28,11 +28,12 @@ import {
   FaCalendarDay, 
   FaCirclePlus 
 } from "react-icons/fa6";
+import { set } from "mongoose";
 
 export default function ModalTrans(): JSX.Element {
   const { user } = useUserContext();
   const { transactions, setTransactions, recurrences, setRecurrences } = useTransactionsContext();
-  const { modalTrans, setModalTrans, setModalWarning, setModalConfirmation } = useUIContext();
+  const { modalTrans, setModalTrans, setModalWarning, setModalMultiSelect, setModalConfirmation } = useUIContext();
   const { date } = useDateContext();
   
   const [dueClockShown, setDueClockShown] = useState<boolean>(false);
@@ -45,7 +46,7 @@ export default function ModalTrans(): JSX.Element {
   const [modalDesc, setModalDesc] = useState<string>(".");
   const [displayCategories, setDisplayCategories] = useState<TUserCategory[]>([]);
   const [stallmentsCountWarning, setStallmentsCountWarning] = useState<boolean>(false);
-  const [updateType, setUpdateType] = useState<"current" | "future" | "all">("current");
+  const [updateType, setUpdateType] = useState<"current" | "future" | "all">(modalTrans!.recurrence_period ? "future" : "current");
   
   const [newID, setNewID] = useState<TUUID>(modalTrans!.id ?? undefined);
   const [newName, setNewName] = useState<string>(modalTrans!.name ?? "");
@@ -66,6 +67,11 @@ export default function ModalTrans(): JSX.Element {
   const [isConfirmed, setIsConfirmed] = useState<boolean>(modalTrans!.confirmation_date ? true : false);
   const [isRecurring, setIsRecurring] = useState<boolean>(modalTrans!.recurrence || modalTrans?.recurrence_period ? true : false);
   const [isInStallments, setIsInStallments] = useState<boolean>(modalTrans!.stallments ? true : false);
+  
+  // used to determine if the user is updating the current transaction but changed data affecting multiple transactions
+  const [originalRecurrencePeriod, setOriginalRecurrencePeriod] = useState<TFinancialEventPeriod | undefined>(undefined);
+  const [originalRecurrenceDueDate, setOriginalRecurrenceDueDate] = useState<Date | undefined>(undefined);
+  const [originalStallmentsCount, setOriginalStallmentsCount] = useState<number | undefined>(modalTrans!.stallments_count ?? 1);
 
   // must be objects to work with my List component
   const recurrencePeriods = [ 
@@ -110,13 +116,32 @@ export default function ModalTrans(): JSX.Element {
     
   }, [newDueDate])
 
-  // If transaction is part of a recurrence, set the period the recurrence period
+  // If transaction is part of a recurrence, set the period and due date to the recurrence's
   useEffect(() => {
     if (newRecurrence) {
       const recurrence = recurrences.find(recurrence => recurrence.id === newRecurrence);
-      setNewRecurrencePeriod(recurrence?.recurrence_period);
+
+      if (recurrence) {
+        setNewRecurrencePeriod(recurrence.recurrence_period);
+        setOriginalRecurrencePeriod(recurrence.recurrence_period);
+
+        setNewDueDate(new Date(recurrence.due_date));
+        setOriginalRecurrenceDueDate(new Date(recurrence.due_date));
+      }
     }
   }, [newRecurrence])
+
+  // If user clicks on ADD outside of the current month, set the due_date as the context date
+  useEffect(() => {
+    const dueDate = new Date(newDueDate);
+    const curDate = new Date(date);
+    const isDifferentDate = dueDate.getMonth() !== curDate.getMonth() || dueDate.getFullYear() !== curDate.getFullYear();
+
+    if (modalTrans?.operation === "POST" && isDifferentDate) {
+      setNewDueDate(curDate);
+      setNewConfirmationDate(curDate);
+    }
+  }, [date])
   
   function handleSetNewTime(newTime: Date, type: string) {
     if (type === "due") {
@@ -137,7 +162,10 @@ export default function ModalTrans(): JSX.Element {
   useEffect(() => {
     if (newStallmentsCount! > modalTrans!.stallments_count! && !stallmentsCountWarning) {
       setStallmentsCountWarning(true);
-      setModalWarning({ header: "Increasing the stallments count will create new transactions." })
+      setModalWarning({ 
+        header: "Be careful when chaging the stallments count",
+        message: "Increasing or decreasing the stallments count will create/delete transactions."
+      })
     }
   }, [newStallmentsCount])
 
@@ -192,7 +220,7 @@ export default function ModalTrans(): JSX.Element {
       category: newCategory,
       amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
       reg_date: newRegDate,
-      due_date: newDueDate,
+      due_date: isRecurring ? modalTrans!.due_date : newDueDate,
       confirmation_date: isConfirmed ? newConfirmationDate : undefined,
     }
 
@@ -309,8 +337,9 @@ export default function ModalTrans(): JSX.Element {
     if (!newRecurrencePeriod)
       return alert("Recurrence period is required");
     
-    const newRecurrence = {
-      id: newID,
+    // if newRecurrence exists, that means the data in the modal is from a transaction, not the recurrence itself
+    const recurrence = {
+      id: newRecurrence ? newRecurrence : newID,
       name: newName,
       user: user!.id,
       account: newAccount,
@@ -326,7 +355,9 @@ export default function ModalTrans(): JSX.Element {
       headers: { type: "application/json" },
       method: modalTrans!.operation,
       body: JSON.stringify({ 
-        recurrence: newRecurrence,
+        recurrence: recurrence,
+        transaction: newRecurrence ? newID : undefined,
+        curTransaction: newRecurrence ? newID : undefined,
         confirmationDate: isConfirmed ? newConfirmationDate : undefined,
         currentDate: date,
         updateType: updateType
@@ -342,11 +373,32 @@ export default function ModalTrans(): JSX.Element {
 
     if (modalTrans?.operation === "POST") {
       setRecurrences(prevRecurrences => [...prevRecurrences, data.recurrence]);
-      setTransactions(prevTransactions => [...prevTransactions, data.transaction]);
+
+      if (data.transaction)
+        setTransactions(prevTransactions => [...prevTransactions, data.transaction]);
     }
 
     else if (modalTrans?.operation === "PUT") {
+      if (data.recurrence) {
+        const recurrencesCopy = recurrences.map(recurrence => {
+          if (recurrence.id === data.recurrence.id)
+            return data.recurrence;
 
+          else 
+            return recurrence;
+        })
+
+        setRecurrences(recurrencesCopy);
+      }
+
+      if (data.transactions.length > 0) {
+        const transactionsCopy = transactions.map(transaction => {
+          const matchingResTransaction = data.transactions.find((t: TTransaction) => t.id === transaction.id);
+          return matchingResTransaction || transaction;
+        });
+
+        setTransactions(transactionsCopy);
+      }
     }
   }
 
@@ -372,8 +424,25 @@ export default function ModalTrans(): JSX.Element {
     }
 
     else if (modalTrans?.operation === "PUT") {
-      if (updateType === "current")
-        await handleSetTransaction();
+      if (updateType === "current") {
+        if (isInStallments && originalStallmentsCount !== newStallmentsCount)
+          await handleSetStallments();
+
+        if (isRecurring) {
+          const recurrencePeriodChanged = originalRecurrencePeriod !== newRecurrencePeriod;
+          const dueDateChanged = originalRecurrenceDueDate && new Date(originalRecurrenceDueDate).getTime() !== new Date(newDueDate).getTime();
+
+          if (recurrencePeriodChanged || dueDateChanged) {
+            await handleSetRecurrence();
+          }
+
+          else
+            await handleSetTransaction();
+        }
+
+        else
+          await handleSetTransaction();
+      }
 
       else {
         if (isRecurring) 
@@ -387,82 +456,108 @@ export default function ModalTrans(): JSX.Element {
     setModalTrans(null);
   }
 
+  async function handleDeleteTransaction() {
+    const res = await fetch('/api/transactions', {
+      headers: { type: "application/json" },
+      method: "DELETE",
+      body: JSON.stringify({ transaction: newID })
+    })
+
+    const { error, data } = await res.json();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    const transactionsCopy = transactions.filter(t => t.id !== data);
+    setTransactions(transactionsCopy);
+  }
+
+  async function handleDeleteStallments(type: string) {
+    if (type === "Current transaction")
+      return handleDeleteTransaction();
+
+    const res = await fetch('/api/stallments', {
+      headers: { type: "application/json" },
+      method: "DELETE",
+      body: JSON.stringify({ 
+        stallments: newStallments,
+        currentCount: newStallmentsCurrent,
+        deleteType: type
+      })
+    })
+
+    const { error, data } = await res.json();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    const transactionsCopy = transactions.filter(t => !data.includes(t.id));
+    setTransactions(transactionsCopy);
+  }
+
+  async function handleDeleteRecurrence(type: string) {
+    if (type === "Current transaction")
+      return handleDeleteTransaction();
+    
+    const res = await fetch('/api/recurrences', {
+      headers: { type: "application/json" },
+      method: "DELETE",
+      body: JSON.stringify({ 
+        recurrence: newRecurrence ? newRecurrence : newID,
+        transaction: newRecurrence ? newID : undefined,
+        deleteType: type
+      })
+    })
+
+    const { error, data } = await res.json();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (data.transactions.length > 0) {
+      const transactionsCopy = transactions.filter(t => !data.transactions.includes(t.id));
+      setTransactions(transactionsCopy);
+    }
+    
+    if (data.recurrence) {
+      const recurrencesCopy = recurrences.filter(r => r.id !== data.recurrence);
+      setRecurrences(recurrencesCopy);
+    }
+  }
+
   async function handleDeleteFinancialEvent() {
-    let resTransactions: TTransaction[] = [];
-    let resRecurrence: TRecurrence | null = null;
-    
-    const newFinancialEvent = {
-      id: newID,
-      name: newName,
-      user: user!.id,
-      account: newAccount,
-      type: newType,
-      category: newCategory,
-      amount: parseFloat(newAmount.replace(/[\D]+/g,'')) / 100,
-      reg_date: newRegDate,
-      due_date: newDueDate,
-    }
-    
+    if (isRecurring || isInStallments) {
+      const options = (isRecurring && modalTrans?.recurrence) || isInStallments
+      ? ["Current transaction", "Future transactions", "All transactions"]
+      : ["Future transactions", "All transactions"]
 
-    if (isRecurring) {
-
-    }
-
-    else if (isInStallments) {
-
+      setModalMultiSelect({
+        header: "Which transactions would you like to delete?",
+        message: "This action is non-reversable.",
+        options: options,
+        type: "danger",
+        onConfirm: (selected: string) => { isRecurring ? handleDeleteRecurrence(selected) : handleDeleteStallments(selected) },
+        onCancel: () => { setModalTrans(null) }
+      })
     }
 
     else {
-      (newFinancialEvent as TTransaction).confirmation_date = isConfirmed ? new Date() : undefined;
-      (newFinancialEvent as TTransaction).recurrence = newRecurrence;
-      (newFinancialEvent as TTransaction).stallments = newStallments;
-
-      const res = await fetch('/api/transactions', {
-        headers: { type: "application/json" },
-        method: "DELETE",
-        body: JSON.stringify({ transaction: newFinancialEvent })
+      setModalConfirmation({
+        header: "Are you sure you want to delete this transaction?",
+        message: "This action is non-reversable.",
+        type: "danger",
+        onConfirm: () => { handleDeleteTransaction() },
+        onCancel: () => { setModalTrans(null) }
       })
-
-      const { status, error, data } = await res.json();
-
-      if (status >= 400 && status < 200) {
-        console.log(error);
-        return;
-      }
-
-      resTransactions = [...resTransactions, ...data];
-    }
-
-    if (resTransactions.length > 0) {
-      const transactionsCopy = transactions.filter(transaction => !resTransactions.some(resTransaction => resTransaction.id === transaction.id));
-      setTransactions(transactionsCopy);
     }
 
     setModalTrans(null);
-
-    // recurrences:
-    // delete current only:
-    // -- delete current transaction, just as with unconfirming
-    // delete this and future:
-    // -- delete current transaction and recurrence data
-
-    // stallments:
-    // delete current only:
-    // -- delete current transaction
-    // delete this and future:
-    // -- delete current transaction and others with the count greater than the current
-    // delete all:
-    // -- delete all transactions with the given stallment id
-  }
-
-  function showConfirmation() {
-    setModalConfirmation({
-      header: `Are you sure you want to delete this ${modalTrans?.recurrence_period ? "recurrence" : "transaction"}?`,
-      message: "This action is non-reversable.",
-      type: "danger",
-      onConfirm: () => { handleDeleteFinancialEvent() },
-      onCancel: () => { setModalConfirmation(null) }
-    })
   }
 
   function ModalAccount({ itemData: account }: { itemData: TUserAccount }) {
@@ -639,7 +734,7 @@ export default function ModalTrans(): JSX.Element {
           <div className="modal--trans__row modal--trans__row--1">
             <div className="input__wrapper">
               <div className="input__label">
-                Due Date
+                { isRecurring ? "Recurrence Start Date" : "Due Date" }
               </div>
 
               <DatePicker 
@@ -932,13 +1027,16 @@ export default function ModalTrans(): JSX.Element {
           {
             (isInStallments|| isRecurring) && modalTrans?.operation === "PUT" &&
             <div className="modal--trans__update-types">
-              <div 
-                className={`toggle toggle--small ${updateType === "current" ? "toggle--toggled" : "toggle--untoggled"}`}
-                onClick= { () => {setUpdateType("current")} }
-              >
-                <div className={`toggle__checkbox ${updateType === "current" ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled"}`}/>
-                <div className="toggle__label">Update Current</div>
-              </div>
+              {
+                !modalTrans?.recurrence_period &&
+                <div 
+                  className={`toggle toggle--small ${updateType === "current" ? "toggle--toggled" : "toggle--untoggled"}`}
+                  onClick= { () => {setUpdateType("current")} }
+                >
+                  <div className={`toggle__checkbox ${updateType === "current" ? "toggle__checkbox--toggled" : "toggle__checkbox--untoggled"}`}/>
+                  <div className="toggle__label">Update Current</div>
+                </div>
+              }
 
               <div 
                 className={`toggle toggle--small ${updateType === "future" ? "toggle--toggled" : "toggle--untoggled-"}`}
@@ -963,7 +1061,7 @@ export default function ModalTrans(): JSX.Element {
               modalTrans!.operation === "PUT" &&
               <button 
                 className="btn btn--bg-red"
-                onClick={ showConfirmation }
+                onClick={ handleDeleteFinancialEvent }
               > {`DELETE ${modalTrans?.recurrence_period ? "RECURRING" : ""} ${newType.toUpperCase()}`}
               </button>
             }

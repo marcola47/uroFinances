@@ -50,9 +50,13 @@ export async function POST(req: NextRequest) {
     await mongoose.connection.close();
     return NextResponse.json({ status: 200 });
   }
+  
+  catch (err: any) {
+    console.log(err);
 
-  catch (error) {
-    console.log(error)
-    return NextResponse.json({ status: 500 });
+    return NextResponse.json({ 
+      status: 500, 
+      error: err.message || err
+    });
   }
 }

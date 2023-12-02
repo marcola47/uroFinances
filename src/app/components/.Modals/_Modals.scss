@@ -13,7 +13,7 @@
   }
 }
 
-.modal--warning, .modal--confirmation {
+.modal--warning, .modal--multi, .modal--confirmation {
   z-index: 9999;
   width: 420px;
   padding: 24px;
@@ -32,6 +32,14 @@
   }
 
   &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.modal--multi {
+  &__options {
     display: flex;
     flex-direction: column;
     gap: 8px;

@@ -19,8 +19,12 @@ export async function PUT(req: NextRequest, { params }: { params: { transaction:
     return NextResponse.json({ status: 200, err: null, data: null })
   }
 
-  catch (err) {
-    console.log(err)
-    return NextResponse.json({ status: 500, err, data: null })
+  catch (err: any) {
+    console.log(err);
+
+    return NextResponse.json({ 
+      status: 500, 
+      error: err.message || err
+    });
   }
 }

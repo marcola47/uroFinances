@@ -27,11 +27,12 @@ export async function GET(req: NextRequest, { params }: { params: { token: strin
     return NextResponse.redirect(new URL("/auth/email/verified", req.url));
   }
 
-  catch (err) {
+  catch (err: any) {
     console.log(err);
+    
     return NextResponse.json({ 
       status: 500, 
-      error: err 
+      error: err.message || err
     });
   }
 }

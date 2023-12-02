@@ -336,15 +336,15 @@ button {
   padding: 16px;
   border-radius: $br-s;
 
-  color: black;
-  background-color: white;
-
   font-size: 1rem;
   font-weight: 600;
 
   user-select: none;
   cursor: pointer;
   @include transition;
+
+  &:hover 
+  { background-color: $grey-750 }
 
   &--full 
   { width: 100%; }
@@ -364,6 +364,18 @@ button {
       background-color: $grey-200; 
     }
   }
+
+  &--blue 
+  { color: $blue-600 }
+
+  &--green 
+  { color: $green-500 }
+
+  &--yellow 
+  { color: $yellow-700 }
+
+  &--red 
+  { color: $red-400 }
 
   &--bg-blue {
     color: white;

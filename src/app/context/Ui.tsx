@@ -1,7 +1,9 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
 import ModalConfirmation from "@/app/components/.Modals/ModalConfirmation";
+import ModalMultiSelect from "@/app/components/.Modals/ModalMultiSelect";
 import ModalWarning from "@/app/components/.Modals/ModalWarning";
+import { type } from "os";
 
 type ModalTrans = Partial<TTransaction> & Partial<TRecurrence> & {
   operation: "PUT" | "POST";
@@ -20,6 +22,12 @@ type ModalConfirmation = ModalWarning & {
   onCancel: () => void;
 }
 
+type ModalMultiSelect = Partial<ModalWarning> & {
+  options: string[]; //last option is the 'strongest' option
+  type: "danger" | "warning" | "success";
+  onConfirm: (selected: string) => void;
+  onCancel: () => void;
+}
 
 interface UIContextProps {
   navbarOpen: boolean;
@@ -30,6 +38,9 @@ interface UIContextProps {
 
   modalWarning: ModalWarning | null;
   setModalWarning: Dispatch<SetStateAction<ModalWarning | null>>;
+
+  modalMultiSelect: ModalMultiSelect | null;
+  setModalMultiSelect: Dispatch<SetStateAction<ModalMultiSelect | null>>;
 
   modalConfirmation: ModalConfirmation | null;
   setModalConfirmation: Dispatch<SetStateAction<ModalConfirmation | null>>;
@@ -45,6 +56,9 @@ const UIContext = createContext<UIContextProps>({
   modalWarning: null,
   setModalWarning: () => {},
 
+  modalMultiSelect: null,
+  setModalMultiSelect: () => {},
+
   modalConfirmation: null,
   setModalConfirmation: () => {}
 });
@@ -53,6 +67,7 @@ export const UIContextProvider = ({ children }: { children: any }) => {
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const [modalTrans, setModalTrans] = useState<ModalTrans | null>(null);
   const [modalWarning, setModalWarning] = useState<ModalWarning | null>(null);
+  const [modalMultiSelect, setModalMultiSelect] = useState<ModalMultiSelect | null>(null);
   const [modalConfirmation, setModalConfirmation] = useState<ModalConfirmation | null>(null);
 
   return (
@@ -60,10 +75,12 @@ export const UIContextProvider = ({ children }: { children: any }) => {
       navbarOpen, setNavbarOpen, 
       modalTrans, setModalTrans,
       modalWarning, setModalWarning,
+      modalMultiSelect, setModalMultiSelect,
       modalConfirmation, setModalConfirmation
     }}> 
       { children }
       { modalWarning && <ModalWarning/> }
+      { modalMultiSelect && <ModalMultiSelect/> }
       { modalConfirmation && <ModalConfirmation/> }
     </UIContext.Provider>
   )
