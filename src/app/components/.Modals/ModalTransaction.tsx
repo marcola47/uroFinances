@@ -132,9 +132,16 @@ export default function ModalTrans(): JSX.Element {
 
   // If user clicks on ADD outside of the current month, set the due_date as the context date
   useEffect(() => {
+    // kinda funky logic, but there's no need to refactor, just a small condition
     const dueDate = new Date(newDueDate);
     const curDate = new Date(date);
     const isDifferentDate = dueDate.getMonth() !== curDate.getMonth() || dueDate.getFullYear() !== curDate.getFullYear();
+
+    if (curDate < dueDate) {
+      curDate.setMonth(curDate.getMonth() + 1);
+      curDate.setDate(0);
+      date.setHours(23, 59, 59, 999);
+    }
 
     if (modalTrans?.operation === "POST" && isDifferentDate) {
       setNewDueDate(curDate);

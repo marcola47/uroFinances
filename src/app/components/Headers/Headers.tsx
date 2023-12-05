@@ -1,3 +1,5 @@
+import { useTransactionsContext } from "@/app/context/Transactions"
+
 export function HeaderPage({ header }: { header: string }): JSX.Element {
   return (
     <h1 className="header--page">
@@ -6,7 +8,6 @@ export function HeaderPage({ header }: { header: string }): JSX.Element {
   )
 }
 
-// LineThroughHeader
 export function HeaderLineTh({ header }: { header: string }): JSX.Element {
   return (
     <h3 className="header--line-th">

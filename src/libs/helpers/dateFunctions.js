@@ -64,7 +64,7 @@ export function applyTimeZoneOffset(originalDate) {
     const offsetInMinutes = timezoneOffset * 60;
     const originalTimestamp = originalDate.getTime();
     
-    const adjustedTimestamp = originalTimestamp + offsetInMinutes * 60 * 1000;
+    const adjustedTimestamp = originalTimestamp - offsetInMinutes * 60 * 1000;
     const adjustedDate = new Date(adjustedTimestamp);
   
     return adjustedDate;

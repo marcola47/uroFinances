@@ -638,20 +638,6 @@
     opacity: 1;
   }
 }
-.transactions {
-  position: relative;
-  left: 64px;
-  width: calc(100dvw - 64px);
-  min-height: 100dvh;
-  padding: 32px;
-  animation: fade_in 0.15s forwards ease-in-out;
-}
-.transactions__top {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  margin-bottom: 48px;
-}
 .transactions__lists {
   display: flex;
   gap: 16px;
@@ -902,6 +888,60 @@ button {
   overflow: hidden;
   height: 100dvh;
   position: relative;
+}
+
+.page {
+  position: relative;
+  left: 64px;
+  width: calc(100dvw - 64px);
+  min-height: 100dvh;
+  padding: 32px;
+  animation: fade_in 0.15s forwards ease-in-out;
+}
+.page__top {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.home__balance {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid hsl(215, 15%, 20%);
+}
+.home__balance__data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.home__balance__label {
+  color: hsl(215, 15%, 60%);
+}
+.home__balance__label--negative {
+  color: hsl(0, 90%, 40%);
+}
+.home__balance__value {
+  color: #fff;
+}
+.home__balance__value--negative {
+  color: #f20d0d;
+}
+.home__balance__side > .home__balance__label {
+  font-size: 1rem;
+}
+.home__balance__side > .home__balance__value {
+  font-size: 1.2rem;
+}
+.home__balance__center > .home__balance__label {
+  font-size: 1.3rem;
+}
+.home__balance__center > .home__balance__value {
+  font-size: 1.8rem;
 }
 
 .input {

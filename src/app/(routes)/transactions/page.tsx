@@ -23,14 +23,16 @@ export default function TransactionsPage(): JSX.Element {
     const confirmedRecurrences: TUUID[] = [];
     const confirmedTransactions: TTransaction[] = [];
     const { startDate, endDate } = getMonthRange(new Date(date));
+    const localizedStartDate = applyTimeZoneOffset(startDate);
+    const localizedEndDate = applyTimeZoneOffset(endDate);
 
     // FIX: recurrences with a due date of like november 30th will show up in february as 30/02    
     transactions.forEach(t => {
-      const localizedDueDate = applyTimeZoneOffset(new Date(t.due_date));
-      const localizedConfirmationDate = applyTimeZoneOffset(new Date(t.confirmation_date!));
+      const dueDate = new Date(t.due_date);
+      const confirmationDate = new Date(t.confirmation_date!);
 
-      const isDueDateBetween = localizedDueDate >= startDate && localizedDueDate <= endDate;
-      const isConfirmedDateBetween = t.confirmation_date && (localizedConfirmationDate >= startDate && localizedConfirmationDate <= endDate);
+      const isDueDateBetween = dueDate >= localizedStartDate && dueDate <= localizedEndDate;
+      const isConfirmedDateBetween = t.confirmation_date && (confirmationDate >= localizedStartDate && confirmationDate <= localizedEndDate);
 
       if (t.recurrence) {
         if (isDueDateBetween) {
@@ -62,8 +64,8 @@ export default function TransactionsPage(): JSX.Element {
 
   return (
     <>
-      <div className="transactions">
-        <div className="transactions__top">
+      <div className="page transactions">
+        <div className="page__top">
           <MonthTab/>
         </div>
 
