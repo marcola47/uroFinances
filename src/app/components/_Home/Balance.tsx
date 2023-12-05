@@ -135,33 +135,33 @@ export default function Balance(): JSX.Element {
   }, [transactions, recurrences, date])
 
   return (
-    <h1 className="home__balance">
-      <div className="home__balance__data home__balance__side">
-        <div className={`home__balance__label ${initial < 0 ? "home__balance__label--negative": ""}`}>
+    <h1 className="balance">
+      <div className="balance__data balance__side">
+        <div className={`balance__label ${initial < 0 ? "balance__label--negative": ""}`}>
           Initial
         </div>
 
-        <div className={`home__balance__value ${initial < 0 ? "home__balance__value--negative": ""}`}>
+        <div className={`balance__value ${initial < 0 ? "balance__value--negative": ""}`}>
           { BRL.format(initial) }
         </div>
       </div>
       
-      <div className="home__balance__data home__balance__center">
-        <div className={`home__balance__label ${balance < 0 ? "home__balance__label--negative": ""}`}>
+      <div className="balance__data balance__center">
+        <div className={`balance__label ${balance < 0 ? "balance__label--negative": ""}`}>
           Balance
         </div>
 
-        <div className={`home__balance__value ${balance < 0 ? "home__balance__value--negative": ""}`}>
+        <div className={`balance__value ${balance < 0 ? "balance__value--negative": ""}`}>
         { BRL.format(balance) }
         </div>
       </div>
 
-      <div className="home__balance__data home__balance__side">
-        <div className={`home__balance__label ${foreseen < 0 ? "home__balance__label--negative": ""}`}>
+      <div className="balance__data balance__side">
+        <div className={`balance__label ${foreseen < 0 ? "balance__label--negative": ""}`}>
           Foreseen
         </div>
 
-        <div className={`home__balance__value ${foreseen < 0 ? "home__balance__value--negative": ""}`}>
+        <div className={`balance__value ${foreseen < 0 ? "balance__value--negative": ""}`}>
         { BRL.format(foreseen) }
         </div>
       </div>

@@ -74,52 +74,7 @@ button {
     flex-direction: column;
     gap: 32px;
 
-    margin-bottom: 48px;
-  }
-}
-
-.home {
-  &__balance {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 32px;
-
-    padding-bottom: 16px;
-    border-bottom: 2px solid $grey-750;
-
-    &__data {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &__label {
-      color: $grey-350;
-
-      &--negative 
-      { color: $red-500 }
-    }
-
-    &__value {
-      color: #fff;
-
-      &--negative 
-      { color: lighten($red-500, 10%) }
-    }
-
-    &__side > &__label
-    { font-size: 1rem }
-
-    &__side > &__value 
-    { font-size: 1.2rem }
-
-    &__center > &__label
-    { font-size: 1.3rem }
-
-    &__center > &__value
-    { font-size: 1.8rem }
+    margin-bottom: 32px;
   }
 }
 

@@ -77,7 +77,10 @@ export default function Navbar(): JSX.Element {
     const [userImgSrc, setUserImgSrc] = useState(user?.image || '/user.svg')
  
     return (
-      <div className="navbar__user">
+      <Link 
+        href="/settings"
+        className="navbar__user"
+      >
         {
           user
           ? <div className="navbar__credentials">
@@ -125,7 +128,7 @@ export default function Navbar(): JSX.Element {
           style={{ transform: navbarOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
         > <FaArrowRight/>
         </div>
-      </div>
+      </Link>
     )
   }
 

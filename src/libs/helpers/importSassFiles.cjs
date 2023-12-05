@@ -25,13 +25,10 @@ function getComponentFiles(dirPath, fileExt = '.scss')
 
 function generateImportStatements() 
 {
-  const componentsDir = path.join(__dirname, '../../app/components');
-  const routesDir = path.join(__dirname, '../../app/(routes)');
-  const componentFiles = getComponentFiles(componentsDir);
-  const routesFiles = getComponentFiles(routesDir);
-  const allFiles = componentFiles.concat(routesFiles);
+  const dir = path.join(__dirname, '../../app');
+  const files = getComponentFiles(dir);
 
-  const importStatements = allFiles.map(filePath => 
+  const importStatements = files.map(filePath => 
   {
     const relativePath = path.relative(__dirname, filePath).replace(/\\/g, '/');
     return `@import '${relativePath.substring(3)}';`; //remove the extra ../

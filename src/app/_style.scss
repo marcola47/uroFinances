@@ -1,0 +1,66 @@
+@import "../css/variables";
+
+.home {
+  .balance {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 32px;
+
+    padding-bottom: 16px;
+    border-bottom: 2px solid $grey-750;
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &__label {
+      color: $grey-350;
+
+      &--negative 
+      { color: $red-500 }
+    }
+
+    &__value {
+      color: #fff;
+
+      &--negative 
+      { color: lighten($red-500, 10%) }
+    }
+
+    &__side {
+      .balance__label 
+      { font-size: 1rem }
+
+      .balance__value 
+      { font-size: 1.2rem }
+    }
+
+    &__center {
+      .balance__label 
+      { font-size: 1.3rem }
+
+      .balance__value 
+      { font-size: 1.8rem }
+    }
+  }
+
+  &__columns {
+    display: grid;
+    grid-template-columns: minmax(420px, 3fr) 7fr;
+    gap: 16px;
+    border-radius: $br-b;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    overflow-y: scroll;
+    border-radius: $br-b;
+  }
+}

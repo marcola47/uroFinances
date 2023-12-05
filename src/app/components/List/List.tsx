@@ -12,7 +12,15 @@ type ListProps = {
   forwardedRef?: RefObject<HTMLUListElement | null>;
 }
 
-export default function List({ className = "", id = "", elements, ListItem, style = {}, unwrapped, forwardedRef }: ListProps): JSX.Element {
+export default function List({ 
+  className = "", 
+  id = "", 
+  elements, 
+  ListItem, 
+  style = {}, 
+  unwrapped, 
+  forwardedRef 
+}: ListProps): JSX.Element {
   const { user } = useUserContext();
   const listRef = useRef<HTMLUListElement | null>(null);
   useImperativeHandle(forwardedRef, () => listRef.current);
