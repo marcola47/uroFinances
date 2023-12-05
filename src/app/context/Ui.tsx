@@ -1,8 +1,8 @@
 "use client";
 import { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
-import ModalConfirmation from "@/app/components/.Modals/ModalConfirmation";
-import ModalMultiSelect from "@/app/components/.Modals/ModalMultiSelect";
-import ModalWarning from "@/app/components/.Modals/ModalWarning";
+import ModalConfirmation from "@/app/components/_Modals/ModalConfirmation";
+import ModalMultiSelect from "@/app/components/_Modals/ModalMultiSelect";
+import ModalWarning from "@/app/components/_Modals/ModalWarning";
 import { type } from "os";
 
 type ModalTrans = Partial<TTransaction> & Partial<TRecurrence> & {

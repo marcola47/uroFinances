@@ -8,8 +8,8 @@ import { useUIContext } from "@/app/context/Ui";
 import { getMonthRange, shouldRecurrenceShow, applyTimeZoneOffset } from "@/libs/helpers/dateFunctions";
 
 import MonthTab from "@/app/components//MonthTab/MonthTab"
-import TransactionList from "@/app/components/.Transactions/TransactionList";
-import ModalTransaction from "@/app/components/.Modals/ModalTransaction";
+import TransactionList from "@/app/components/_Transactions/TransactionList";
+import ModalTransaction from "@/app/components/_Modals/ModalTransaction";
 
 export default function TransactionsPage(): JSX.Element {
   const [thisMonthTransactions, setThisMonthTransactions] = useState<TTransaction[]>([]);

@@ -54,17 +54,18 @@ export function shouldRecurrenceShow(due_date, cur_date, period) {
 export function getTimeZoneOffset() {
   const currentDate = new Date();
   const offsetInMinutes = currentDate.getTimezoneOffset();
-  const offsetInHours = -offsetInMinutes / 60;
+  const offsetInHours = offsetInMinutes / 60;
   return offsetInHours;
 }
 
+// whenever creating a new Date(), it will create it with the local timezone offset, but, transactions are stored in UTC.
 export function applyTimeZoneOffset(originalDate) {
     const timezoneOffset = getTimeZoneOffset();
 
     const offsetInMinutes = timezoneOffset * 60;
     const originalTimestamp = originalDate.getTime();
     
-    const adjustedTimestamp = originalTimestamp - offsetInMinutes * 60 * 1000;
+    const adjustedTimestamp = originalTimestamp + offsetInMinutes * 60 * 1000;
     const adjustedDate = new Date(adjustedTimestamp);
   
     return adjustedDate;
