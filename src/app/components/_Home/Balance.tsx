@@ -100,7 +100,7 @@ export default function Balance(): JSX.Element {
             }
           }
 
-          else {
+          else if (shouldRecurrenceShow(r.due_date, dueDate, r.recurrence_period)) {
             if (r.type === "income")
               newInitialIncomes += r.amount;
 

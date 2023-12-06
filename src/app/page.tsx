@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect, useRef } from "react"
-import * as Icons from 'react-icons/fa';
 
 import { useUserContext } from "./context/User";
 import { useIconsContext } from "./context/Icons";
@@ -8,7 +7,9 @@ import { useIconsContext } from "./context/Icons";
 import Navbar from "@/app/components/Navbar/Navbar";
 import MonthTab from "@/app/components/MonthTab/MonthTab";
 import Balance from "@/app/components/_Home/Balance";
-import Overview from "./components/_Home/Overview";
+import Overview from "@/app/components/_Home/Overview";
+
+import IconPicker from "./components/IconPicker/IconPicker";
 
 export default function Home(): JSX.Element {
   const { user } = useUserContext();
@@ -59,28 +60,10 @@ export default function Home(): JSX.Element {
         >
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--left`}>
             { icons }
-            {/* <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/> */}
           </div>
 
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--right`}>
-            {/* <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/>
-            <Overview/> */}
+            <IconPicker/>
           </div>
         </div>
       </div>
