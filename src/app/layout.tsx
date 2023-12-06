@@ -5,6 +5,7 @@ import { UserContextProvider } from './context/User';
 import { UIContextProvider } from './context/Ui';
 import { TransactionsContextProvider } from './context/Transactions';
 import { DateContextProvider } from './context/Date';
+import { IconsContextProvider } from './context/Icons';
 
 import { authOptions } from './api/auth/[...nextauth]/route';
 import '@/css/app.css';
@@ -26,7 +27,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <DateContextProvider>
               <TransactionsContextProvider>
                 <UIContextProvider>
-                  { children }
+                  <IconsContextProvider>
+                    { children }
+                  </IconsContextProvider>
                 </UIContextProvider>
               </TransactionsContextProvider>
             </DateContextProvider>

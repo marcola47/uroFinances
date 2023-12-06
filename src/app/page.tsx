@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react"
+import * as Icons from 'react-icons/fa';
 
 import { useUserContext } from "./context/User";
+import { useIconsContext } from "./context/Icons";
 
 import Navbar from "@/app/components/Navbar/Navbar";
 import MonthTab from "@/app/components/MonthTab/MonthTab";
@@ -10,9 +12,14 @@ import Overview from "./components/_Home/Overview";
 
 export default function Home(): JSX.Element {
   const { user } = useUserContext();
+  const { iconNames, filterIcons, getIcons } = useIconsContext();
+
+  const filteredIcons = filterIcons('user');
+  const icons = getIcons(filteredIcons);
+
   const [height, setHeight] = useState<number>(0);
   const columnsRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     function calculateDistances() {
       const element = columnsRef.current;
@@ -51,15 +58,17 @@ export default function Home(): JSX.Element {
           style={{ height }}
         >
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--left`}>
+            { icons }
+            {/* <Overview/>
             <Overview/>
             <Overview/>
             <Overview/>
             <Overview/>
-            <Overview/>
-            <Overview/>
+            <Overview/> */}
           </div>
 
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--right`}>
+            {/* <Overview/>
             <Overview/>
             <Overview/>
             <Overview/>
@@ -71,8 +80,7 @@ export default function Home(): JSX.Element {
             <Overview/>
             <Overview/>
             <Overview/>
-            <Overview/>
-            <Overview/>
+            <Overview/> */}
           </div>
         </div>
       </div>

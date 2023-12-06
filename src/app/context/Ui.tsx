@@ -3,7 +3,6 @@ import { useState, useContext, createContext, Dispatch, SetStateAction } from "r
 import ModalConfirmation from "@/app/components/_Modals/ModalConfirmation";
 import ModalMultiSelect from "@/app/components/_Modals/ModalMultiSelect";
 import ModalWarning from "@/app/components/_Modals/ModalWarning";
-import { type } from "os";
 
 type ModalTrans = Partial<TTransaction> & Partial<TRecurrence> & {
   operation: "PUT" | "POST";
