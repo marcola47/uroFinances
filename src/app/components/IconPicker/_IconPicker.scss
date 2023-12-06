@@ -1,5 +1,74 @@
 @import "../../../css/variables";
 
-.icon-pikcer {
+.icon-picker {
+  display: flex;
+  flex-direction: column;
 
+  width: 400px;
+  height: 480px;
+  padding: 24px;
+  border-radius: $br-m;
+  
+  background-color: $grey-800;
+
+  &__search {
+    display: flex;
+    position: relative;
+    border-bottom: 2px solid $grey-250;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+
+    &__icon {
+      position: absolute;
+      top: 2px;
+      left: 0px;
+
+      &--clear {
+        right: 0px;
+        left: auto;
+
+        cursor: pointer;
+
+        &:hover {
+          color: $red-500;
+        }
+      }
+    }
+
+    &__input {
+      width: 100%;
+      padding-left: 28px;
+
+      color: #fff;
+      background-color: $grey-800;
+
+      &::placeholder 
+      { color: $grey-350 }
+    }
+  }
+
+  &__icons {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+
+    overflow-y: scroll;
+    border-radius: $br-s;
+  }
+
+  &__icon {
+    display: grid;
+    place-items: center;
+
+    padding: 8px 0px;
+    border-radius: $br-m;
+
+    font-size: 1.5rem;
+    cursor: pointer;
+    @include transition;
+
+    &:hover, &--selected {
+      background-color: $grey-850;
+    }
+  }
 }

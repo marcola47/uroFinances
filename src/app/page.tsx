@@ -59,7 +59,7 @@ export default function Home(): JSX.Element {
           style={{ height }}
         >
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--left`}>
-            { icons }
+    
           </div>
 
           <div className={`${user?.settings?.hide_scrollbars ? "hide-scrollbar" : ""} home__column home__column--right`}>
